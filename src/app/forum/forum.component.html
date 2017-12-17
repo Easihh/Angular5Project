@@ -1,0 +1,31 @@
+
+<body class="forum">
+	forum works!
+	<div>
+	<button type="button" class="btn btn-primary">New Topic</button>
+	</div> 
+	<div class="topic-container">	
+		<a class="topic-link" routerLink="./topic">	
+			<div class="topic-details">		
+				<span class="topic-title">
+					<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">Forum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum Topic</span>
+				</span>
+				<span class="topic-comment">999</span>
+				<span class="topic-author">Asuraii</span>
+				<span class="topic-timestamp">4m</span>
+			</div>		
+		</a>
+	</div>
+	<!-- 	<data-table [dataList]="topicList" [header]="" (rowClick)="test($event)"></data-table> -->
+
+<div class="float_center">
+	<ul class="pagination">
+    <li *ngIf="showPreviousPageBtn()" class="page-item">
+      <a class="page-link" (click)="prevPage()" routerLink="page/{{currentPage-1}}">PREVIOUS</a>
+    </li>
+    <li *ngIf="showNextPageBtn()" class="page-item">
+      <a class="page-link" (click)="nextPage()" routerLink="page/{{currentPage+1}}">NEXT</a>
+    </li>
+  </ul>
+</div>
+</body>
