@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
+import { Topic } from "../topic";
 
 @Component({
   selector: 'app-forum',
@@ -12,12 +13,20 @@ export class ForumComponent  implements OnInit{
     perPageMaxListPlayer: number;
     currentPage: number;
     maxPage: number;
+   // topic:Topic;
+    topics: Topic[] = [];
+    @ViewChild( 'topicBtn' ) topicBtn;
     
 
     constructor() { 
         this.initData();
         this.initPagination();//should be only after return call from db for data
         this.refresh();
+        this.initTopics();
+    }
+    
+    private initTopics() {
+       // this.topic = new Topic( 64213, "Some Topic Title Here About Something", 999, "Asurai", "4m" );
     }
     
     private initData() {
@@ -70,5 +79,10 @@ export class ForumComponent  implements OnInit{
     
     test( event: Event ): void {
         console.log("Click Row Received.")
+    }
+    
+    createTopic() : void{
+        this.topicBtn.nativeElement.blur();
+        this.topics.push(new Topic(57234,"New Topic Created",0,"Test","Now"));
     }
 }

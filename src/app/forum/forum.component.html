@@ -1,20 +1,24 @@
 
 <body class="forum">
 	forum works!
-	<div>
-	<button type="button" class="btn btn-primary">New Topic</button>
-	</div> 
-	<div class="topic-container">	
-		<a class="topic-link" routerLink="./topic">	
-			<div class="topic-details">		
-				<span class="topic-title">
-					<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">Forum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum TopicForum Topic</span>
-				</span>
-				<span class="topic-comment">999</span>
-				<span class="topic-author">Asuraii</span>
-				<span class="topic-timestamp">4m</span>
-			</div>		
-		</a>
+	<div class="forum-container">
+		<div>
+			<button #topicBtn type="button"  (click)="createTopic()" class="btn btn-primary btn-hover">NewTopic</button>
+		</div>	
+		<div class="topic-container">
+			<div *ngFor="let topic of topics">
+				<a class="topic-link" [routerLink]="['./topic',topic.id]">
+					<div class="topic-details">
+						<span class="topic-title">
+							<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">{{topic.title}}</span>
+						</span>
+						<span class="topic-comment">{{topic.replies}}</span>
+						<span class="topic-author">{{topic.author}}</span> 
+						<span class="topic-timestamp">{{topic.timestamp}}</span>
+					</div>
+				</a>
+			</div>
+		</div>
 	</div>
 	<!-- 	<data-table [dataList]="topicList" [header]="" (rowClick)="test($event)"></data-table> -->
 
