@@ -1,0 +1,37 @@
+
+
+.forum {
+	min-height: 600px;
+}
+
+.reply-container{
+	display:block;
+	font-size: 1.0625rem;
+	height: 100%;
+}
+
+.reply-user{
+	border: 1px red solid;
+	width:20%;
+	display:inline-block;
+}
+
+.reply-comment{
+	border: 1px purple solid;
+	width:75%;
+	display:inline-block;
+}
+
+.reply-details{
+	padding: .875rem 0 .875rem .875rem;
+	min-height:60px;
+	
+	border-top-color: rgba(255, 255, 255, .15);
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-bottom-color: rgba(255, 255, 255, .15);
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	
+	margin:2.5rem;
+}

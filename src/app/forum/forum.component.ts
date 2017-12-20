@@ -4,7 +4,7 @@ import { Topic } from "../topic";
 @Component({
   selector: 'app-forum',
   templateUrl: './forum.component.html',
-  styleUrls: ['../css/bootstrap.css','../css/custom.css']
+  styleUrls: ['../css/bootstrap.css','./forum-component.css']
 })
 export class ForumComponent  implements OnInit{
     

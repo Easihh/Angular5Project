@@ -5,7 +5,7 @@ import { OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'data-table',
   templateUrl: './datatable.component.html',
-  styleUrls: ['../css/bootstrap.css','../css/custom.css']
+  styleUrls: ['../css/bootstrap.css']
 })
 export class DatatableComponent implements OnInit{
     objectKeys = Object.keys;

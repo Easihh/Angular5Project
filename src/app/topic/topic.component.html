@@ -1,0 +1,12 @@
+<body class="forum">
+  topic page works!
+  
+  <div class="reply-container">
+  Topic Title here
+	<div *ngFor="let reply of replies" class="reply-details">
+		<span class="reply-user">{{reply.author}}</span>
+		<span class="reply-comment">{{reply.comment}}</span>
+	</div>
+  </div>
+</body>
+

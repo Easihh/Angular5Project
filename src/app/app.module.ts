@@ -13,6 +13,7 @@ import { DatatableComponent } from './datatable/datatable.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { ForumComponent } from './forum/forum.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TopicComponent } from './topic/topic.component';
 
 @NgModule({
   declarations: [     
@@ -21,7 +22,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NotFoundComponent,
     DatatableComponent,
     LoginFormComponent,
-    ForumComponent
+    ForumComponent,
+    TopicComponent
   ],
   imports: [
     BrowserModule,

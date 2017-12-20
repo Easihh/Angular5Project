@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { AboutComponent } from './about/about.component';
 import { ForumComponent } from './forum/forum.component';
 import { NotFoundComponent } from './notfound/notfound.component';
+import { TopicComponent } from './topic/topic.component';
 import { AuthGuard} from './auth.guard';
 
 export const router: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'about', component: AboutComponent , canActivate:[AuthGuard]},
+    { path: 'forum/topic/:id', component: TopicComponent},
     { path: 'forum', component: ForumComponent},
     { path: '**', component: NotFoundComponent },
 ];

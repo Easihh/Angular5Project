@@ -7,7 +7,7 @@ import { RankedPlayer} from './ranked-player';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['css/bootstrap.css','css/custom.css']
+  styleUrls: ['css/bootstrap.css']
 })
 export class AppComponent implements OnInit {
     
