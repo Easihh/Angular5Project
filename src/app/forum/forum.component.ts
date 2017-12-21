@@ -1,5 +1,6 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { Topic } from "../topic";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-forum',
@@ -8,79 +9,57 @@ import { Topic } from "../topic";
 })
 export class ForumComponent  implements OnInit{
     
-    originalTopicList: any[]
-    topicList: any[];
-    perPageMaxListPlayer: number;
+    perPageTopic: number = 5;
+    topicCount: number;
     currentPage: number;
     maxPage: number;
-   // topic:Topic;
     topics: Topic[] = [];
+    showNextPage: boolean;
+    showPrevPage: boolean;
     @ViewChild( 'topicBtn' ) topicBtn;
     
 
-    constructor() { 
-        this.initData();
-        this.initPagination();//should be only after return call from db for data
-        this.refresh();
+    constructor(private route: ActivatedRoute) { 
         this.initTopics();
+      //followed by retrieving count of all topics from DB for pagination logic
+        this.topicCount = 9;
+        this.initPagination();//should be only after return call from db for data  
     }
+    
+    
     
     private initTopics() {
-       // this.topic = new Topic( 64213, "Some Topic Title Here About Something", 999, "Asurai", "4m" );
-    }
-    
-    private initData() {
-        this.originalTopicList = [];
-        for ( let i = 1; i < 9; i++ ) {
-            let item: any = {
-                rank: i,
-                name: "Name" + i
-            };
-            this.originalTopicList.push( item )
+        //retrieve top perPageTopic from DB
+        for ( let i = 10000; i < 10000 + this.perPageTopic; i++ ) {
+            this.topics.push( new Topic( i, "New Topic Created", 0, "Test", "Now" ) );
         }
     }
-    
+        
     private initPagination() {
         this.currentPage = 1;
-        this.perPageMaxListPlayer = 5;
         
-        let rem = this.originalTopicList.length % this.perPageMaxListPlayer;
+        let rem = this.topicCount % this.perPageTopic;
         console.log( "rem:" + rem );
-        let total = ( this.originalTopicList.length - rem ) / this.perPageMaxListPlayer;
+        let total = ( this.topicCount - rem ) / this.perPageTopic;
         console.log( "Total:" + total );
         this.maxPage = rem == 0 ? total : total += 1;
     }
     
-    private refresh(): void {
-        let start = ( this.currentPage - 1 ) * this.perPageMaxListPlayer;
-        let end = start + this.perPageMaxListPlayer;
-        this.topicList = this.originalTopicList.slice( start, end )
-    }
+    ngOnInit(): void {
+        let pageNumber = this.route.snapshot.paramMap.get( 'id' );
+        if ( pageNumber == null ) {
+            //we are in the main forum page
+            this.currentPage = 1;
+            console.log("my page number is null");
+        }
+        else {
+            this.currentPage = parseInt( pageNumber );
+        }
 
-    ngOnInit(): void {}
-    
-    nextPage(): void {
-        this.currentPage++;
-        this.refresh();
+        this.showNextPage = this.currentPage == this.maxPage ? false : true;
+        this.showPrevPage = this.currentPage == 1 ? false : true;
     }
-    
-    prevPage(): void {
-        this.currentPage--;
-        this.refresh();
-    }
-    
-    showPreviousPageBtn(): boolean {
-        return this.currentPage != 1;
-    }
-    
-    showNextPageBtn(): boolean {
-        return this.currentPage +1 == this.maxPage;
-    }
-    
-    test( event: Event ): void {
-        console.log("Click Row Received.")
-    }
-    
+        
     createTopic() : void{
         this.topicBtn.nativeElement.blur();
         this.topics.push(new Topic(57234,"New Topic Created",0,"Test","Now"));

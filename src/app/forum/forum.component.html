@@ -24,11 +24,12 @@
 
 <div class="float_center">
 	<ul class="pagination">
-    <li *ngIf="showPreviousPageBtn()" class="page-item">
-      <a class="page-link" (click)="prevPage()" routerLink="page/{{currentPage-1}}">PREVIOUS</a>
+    <li *ngIf="showPrevPage" class="page-item">
+      <a *ngIf="currentPage-1!=1" class="page-link"  routerLink="page/{{currentPage-1}}"> &lt; PREVIOUS</a>
+      <a *ngIf="currentPage-1==1" class="page-link"  routerLink="/forum"> &lt; PREVIOUS</a>
     </li>
-    <li *ngIf="showNextPageBtn()" class="page-item">
-      <a class="page-link" (click)="nextPage()" routerLink="page/{{currentPage+1}}">NEXT</a>
+    <li *ngIf="showNextPage" class="page-item">
+      <a class="page-link"  routerLink="page/{{currentPage+1}}">NEXT &gt;</a>
     </li>
   </ul>
 </div>

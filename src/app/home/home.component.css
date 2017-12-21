@@ -1,0 +1,18 @@
+.home {
+	min-height: 600px;
+}
+
+.news-container {
+	padding: 0.875rem;
+	margin: 2.5rem;
+	display: block;
+}
+
+.news-details {
+	min-height: 45px;
+	border: 1px red solid;
+}
+
+.news-title{
+	border: 1px cyan solid;
+}

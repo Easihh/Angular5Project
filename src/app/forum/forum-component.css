@@ -11,7 +11,8 @@
 }
 
 .forum {
-	min-height: 600px;
+/* 	min-height: 600px; */
+	overflow: auto;
 }
 
 .topic-container{

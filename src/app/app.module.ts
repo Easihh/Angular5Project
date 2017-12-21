@@ -14,6 +14,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { ForumComponent } from './forum/forum.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TopicComponent } from './topic/topic.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [     
@@ -23,7 +24,8 @@ import { TopicComponent } from './topic/topic.component';
     DatatableComponent,
     LoginFormComponent,
     ForumComponent,
-    TopicComponent
+    TopicComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
