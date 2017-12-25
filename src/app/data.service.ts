@@ -10,11 +10,12 @@ import 'rxjs/add/operator/catch';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
 import { ITokenResponse } from "./iTokenResponse";
+import { Topic } from "./topic";
 
 @Injectable()
 export class DataService {
     dataUrl: string = "http://restcountries.eu/rest/v2/name/india?fullText=true";
-    testURl: string ="/ProjectREST/greeting";
+    getTopicURl: string ="/ProjectREST/forum";
     loginURL: string ="/ProjectREST/login";
     adminURL: string ="/ProjectREST/admin";
 
@@ -54,10 +55,9 @@ export class DataService {
             .catch( this.handleError );
     }
     
-     testGetJson(): Observable<any> {
+     getForumTopics(): Observable<Topic[]> {
         return this._http
-            .get( this.testURl )
-            //.map(( response: Response ) => response.json() )
+            .get( this.getTopicURl )
             .do(data => console.log("Success:"+data))//on success
             .catch( this.handleError );
     }

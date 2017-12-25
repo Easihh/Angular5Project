@@ -1,6 +1,8 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { Topic } from "../topic";
 import { ActivatedRoute } from "@angular/router";
+import { DataService } from "../data.service";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: 'app-forum',
@@ -19,22 +21,43 @@ export class ForumComponent  implements OnInit{
     @ViewChild( 'topicBtn' ) topicBtn;
     
 
-    constructor(private route: ActivatedRoute) { 
+    constructor( private route: ActivatedRoute, private dataService: DataService ) { 
         this.initTopics();
-      //followed by retrieving count of all topics from DB for pagination logic
-        this.topicCount = 9;
-        this.initPagination();//should be only after return call from db for data  
     }
     
     
     
     private initTopics() {
-        //retrieve top perPageTopic from DB
-        for ( let i = 10000; i < 10000 + this.perPageTopic; i++ ) {
-            this.topics.push( new Topic( i, "New Topic Created", 0, "Test", "Now" ) );
+        //retrieve top perPageTopic from DB offset by page number 
+        //i.e  page 2 should return topic 21-40 with 20 topics per page
+        this.dataService.getForumTopics().subscribe(( data ) => {
+            this.topics = data;
+            this.topicCount = data.length;
+            this.initTimestamp();//currently read from topic instead of replies;
+            this.initPagination();
+        } );
+    }
+    private initTimestamp() {
+        for ( let i = 0; i < this.topics.length; i++ ) {
+            let lastReplyDate = new Date( this.topics[i].created )
+            let date = new Date();
+            let currentTime = date.valueOf() / 1000 | 0;
+            let lastReplyTime = lastReplyDate.valueOf();
+            let timeDifferenceInSeconds = currentTime - lastReplyTime;
+            if ( timeDifferenceInSeconds < 60 ) {
+                this.topics[i].created = timeDifferenceInSeconds + "s";
+            }
+            else if ( timeDifferenceInSeconds < 3600 ) {
+                this.topics[i].created = ( timeDifferenceInSeconds / 60 | 0 ) + "m";
+            }
+            else {
+                lastReplyDate.setTime( lastReplyTime * 1000 );
+                let datePipe = new DatePipe( "en-US" );
+                this.topics[i].created = datePipe.transform( lastReplyDate, 'MMM dd, yyyy' );
+            }
+            console.log( "TimeDifference(s):" + ( timeDifferenceInSeconds ) );
         }
     }
-        
     private initPagination() {
         this.currentPage = 1;
         
