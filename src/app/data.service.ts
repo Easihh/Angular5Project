@@ -15,7 +15,8 @@ import { Topic } from "./topic";
 @Injectable()
 export class DataService {
     dataUrl: string = "http://restcountries.eu/rest/v2/name/india?fullText=true";
-    getTopicURl: string ="/ProjectREST/forum";
+    getTopicURL: string ="/ProjectREST/forum";
+    createTopicURL: string ="/ProjectREST/forum/topic/create";
     loginURL: string ="/ProjectREST/login";
     adminURL: string ="/ProjectREST/admin";
 
@@ -57,10 +58,16 @@ export class DataService {
     
      getForumTopics(): Observable<Topic[]> {
         return this._http
-            .get( this.getTopicURl )
+            .get( this.getTopicURL )
             .do(data => console.log("Success:"+data))//on success
             .catch( this.handleError );
     }
+     
+     createNewTopic( title: String, body: String ): Observable<any> {
+         return this._http.put( this.createTopicURL, { title: title, body: body } )
+         .do( data => console.log( "Topic:" + data ) )//data return in
+         .catch( this.handleError );
+     }
     
      getUsername(): string {
          const token: string = this.jwtHelperService.tokenGetter();

@@ -3,8 +3,25 @@
 	forum works!
 	<div class="forum-container">
 		<div>
-			<button #topicBtn type="button"  (click)="createTopic()" class="btn btn-primary btn-hover">NewTopic</button>
-		</div>	
+			<button #topicBtn type="button"  (click)="showTopicForm()" class="btn btn-primary btn-hover">New Topic</button>
+		</div>
+		<div *ngIf="isCreatingTopic" class="topicCreation-container">
+			<div>
+				<form (ngSubmit)="createTopic(newTopicTitle.value,newTopicBody.value)" >
+					<fieldset>
+						<legend>New Topic</legend>
+						<input type="text" #newTopicTitle class="form-control create-topic-form"
+							value="Title">
+						<div class="form-group">
+							<label for="create-topic-textarea">text (optional)</label>
+							<textarea #newTopicBody class="form-control" id="create-topic-textarea"
+								rows="3"></textarea>
+						</div>
+						<button type="submit" class="btn btn-success">CREATE TOPIC</button>
+					</fieldset>
+				</form>
+			</div>
+		</div>
 		<div class="topic-container">
 			<div *ngFor="let topic of topics">
 				<a class="topic-link" [routerLink]="['./topic',topic.id]">
