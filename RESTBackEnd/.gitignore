@@ -1,9 +1,12 @@
 
 *.class
-RESTBackEnd/bin/application.properties
-RESTBackEnd/.settings/org.eclipse.wst.common.project.facet.core.xml
-RESTBackEnd/.settings/org.eclipse.wst.common.component
-RESTBackEnd/.settings/org.eclipse.buildship.core.prefs
-RESTBackEnd/.project
-RESTBackEnd/.gradle/buildOutputCleanup/cache.properties
-RESTBackEnd/.classpath
+*.lock
+*.bin
+/.classpath
+/bin/application.properties
+/.settings/org.eclipse.wst.common.project.facet.core.xml
+/.settings/org.eclipse.wst.common.component
+/.settings/org.eclipse.buildship.core.prefs
+/.project
+/.gradle/buildOutputCleanup/cache.properties
+/.classpath
