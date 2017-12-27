@@ -1,9 +1,0 @@
-
-*.class
-RESTBackEnd/.classpath
-RESTBackEnd/.gradle/buildOutputCleanup/cache.properties
-RESTBackEnd/.project
-*.prefs
-RESTBackEnd/.settings/org.eclipse.wst.common.component
-RESTBackEnd/.settings/org.eclipse.wst.common.project.facet.core.xml
-RESTBackEnd/bin/application.properties
