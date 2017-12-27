@@ -1,0 +1,10 @@
+
+RESTBackEnd/.classpath
+RESTBackEnd/.project
+RESTBackEnd/.gradle/buildOutputCleanup/cache.properties
+RESTBackEnd/.settings/org.eclipse.wst.common.project.facet.core.xml
+*.bin
+*.lock
+RESTBackEnd/.settings/org.eclipse.wst.common.component
+RESTBackEnd/.settings/org.eclipse.buildship.core.prefs
+RESTBackEnd/bin/*.*
