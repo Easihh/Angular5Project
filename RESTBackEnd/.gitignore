@@ -3,10 +3,12 @@
 *.lock
 *.bin
 /.classpath
-/bin/application.properties
+/bin/
 /.settings/org.eclipse.wst.common.project.facet.core.xml
 /.settings/org.eclipse.wst.common.component
 /.settings/org.eclipse.buildship.core.prefs
 /.project
 /.gradle/buildOutputCleanup/cache.properties
 /.classpath
+/.gradle/
+/build/
