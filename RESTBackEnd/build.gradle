@@ -1,0 +1,42 @@
+buildscript {
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use jcenter for resolving your dependencies.
+    mavenCentral()
+}
+
+dependencies {
+	classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
+}
+}
+apply plugin: 'war'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+//war {
+ //   baseName = 'ProjectREST'
+ //   version =  '0.5.0'
+//}
+
+jar {
+    baseName = 'gs-rest-service'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web"
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile files('libs/ojdbc8.jar')
+    compile('com.auth0:java-jwt:3.3.0')
+}
