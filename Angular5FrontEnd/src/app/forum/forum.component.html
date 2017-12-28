@@ -29,7 +29,7 @@
 						<span class="topic-title">
 							<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">{{topic.title}}</span>
 						</span>
-						<span class="topic-comment">{{topic.replies}}</span>
+						<span class="topic-comment">{{topic.repliesCounter}}</span>
 						<span class="topic-author">{{topic.author}}</span> 
 						<span class="topic-timestamp">{{topic.created}}</span>
 					</div>
@@ -42,11 +42,11 @@
 <div class="float_center">
 	<ul class="pagination">
     <li *ngIf="showPrevPage" class="page-item">
-      <a *ngIf="currentPage-1!=1" class="page-link"  routerLink="page/{{currentPage-1}}"> &lt; PREVIOUS</a>
-      <a *ngIf="currentPage-1==1" class="page-link"  routerLink="/forum"> &lt; PREVIOUS</a>
+      <a *ngIf="currentPage-1!=1" class="btn btn-outline-warning"  routerLink="page/{{currentPage-1}}"> &lt; PREVIOUS</a>
+      <a *ngIf="currentPage-1==1" class="btn btn-outline-warning"  routerLink="/forum"> &lt; PREVIOUS</a>
     </li>
     <li *ngIf="showNextPage" class="page-item">
-      <a class="page-link"  routerLink="page/{{currentPage+1}}">NEXT &gt;</a>
+      <a class="btn btn-outline-warning"  routerLink="page/{{currentPage+1}}">NEXT &gt;</a>
     </li>
   </ul>
 </div>
