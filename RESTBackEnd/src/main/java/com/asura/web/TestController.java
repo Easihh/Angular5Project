@@ -1,10 +1,16 @@
 package com.asura.web;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,11 +31,17 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 @RestController
 public class TestController {
 	
+	@PersistenceContext
+	EntityManager entityManager;
+	
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
 	private TopicRepository topicRepository;
+	
+	@Autowired
+	private TopicReplyRepository topicReplyRepository;
 
 	@RequestMapping(value = {"/greeting","/"}, method = RequestMethod.GET)
 	public Greeting greeting() {
@@ -38,8 +50,24 @@ public class TestController {
 	
 	@RequestMapping(value = { "forum" }, method = RequestMethod.GET)
 	public ResponseEntity<List<Topic>> getForumTopics() {
+		Map<Long, Long> orderInfoMap = new HashMap<Long, Long>();
 		List<Topic> topicList = new ArrayList<Topic>();
 		topicRepository.findAll().forEach(topicList::add);
+		
+		Query query = entityManager
+				.createNativeQuery("select tr.topic_id,count(*) from TOPIC_REPLIES tr " + "group by tr.topic_id");
+		
+		List<Object[]> test = query.getResultList();
+		for (Object[] objArr : test) {
+			Long topicId = ((BigDecimal) objArr[0]).longValue();
+			Long repliesCount = ((BigDecimal) objArr[1]).longValue();
+			repliesCount -= 1;// dont count topic creation reply.
+			orderInfoMap.put(topicId, repliesCount);
+		}
+		
+		for(Topic topic:topicList) {
+			topic.setRepliesCounter(orderInfoMap.get(topic.getId()));
+		}
 		return new ResponseEntity<>(topicList, HttpStatus.OK);
 	}
 	
@@ -64,7 +92,13 @@ public class TestController {
 			return new ResponseEntity<>("Failed to create the topic.", HttpStatus.OK);
 		}*/
 		
-		topicRepository.save(topic);
+		Topic savedTopic = topicRepository.save(topic);
+		TopicReply reply = new TopicReply();
+		reply.setAuthor("Admin");
+		reply.setReplyText("Hi");
+		reply.setTopicId(savedTopic.getId());
+		reply.setCreated(System.currentTimeMillis());
+		topicReplyRepository.save(reply);
 	}
 	
 	private DecodedJWT getDecodedJWT(String token) {

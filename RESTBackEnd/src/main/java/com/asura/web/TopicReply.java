@@ -9,42 +9,26 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="TOPICS")
-public class Topic {
+@Table(name="TOPIC_REPLIES")
+public class TopicReply {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TOPICS_SEQ")
-	@SequenceGenerator(name = "TOPICS_SEQ",sequenceName = "TOPICS_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TOPIC_REPLIES_SEQ")
+	@SequenceGenerator(name = "TOPIC_REPLIES_SEQ",sequenceName = "TOPIC_REPLIES_SEQ", allocationSize = 1)
 	@Column(name = "ID")
 	private Long id;
 	
-	@Column(name = "TITLE")
-	private String title;
+	@Column(name="TOPIC_ID")
+	private Long topicId;
 	
 	@Column(name = "AUTHOR")
 	private String author;
 	
+	@Column(name="REPLY_TEXT")
+	private String replyText;
+	
 	@Column(name = "CREATED")
 	private Long created;
-	
-	private transient Long repliesCounter;
-	private transient Long lastReplies;
-	
-	public Long getRepliesCounter() {
-		return repliesCounter;
-	}
-
-	public void setRepliesCounter(Long repliesCounter) {
-		this.repliesCounter = repliesCounter;
-	}
-
-	public Long getLastReplies() {
-		return lastReplies;
-	}
-
-	public void setLastReplies(Long lastReplies) {
-		this.lastReplies = lastReplies;
-	}
 
 	public Long getId() {
 		return id;
@@ -53,13 +37,13 @@ public class Topic {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getTitle() {
-		return title;
+	
+	public String getReplyText() {
+		return replyText;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setReplyText(String replyText) {
+		this.replyText = replyText;
 	}
 
 	public String getAuthor() {
@@ -78,4 +62,11 @@ public class Topic {
 		this.created = created;
 	}
 	
+	public Long getTopicId() {
+		return topicId;
+	}
+
+	public void setTopicId(Long topicId) {
+		this.topicId = topicId;
+	}
 }
