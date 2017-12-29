@@ -16,14 +16,12 @@ export class ForumComponent  implements OnInit{
     currentPage: number;
     maxPage: number;
     topics: Topic[] = [];
-    showNextPage: boolean;
     showPrevPage: boolean;
     isCreatingTopic: boolean = false;
     @ViewChild( 'topicBtn' ) topicBtn;
     
 
     constructor( private route: ActivatedRoute, private dataService: DataService ) { 
-        this.initTopics();
     }
     
     
@@ -35,7 +33,6 @@ export class ForumComponent  implements OnInit{
             this.topics = data;
             this.topicCount = data.length;
             this.initTimestamp();//currently read from topic instead of replies;
-            this.initPagination();
         } );
     }
     private initTimestamp() {
@@ -58,32 +55,28 @@ export class ForumComponent  implements OnInit{
                 let datePipe = new DatePipe( "en-US" );
                 this.topics[i].created = datePipe.transform( lastReplyDate, 'MMM dd, yyyy' );
             }
-            console.log( "TimeDifference(s):" + ( timeDifferenceInSeconds ) );
         }
-    }
-    private initPagination() {
-        this.currentPage = 1;
+    }  
+    ngOnInit(): void {
+        console.log("ngOnInit was called.");
         
-        let rem = this.topicCount % this.perPageTopic;
-        console.log( "rem:" + rem );
-        let total = ( this.topicCount - rem ) / this.perPageTopic;
-        console.log( "Total:" + total );
-        this.maxPage = rem == 0 ? total : total += 1;
+        this.route.params.subscribe(params=>{
+            let pageNumber = params[ 'id' ];
+            if ( pageNumber == null ) {
+                //we are in the main forum page
+                this.currentPage = 1;
+            }
+            else {
+                this.currentPage = parseInt( pageNumber );
+            }
+            this.showPrevPage = this.currentPage == 1 ? false : true;
+            
+            this.initTopics();
+        });
     }
     
-    ngOnInit(): void {
-        let pageNumber = this.route.snapshot.paramMap.get( 'id' );
-        if ( pageNumber == null ) {
-            //we are in the main forum page
-            this.currentPage = 1;
-            console.log("my page number is null");
-        }
-        else {
-            this.currentPage = parseInt( pageNumber );
-        }
-
-        this.showNextPage = this.currentPage == this.maxPage ? false : true;
-        this.showPrevPage = this.currentPage == 1 ? false : true;
+    increasePage(){
+        this.currentPage++;
     }
     
     showTopicForm(){
