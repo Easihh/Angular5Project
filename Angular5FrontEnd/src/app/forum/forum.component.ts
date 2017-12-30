@@ -29,7 +29,7 @@ export class ForumComponent  implements OnInit{
     private initTopics() {
         //retrieve top perPageTopic from DB offset by page number 
         //i.e  page 2 should return topic 21-40 with 20 topics per page
-        this.dataService.getForumTopics().subscribe(( data ) => {
+        this.dataService.getForumTopics(this.currentPage).subscribe(( data ) => {
             this.topics = data;
             this.topicCount = data.length;
             this.initTimestamp();//currently read from topic instead of replies;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { ICountry } from './icountry';
 import 'rxjs/add/operator/map';
@@ -56,10 +56,12 @@ export class DataService {
             .catch( this.handleError );
     }
     
-     getForumTopics(): Observable<Topic[]> {
+    getForumTopics( pageNumber: number ): Observable<Topic[]> {
+        let params = new HttpParams();
+        params = params.append( "pageNumber", pageNumber.toString() );
         return this._http
-            .get( this.getTopicURL )
-            .do(data => console.log("Success:"+data))//on success
+            .get( this.getTopicURL, { params: params } )
+            .do( data => console.log( "Success:" + data ) )//on success
             .catch( this.handleError );
     }
      
