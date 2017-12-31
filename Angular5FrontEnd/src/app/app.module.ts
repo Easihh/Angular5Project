@@ -15,6 +15,7 @@ import { ForumComponent } from './forum/forum.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TopicComponent } from './topic/topic.component';
 import { HomeComponent } from './home/home.component';
+import { TopicService } from "./topic.service";
 
 @NgModule({
   declarations: [     
@@ -43,7 +44,7 @@ import { HomeComponent } from './home/home.component';
     routes
   ],
   exports: [],
-  providers: [DataService,AuthGuard],
+  providers: [DataService,AuthGuard,TopicService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -8,14 +8,16 @@ import { NotFoundComponent } from './notfound/notfound.component';
 import { TopicComponent } from './topic/topic.component';
 import { AuthGuard} from './auth.guard';
 import { HomeComponent } from "./home/home.component";
+import { TopicService } from "./topic.service";
+import { Topic } from "./topic";
 
 export const router: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent},
     { path: 'about', component: AboutComponent , canActivate:[AuthGuard]},
     { path: 'forum/topic/:id', component: TopicComponent},
-    { path: 'forum/page/:id', component: ForumComponent},
-    { path: 'forum', component: ForumComponent},
+    { path: 'forum/page/:id', component: ForumComponent , resolve:{topics:TopicService}},
+    { path: 'forum', component: ForumComponent , resolve:{topics:TopicService}},
     { path: '**', component: NotFoundComponent },
 ];
 

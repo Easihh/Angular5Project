@@ -26,14 +26,13 @@ export class DataService {
     
     private handleError( error: any ) {
         if ( error instanceof Response ) {//Backend Error
-            //.json() parsing failed from server. This part is used for Dev only
+            //.json() parsing failed from server
             console.log( "Error:"+error.text() );
             return Observable.throw( error.text() );
         }
         //otherwise the server returned error code status
         console.log("Hello There");
-        return Observable.throw( error || 'backend error' );
-
+        return Observable.throw( error );
     }
     
     loggedIn() : boolean {
@@ -61,7 +60,7 @@ export class DataService {
         params = params.append( "pageNumber", pageNumber.toString() );
         return this._http
             .get( this.getTopicURL, { params: params } )
-            .do( data => console.log( "Success:" + data ) )//on success
+            //.do( data => console.log( "Success:" + data ) )//on success
             .catch( this.handleError );
     }
      

@@ -1,6 +1,6 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { Topic } from "../topic";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DataService } from "../data.service";
 import { DatePipe } from "@angular/common";
 
@@ -21,20 +21,9 @@ export class ForumComponent  implements OnInit{
     @ViewChild( 'topicBtn' ) topicBtn;
     
 
-    constructor( private route: ActivatedRoute, private dataService: DataService ) { 
+    constructor( private route: ActivatedRoute, private dataService: DataService, private router:Router ) { 
     }
     
-    
-    
-    private initTopics() {
-        //retrieve top perPageTopic from DB offset by page number 
-        //i.e  page 2 should return topic 21-40 with 20 topics per page
-        this.dataService.getForumTopics(this.currentPage).subscribe(( data ) => {
-            this.topics = data;
-            this.topicCount = data.length;
-            this.initTimestamp();//currently read from topic instead of replies;
-        } );
-    }
     private initTimestamp() {
         for ( let i = 0; i < this.topics.length; i++ ) {
             let lastReplyDate = new Date( this.topics[i].created )
@@ -59,9 +48,16 @@ export class ForumComponent  implements OnInit{
     }  
     ngOnInit(): void {
         console.log("ngOnInit was called.");
-        
-        this.route.params.subscribe(params=>{
-            let pageNumber = params[ 'id' ];
+        /* Have to subscribe here since ngOnInit is only called once
+         * when going in the same path ie from forum/page2 to forum/page3
+         * 
+         * careful here: data is an object containing a list of topic
+         * and not the actual list of topic so you cannot assign topics
+         * to this variable straight away.
+         */      
+        this.route.data.subscribe((data:any) =>{
+            this.topics=this.route.snapshot.data['topics'];
+            let pageNumber = this.route.snapshot.params['id'];
             if ( pageNumber == null ) {
                 //we are in the main forum page
                 this.currentPage = 1;
@@ -69,14 +65,25 @@ export class ForumComponent  implements OnInit{
             else {
                 this.currentPage = parseInt( pageNumber );
             }
-            this.showPrevPage = this.currentPage == 1 ? false : true;
-            
-            this.initTopics();
+            this.initData();
         });
     }
     
     increasePage(){
         this.currentPage++;
+    }
+    
+    initData(){
+        this.showPrevPage = this.currentPage == 1 ? false : true;
+        this.topicCount = this.topics.length;
+        this.initTimestamp();//currently read from topic instead of replies;
+    }
+    
+    refreshData(){
+        this.dataService.getForumTopics(this.currentPage).subscribe(topics=>{
+            this.topics=topics;
+            this.initData();
+        });
     }
     
     showTopicForm(){
@@ -85,13 +92,22 @@ export class ForumComponent  implements OnInit{
     }
         
     createTopic( title: String, topicBody: String ): void {
-        this.isCreatingTopic = false;
+        
         this.dataService.createNewTopic( title, topicBody)
         .subscribe(
         res => {
-            //Topic Creation Succeeded,refresh page data so we see it     
-            this.initTopics();
-            console.log( res );
+            this.isCreatingTopic = false;
+            //Topic Creation Succeeded,refresh page data so we see it.
+            
+            /*If we are currently on main page(1) refresh data, otherwise reroute to main page
+            which will load the new data.Rerouting to the same page you are currently viewing
+            will not activate anything as per angular.*/
+            if ( this.currentPage != 1 ) {
+                this.router.navigateByUrl( "/forum" );
+            }
+            else{
+                this.refreshData();
+            }
         },
         error => console.log( "ERROR:" + error )
         );
