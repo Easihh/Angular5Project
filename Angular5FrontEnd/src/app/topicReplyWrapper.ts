@@ -5,6 +5,7 @@ import { TopicReply } from "./topicReply";
  */
 export class TopicReplyWrapper {
     constructor(
+        public topicTitle:string,
         public repliesCount:number,
         public topicReplies:TopicReply[]
     ) {}

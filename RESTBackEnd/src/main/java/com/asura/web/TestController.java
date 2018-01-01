@@ -31,14 +31,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 @RestController
 public class TestController {
-	
-	private final int topicsReplyPerPage = 5;
-	
+		
 	@PersistenceContext
 	EntityManager entityManager;
-	
-	@Autowired
-	private UserRepository userRepository;
 	
 	@Autowired
 	private TopicRepository topicRepository;
@@ -54,18 +49,14 @@ public class TestController {
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
 			@RequestParam("pageNumber") int pageNumber) {
-		List<TopicReply> topicReplies = topicReplyRepository.getTopicRepliesByTopicIds(topicId, pageNumber);
-		int total = topicReplies.size();
-		int startIndex = (topicsReplyPerPage * pageNumber) - topicsReplyPerPage;
-		int endIndex = startIndex + topicsReplyPerPage;
-		if (endIndex > topicReplies.size()) {
-			endIndex = topicReplies.size();
-		}
-		topicReplies = topicReplies.subList(startIndex, endIndex);
-		TopicReplyWrapper wrapper = new TopicReplyWrapper(total, topicReplies);
+		Topic topic = topicRepository.findOne(topicId);
+		String topicTitle = topic == null ? "Topic does not exist" : topic.getTitle();
+		List<TopicReply> topicReplies = topicReplyRepository.getPagedTopicRepliesByTopicId(topicId, pageNumber);
+		int total = topicReplyRepository.getTotalTopicRepliesByTopicId(topicId);
+		TopicReplyWrapper wrapper = new TopicReplyWrapper(total, topicReplies, topicTitle);
 		return new ResponseEntity<>(wrapper, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = { "forum" }, method = RequestMethod.GET)
 	public ResponseEntity<List<Topic>> getForumTopics(@RequestParam("pageNumber") int pageNumber) {
 		Map<Long, Long> orderInfoMap = new HashMap<Long, Long>();

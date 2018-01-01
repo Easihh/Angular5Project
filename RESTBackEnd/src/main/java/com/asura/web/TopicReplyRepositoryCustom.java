@@ -4,5 +4,7 @@ import java.util.List;
 
 public interface TopicReplyRepositoryCustom {
 	
-	List<TopicReply> getTopicRepliesByTopicIds(long topicId,int pageNumber);
+	List<TopicReply> getPagedTopicRepliesByTopicId(long topicId, int pageNumber);
+	
+	int getTotalTopicRepliesByTopicId(long topicId);
 }

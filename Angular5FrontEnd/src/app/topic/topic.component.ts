@@ -11,13 +11,12 @@ import { TopicReplyWrapper } from "../topicReplyWrapper";
 })
 export class TopicComponent implements OnInit {
   
-    @Input( 'topicTitle' ) topicTitle;
-    topicIdentifier: string;
     replies: TopicReply[] = [];
     perPageTopicReplies: number = 5;
     currentPage: number;
     pageholder:number[]=[];
     topicId:number;
+    topicTitle:string; 
   
   constructor(private route: ActivatedRoute, private dataService:DataService ) { }
 
@@ -30,6 +29,7 @@ export class TopicComponent implements OnInit {
           this.replies = wrapper.topicReplies;
           let pageNumber = this.route.snapshot.params['page'];
           this.topicId = this.route.snapshot.params['topicId'];
+          this.topicTitle=wrapper.topicTitle;
           console.log("TopicId:"+this.topicId);
           if ( isNaN(pageNumber)) {
               //we are in the main topic-reply page
@@ -44,7 +44,6 @@ export class TopicComponent implements OnInit {
           this.pageholder = [];
           let minPage = this.currentPage == 1 ? 1 : this.currentPage - 1;
           for ( let i = minPage; i <= maxPage; i++ ) {
-              console.log("loop");
               if ( isNaN( pageNumber ) && i==1 ) {
                   continue;    
               }
