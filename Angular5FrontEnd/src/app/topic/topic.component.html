@@ -5,8 +5,17 @@
   Topic Title here
 	<div *ngFor="let reply of replies" class="reply-details">
 		<span class="reply-user">{{reply.author}}</span>
-		<span class="reply-comment">{{reply.comment}}</span>
+		<span class="reply-comment">{{reply.replyComment}}</span>
 	</div>
+  </div>
+  
+  <div *ngFor="let page of pageholder" class="pagination inline">
+	    <li *ngIf="page==currentPage" class="page-item active">
+	      <a class="btn btn-outline-warning" >{{page}}</a>
+	    </li>
+		<li *ngIf="page!=currentPage" class="page-item">
+	      <a class="btn btn-outline-warning" routerLink="/forum/topic/{{topicId}}/page/{{page}}">{{page}}</a>
+	    </li>
   </div>
 </body>
 

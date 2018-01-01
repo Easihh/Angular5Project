@@ -33,7 +33,9 @@ public class Topic {
 	private Long created;
 	
 	private transient Long repliesCounter;
-	private transient Long lastReplies;
+	
+	@Column(name="LAST_UPDATED")
+	private Long lastUpdated;
 	
 	public Long getRepliesCounter() {
 		return repliesCounter;
@@ -41,14 +43,6 @@ public class Topic {
 
 	public void setRepliesCounter(Long repliesCounter) {
 		this.repliesCounter = repliesCounter;
-	}
-
-	public Long getLastReplies() {
-		return lastReplies;
-	}
-
-	public void setLastReplies(Long lastReplies) {
-		this.lastReplies = lastReplies;
 	}
 
 	public Long getId() {
@@ -83,4 +77,11 @@ public class Topic {
 		this.created = created;
 	}
 	
+	public Long getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Long lastUpdated) {
+		this.lastUpdated = lastUpdated;
+	}
 }

@@ -1,8 +1,8 @@
-export class Reply {
+export class TopicReply {
     constructor(
         public id:number,
         public author: string,
-        public comment: string,
+        public replyComment: string,
         public timestamp: string
     ) {}
 }

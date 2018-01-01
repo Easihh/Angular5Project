@@ -11,11 +11,13 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
 import { ITokenResponse } from "./iTokenResponse";
 import { Topic } from "./topic";
+import { TopicReply } from "./topicReply";
 
 @Injectable()
 export class DataService {
     dataUrl: string = "http://restcountries.eu/rest/v2/name/india?fullText=true";
     getTopicURL: string ="/ProjectREST/forum";
+    getTopicRepliesURL: string ="/ProjectREST/forum/topic";
     createTopicURL: string ="/ProjectREST/forum/topic/create";
     loginURL: string ="/ProjectREST/login";
     adminURL: string ="/ProjectREST/admin";
@@ -63,6 +65,17 @@ export class DataService {
             //.do( data => console.log( "Success:" + data ) )//on success
             .catch( this.handleError );
     }
+    
+    getTopicReplies(topicId:number, pageNumber: number ): Observable<TopicReply[]> {
+        let params = new HttpParams();
+        params = params.append( "pageNumber", pageNumber.toString() );
+        params = params.append( "topicId", topicId.toString() );
+        return this._http
+            .get( this.getTopicRepliesURL, { params: params } )
+            //.do( data => console.log( "Success:" + data ) )//on success
+            .catch( this.handleError );
+    }
+     
      
      createNewTopic( title: String, body: String ): Observable<any> {
          return this._http.put( this.createTopicURL, { title: title, body: body } )

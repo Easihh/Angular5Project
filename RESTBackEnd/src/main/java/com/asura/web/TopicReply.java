@@ -5,11 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="TOPIC_REPLIES")
+@NamedQueries({
+	@NamedQuery(name="TopicReply.findByTopicId",query="select t from TopicReply t where t.topicId=:id Order by t.created DESC")
+})
 public class TopicReply {
 	
 	@Id
@@ -24,8 +29,8 @@ public class TopicReply {
 	@Column(name = "AUTHOR")
 	private String author;
 	
-	@Column(name="REPLY_TEXT")
-	private String replyText;
+	@Column(name="REPLY_COMMENT")
+	private String replyComment;
 	
 	@Column(name = "CREATED")
 	private Long created;
@@ -38,14 +43,6 @@ public class TopicReply {
 		this.id = id;
 	}
 	
-	public String getReplyText() {
-		return replyText;
-	}
-
-	public void setReplyText(String replyText) {
-		this.replyText = replyText;
-	}
-
 	public String getAuthor() {
 		return author;
 	}
@@ -68,5 +65,13 @@ public class TopicReply {
 
 	public void setTopicId(Long topicId) {
 		this.topicId = topicId;
+	}
+	
+	public String getReplyComment() {
+		return replyComment;
+	}
+
+	public void setReplyComment(String replyComment) {
+		this.replyComment = replyComment;
 	}
 }

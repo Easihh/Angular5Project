@@ -32,6 +32,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 @RestController
 public class TestController {
 	
+	private final int topicsReplyPerPage = 5;
+	
 	@PersistenceContext
 	EntityManager entityManager;
 	
@@ -47,6 +49,21 @@ public class TestController {
 	@RequestMapping(value = {"/greeting","/"}, method = RequestMethod.GET)
 	public Greeting greeting() {
 		return new Greeting();
+	}
+	
+	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
+	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
+			@RequestParam("pageNumber") int pageNumber) {
+		List<TopicReply> topicReplies = topicReplyRepository.getTopicRepliesByTopicIds(topicId, pageNumber);
+		int total = topicReplies.size();
+		int startIndex = (topicsReplyPerPage * pageNumber) - topicsReplyPerPage;
+		int endIndex = startIndex + topicsReplyPerPage;
+		if (endIndex > topicReplies.size()) {
+			endIndex = topicReplies.size();
+		}
+		topicReplies = topicReplies.subList(startIndex, endIndex);
+		TopicReplyWrapper wrapper = new TopicReplyWrapper(total, topicReplies);
+		return new ResponseEntity<>(wrapper, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = { "forum" }, method = RequestMethod.GET)
@@ -86,6 +103,7 @@ public class TestController {
 		topic.setTitle(title);
 		topic.setAuthor("Admin");
 		topic.setCreated(System.currentTimeMillis());
+		topic.setLastUpdated(System.currentTimeMillis());
 		/*String token = getJWTToken(header);
 		if(token==null) {
 			
@@ -98,7 +116,7 @@ public class TestController {
 		Topic savedTopic = topicRepository.save(topic);
 		TopicReply reply = new TopicReply();
 		reply.setAuthor("Admin");
-		reply.setReplyText("Hi");
+		reply.setReplyComment("Hi");
 		reply.setTopicId(savedTopic.getId());
 		reply.setCreated(System.currentTimeMillis());
 		topicReplyRepository.save(reply);

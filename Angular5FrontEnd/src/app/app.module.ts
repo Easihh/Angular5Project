@@ -16,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TopicComponent } from './topic/topic.component';
 import { HomeComponent } from './home/home.component';
 import { TopicService } from "./topic.service";
+import { TopicReplyResolver } from "./topicReply.resolver";
 
 @NgModule({
   declarations: [     
@@ -44,7 +45,7 @@ import { TopicService } from "./topic.service";
     routes
   ],
   exports: [],
-  providers: [DataService,AuthGuard,TopicService],
+  providers: [DataService,AuthGuard,TopicService,TopicReplyResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

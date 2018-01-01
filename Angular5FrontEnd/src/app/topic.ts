@@ -4,6 +4,6 @@ export class Topic {
         public title: string,
         public repliesCounter: number,
         public author: string,
-        public created: string
+        public lastUpdated: string
     ) {}
 }

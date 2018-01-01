@@ -24,14 +24,14 @@
 		</div>
 		<div class="topic-container">
 			<div *ngFor="let topic of topics">
-				<a class="topic-link" [routerLink]="['./topic',topic.id]">
+				<a class="topic-link" [routerLink]="['/forum/topic',topic.id]">
 					<div class="topic-details">
 						<span class="topic-title">
 							<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">{{topic.title}}</span>
 						</span>
 						<span class="topic-comment">{{topic.repliesCounter}}</span>
 						<span class="topic-author">{{topic.author}}</span> 
-						<span class="topic-timestamp">{{topic.created}}</span>
+						<span class="topic-timestamp">{{topic.lastUpdated}}</span>
 					</div>
 				</a>
 			</div>
