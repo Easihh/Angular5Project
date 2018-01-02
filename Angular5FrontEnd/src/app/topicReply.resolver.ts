@@ -7,11 +7,11 @@ import 'rxjs/add/observable/of';
 import { TopicReplyWrapper } from "./topicReplyWrapper";
 
 @Injectable()
-export class TopicReplyResolver implements Resolve<TopicReplyWrapper[]>{
+export class TopicReplyResolver implements Resolve<TopicReplyWrapper>{
 
   constructor(private dataService: DataService, private router: Router) { }
 
-  resolve(route: ActivatedRouteSnapshot) : Observable<TopicReplyWrapper[]>{
+  resolve(route: ActivatedRouteSnapshot) : Observable<TopicReplyWrapper>{
       let page = +route.params['page'];
       let topicId=+route.params['topicId'];
       if ( isNaN(page)) {

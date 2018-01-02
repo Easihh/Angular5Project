@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="TOPIC_REPLIES")
 @NamedQueries({
-	@NamedQuery(name="TopicReply.findByTopicId",query="select t from TopicReply t where t.topicId=:id Order by t.created DESC")
+	@NamedQuery(name="TopicReply.findByTopicId",query="select t from TopicReply t where t.topicId=:id Order by t.created ASC")
 })
 public class TopicReply {
 	

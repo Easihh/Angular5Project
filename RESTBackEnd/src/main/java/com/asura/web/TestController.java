@@ -113,6 +113,24 @@ public class TestController {
 		topicReplyRepository.save(reply);
 	}
 	
+	@RequestMapping(value = { "forum/topic/reply/create" }, method = RequestMethod.PUT)
+	public void createForumTopicReply(@RequestHeader Map<String, String> header,
+			@RequestBody Map<String, String> body) {
+		String topicIdStr = body.get("topicId");
+		String commentText = body.get("body");
+		if (topicIdStr != null) {
+			long topicId = Long.valueOf(topicIdStr);
+			Topic topic = topicRepository.findOne(topicId);
+			if (topic != null) {
+				TopicReply reply = new TopicReply();
+				reply.setAuthor("Admin");
+				reply.setCreated(System.currentTimeMillis());
+				reply.setTopicId(topicId);
+				reply.setReplyComment(commentText);
+				topicReplyRepository.save(reply);
+			}
+		}
+	}
 	private DecodedJWT getDecodedJWT(String token) {
 		// TODO Auto-generated method stub
 		return null;

@@ -12,7 +12,7 @@ import { DatePipe } from "@angular/common";
 export class ForumComponent  implements OnInit{
     
     perPageTopic: number = 5;
-    topicCount: number;
+    //topicCount: number;
     currentPage: number;
     topics: Topic[] = [];
     showPrevPage: boolean;
@@ -70,7 +70,7 @@ export class ForumComponent  implements OnInit{
     
     initData(){
         this.showPrevPage = this.currentPage == 1 ? false : true;
-        this.topicCount = this.topics.length;
+        //this.topicCount = this.topics.length;
         this.initTimestamp();
     }
     

@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
 import { DataService } from "../data.service";
 import { TopicReply } from "../topicReply";
 import { TopicReplyWrapper } from "../topicReplyWrapper";
@@ -16,9 +16,13 @@ export class TopicComponent implements OnInit {
     currentPage: number;
     pageholder:number[]=[];
     topicId:number;
-    topicTitle:string; 
+    topicTitle:string;
+    topicReplyText:string="";
+    @ViewChild( 'replyBtn' ) replyBtn;
+    @ViewChild( 'addReplyBtn' ) addReplyBtn;
+    @ViewChild('replyDiv', { read: ElementRef }) public replyDiv: ElementRef;
   
-  constructor(private route: ActivatedRoute, private dataService:DataService ) { }
+  constructor(private route: ActivatedRoute, private dataService:DataService,private router:Router ) { }
 
   ngOnInit() {
       /* Have to subscribe here since ngOnInit is only called once
@@ -50,5 +54,42 @@ export class TopicComponent implements OnInit {
               this.pageholder.push( i );
           }
       } );
+  }
+  
+  moveToReplyForm() {
+      this.replyBtn.nativeElement.blur();
+      this.replyDiv.nativeElement.scrollIntoView();
+  }
+  
+  refreshData() {
+      this.dataService.getTopicReplies( this.topicId, this.currentPage ).subscribe( repliesWrapper => {
+          this.replies = repliesWrapper.topicReplies;
+          this.topicTitle = repliesWrapper.topicTitle;
+          //should also refresh pagination here incase new page..
+      } );
+  }
+  
+  createTopicReply(): void {
+      this.addReplyBtn.nativeElement.blur();
+      
+      this.dataService.createNewTopicReply( this.topicId, this.topicReplyText)
+      .subscribe(
+      res => {
+          //TopicReply Creation Succeeded,refresh page data so we see it.
+          
+          /*If we are currently on main page(1) refresh data, otherwise reroute to main page
+          which will load the new data.Rerouting to the same page you are currently viewing
+          will not activate anything as per angular.*/
+          if ( this.currentPage != 1 ) {
+              this.router.navigateByUrl( "/forum/topic/"+this.topicId);
+          }
+          else{
+              this.refreshData();
+              this.topicReplyText = "";
+              window.scrollTo( 0, 0 );
+          }
+      },
+      error => console.log( "ERROR:" + error )
+      );
   }
 }

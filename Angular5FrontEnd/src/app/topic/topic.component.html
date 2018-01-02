@@ -1,6 +1,8 @@
 <body class="forum">
   topic page works!
-  
+  		<div>
+			<button #replyBtn type="button" (click)="moveToReplyForm()" class="btn btn-primary btn-hover">Reply</button>
+		</div>
   <div class="reply-container">
   {{topicTitle}}
 	<div *ngFor="let reply of replies" class="reply-details">
@@ -17,5 +19,17 @@
 	      <a class="page-link" routerLink="/forum/topic/{{topicId}}/page/{{page}}">{{page}}</a>
 	    </li>
   </div>
+
+	<div #replyDiv>
+		<form (ngSubmit)="createTopicReply()">
+			<fieldset>
+				<legend>Reply</legend>
+				<div class="form-group">
+					<textarea [(ngModel)]="topicReplyText" class="form-control" name="newTopicReplyBody" rows="3"></textarea>
+				</div>
+				<button #addReplyBtn type="submit" class="btn btn-success">ADD REPLY</button>
+			</fieldset>
+		</form>
+	</div>
 </body>
 
