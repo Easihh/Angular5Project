@@ -2,7 +2,6 @@ package com.asura.web;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -40,16 +39,14 @@ public class TestController {
 	
 	@Autowired
 	private TopicReplyRepository topicReplyRepository;
-
-	@RequestMapping(value = {"/greeting","/"}, method = RequestMethod.GET)
-	public Greeting greeting() {
-		return new Greeting();
-	}
 	
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
-			@RequestParam("pageNumber") int pageNumber) {
+			@RequestParam("pageNumber") int pageNumber) throws Exception {
 		Topic topic = topicRepository.findOne(topicId);
+		if (topicId == 999l) {
+			throw new Exception("Topic with id:" + topicId + " does not exist.");
+		}
 		String topicTitle = topic == null ? "Topic does not exist" : topic.getTitle();
 		List<TopicReply> topicReplies = topicReplyRepository.getPagedTopicRepliesByTopicId(topicId, pageNumber);
 		int total = topicReplyRepository.getTotalTopicRepliesByTopicId(topicId);
@@ -60,13 +57,11 @@ public class TestController {
 	@RequestMapping(value = { "forum" }, method = RequestMethod.GET)
 	public ResponseEntity<List<Topic>> getForumTopics(@RequestParam("pageNumber") int pageNumber) {
 		Map<Long, Long> orderInfoMap = new HashMap<Long, Long>();
-		//List<Topic> topicList = new ArrayList<Topic>();
-		//topicRepository.findAll().forEach(topicList::add);
 		
 		Query query = entityManager
 				.createNativeQuery("select tr.topic_id,count(*) from TOPIC_REPLIES tr " + "group by tr.topic_id");
 		
-		List<Topic> topicList = topicRepository.getTopicByIdsOrderByLastUpdated(pageNumber);
+		List<Topic> topicList = topicRepository.getTopicByPageOrderByLastUpdated(pageNumber);
 
 		List<Object[]> test = query.getResultList();
 		for (Object[] objArr : test) {
@@ -143,12 +138,6 @@ public class TestController {
 		}
 		return token;
 	}
-
-	@RequestMapping(value = {"test"}, method = RequestMethod.GET)
-	public String test() {
-		return "Adsadsad";
-	}
-	
 	
 	private String createAuthenticationToken() {
 		String token = null;

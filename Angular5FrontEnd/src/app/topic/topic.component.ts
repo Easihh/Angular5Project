@@ -30,7 +30,10 @@ export class TopicComponent implements OnInit {
        */      
       this.route.data.subscribe(data => {
           let wrapper: TopicReplyWrapper = data['replies'];
-          this.replies = wrapper.topicReplies;
+          if ( wrapper == null ) {
+              return;//Server did not return any replies due to an Error
+          }
+          this.replies = wrapper.topicReplies;       
           let pageNumber = this.route.snapshot.params['page'];
           this.topicId = this.route.snapshot.params['topicId'];
           this.topicTitle=wrapper.topicTitle;
