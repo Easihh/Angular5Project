@@ -1,6 +1,6 @@
 <body class="forum">
   topic page works!
-  		<div>
+  		<div *ngIf="displayReplyForm">
 			<button #replyBtn type="button" (click)="moveToReplyForm()" class="btn btn-primary btn-hover">Reply</button>
 		</div>
   <div class="reply-container">
@@ -20,7 +20,7 @@
 	    </li>
   </div>
 
-	<div #replyDiv>
+	<div *ngIf="displayReplyForm" #replyDiv>
 		<form (ngSubmit)="createTopicReply()">
 			<fieldset>
 				<legend>Reply</legend>

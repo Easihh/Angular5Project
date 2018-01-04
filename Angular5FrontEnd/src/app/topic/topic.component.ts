@@ -18,6 +18,7 @@ export class TopicComponent implements OnInit {
     topicId:number;
     topicTitle:string;
     topicReplyText:string="";
+    displayReplyForm: boolean = true;
     @ViewChild( 'replyBtn' ) replyBtn;
     @ViewChild( 'addReplyBtn' ) addReplyBtn;
     @ViewChild('replyDiv', { read: ElementRef }) public replyDiv: ElementRef;
@@ -31,32 +32,36 @@ export class TopicComponent implements OnInit {
       this.route.data.subscribe(data => {
           let wrapper: TopicReplyWrapper = data['replies'];
           if ( wrapper == null ) {
+              this.displayReplyForm = false;
               return;//Server did not return any replies due to an Error
           }
-          this.replies = wrapper.topicReplies;       
-          let pageNumber = this.route.snapshot.params['page'];
-          this.topicId = this.route.snapshot.params['topicId'];
-          this.topicTitle=wrapper.topicTitle;
-          console.log("TopicId:"+this.topicId);
-          if ( isNaN(pageNumber)) {
-              //we are in the main topic-reply page
-              this.currentPage = 1;
-          }
-          else {
-              this.currentPage = parseInt( pageNumber );
-          }
-          let rem = wrapper.repliesCount % this.perPageTopicReplies;
-          let div = ( wrapper.repliesCount / this.perPageTopicReplies ) | 0;
-          let maxPage = rem == 0 ? div : div + 1;
-          this.pageholder = [];
-          let minPage = this.currentPage == 1 ? 1 : this.currentPage - 1;
-          for ( let i = minPage; i <= maxPage; i++ ) {
-              if ( isNaN( pageNumber ) && i==1 ) {
-                  continue;    
-              }
-              this.pageholder.push( i );
-          }
+          this.replies = wrapper.topicReplies;
+          this.topicTitle = wrapper.topicTitle;
+          this.initPagination(wrapper.repliesCount);
       } );
+  }
+  
+  initPagination(totalRepliesCount:number){
+      let pageNumber = this.route.snapshot.params['page'];
+      this.topicId = this.route.snapshot.params['topicId'];
+      if ( isNaN(pageNumber)) {
+          //we are in the main topic-reply page
+          this.currentPage = 1;
+      }
+      else {
+          this.currentPage = parseInt( pageNumber );
+      }
+      let rem = totalRepliesCount % this.perPageTopicReplies;
+      let div = ( totalRepliesCount / this.perPageTopicReplies ) | 0;
+      let maxPage = rem == 0 ? div : div + 1;
+      this.pageholder = [];
+      let minPage = this.currentPage == 1 ? 1 : this.currentPage - 1;
+      for ( let i = minPage; i <= maxPage; i++ ) {
+          if ( isNaN( pageNumber ) && i==1 ) {
+              continue;    
+          }
+          this.pageholder.push( i );
+      }
   }
   
   moveToReplyForm() {
@@ -68,7 +73,7 @@ export class TopicComponent implements OnInit {
       this.dataService.getTopicReplies( this.topicId, this.currentPage ).subscribe( repliesWrapper => {
           this.replies = repliesWrapper.topicReplies;
           this.topicTitle = repliesWrapper.topicTitle;
-          //should also refresh pagination here incase new page..
+          this.initPagination(repliesWrapper.repliesCount);
       } );
   }
   
