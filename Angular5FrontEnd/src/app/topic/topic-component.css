@@ -12,8 +12,22 @@
 
 .reply-user{
 	border: 1px red solid;
-	width:20%;
+	width:50%;
 	display:inline-block;
+	height:100%;
+	vertical-align:top;
+}
+
+.reply-avatar{
+	border: 1px pink solid;
+	width:48%;
+	display:inline-block;
+	height:100%;
+}
+
+.reply-userInfo{
+	display:inline-block;
+	width:20%;
 }
 
 .reply-comment{
