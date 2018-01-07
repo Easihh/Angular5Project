@@ -14,6 +14,7 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +39,14 @@ public class TestController {
 	private TopicRepository topicRepository;
 	
 	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
 	private TopicReplyRepository topicReplyRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+		
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
 			@RequestParam("pageNumber") int pageNumber) throws Exception {
@@ -176,18 +183,12 @@ public class TestController {
 		}
 		return true;
 	}
-	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<Message> login(@RequestBody LoginInfoMessage payload) {
-		System.out.println(payload.toString());
-		String token = createAuthenticationToken();
-		//token = null;
-		if (token == null) {
-			return new ResponseEntity<Message>(new Message("Error 566:Authentication Failed."), HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<Message>(new Message(token), HttpStatus.OK);
+	@RequestMapping(value = "/register", method = RequestMethod.PUT)
+	public void register(@RequestBody ApplicationUser user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		userRepository.save(user);
 	}
-	
+
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public ResponseEntity<String> someRestrictedFunction(@RequestHeader Map<String,String> header) {
 		String token=header.get("authorization");

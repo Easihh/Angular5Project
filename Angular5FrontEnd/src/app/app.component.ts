@@ -115,4 +115,13 @@ export class AppComponent implements OnInit {
         this.isOnline = true
         console.log( "LoggedIn Done." );
     }
+    
+    register() {
+        this.dataService.createNewUser( "Admin", "1234" )
+        .subscribe( data => {
+            console.log("UserCreated.");
+        },
+        error => console.log( "Error Creating User:" + error )
+        );
+    }
 }

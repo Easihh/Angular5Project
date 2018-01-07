@@ -16,6 +16,7 @@
     </ul>
 		<login-form *ngIf="!isOnline" (loggedIn)="initLogIn($event)">show login form</login-form>
 		<div *ngIf="isOnline">Welcome {{username}}</div>
+		<button type="button" (click)="register()" class="btn btn-success">Register</button>
 	</div>
  </nav>
 <router-outlet></router-outlet>

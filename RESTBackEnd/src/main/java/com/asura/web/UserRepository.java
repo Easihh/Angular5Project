@@ -2,6 +2,6 @@ package com.asura.web;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<User, Long>{
+public interface UserRepository extends CrudRepository<ApplicationUser, Long>, UserRepositoryCustom{
 	
 }

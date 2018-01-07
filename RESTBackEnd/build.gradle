@@ -39,4 +39,5 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile files('libs/ojdbc8.jar')
     compile('com.auth0:java-jwt:3.3.0')
+    compile("org.springframework.boot:spring-boot-starter-security")
 }

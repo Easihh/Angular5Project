@@ -16,9 +16,9 @@ import { TopicReplyWrapper } from "./topicReplyWrapper";
 
 @Injectable()
 export class DataService {
-    dataUrl: string = "http://restcountries.eu/rest/v2/name/india?fullText=true";
     getTopicURL: string ="/ProjectREST/forum";
     getTopicRepliesURL: string ="/ProjectREST/forum/topic";
+    createNewUserURL: string ="/ProjectREST/register";
     createTopicURL: string ="/ProjectREST/forum/topic/create";
     createTopicReplyURL: string ="/ProjectREST/forum/topic/reply/create";
     loginURL: string ="/ProjectREST/login";
@@ -96,4 +96,10 @@ export class DataService {
          let decoded: any = this.jwtHelperService.decodeToken( token );
          return decoded.name;
     }
+     
+     createNewUser(name:string,password:string):Observable<any>{
+         return this._http.put( this.createNewUserURL, { username: name, password: password } )
+         .do( data => console.log( "createUser:" + data ) )//data return in
+         .catch( this.handleError );
+     }
 }

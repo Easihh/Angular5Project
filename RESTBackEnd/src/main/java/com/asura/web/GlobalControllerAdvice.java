@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalControllerAdvice {
 	
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> error(final Exception e){
-		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	public ResponseEntity<ExceptionResponse> error(final Exception e){
+		ExceptionResponse res=new ExceptionResponse();
+		res.setErrorMessage(e.getMessage());
+		res.setErrorCode("Not Found");
+		return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
 	}
 }
