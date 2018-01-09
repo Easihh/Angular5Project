@@ -19,8 +19,8 @@ export class DataService {
     getTopicURL: string ="/ProjectREST/forum";
     getTopicRepliesURL: string ="/ProjectREST/forum/topic";
     createNewUserURL: string ="/ProjectREST/register";
-    createTopicURL: string ="/ProjectREST/forum/topic/create";
-    createTopicReplyURL: string ="/ProjectREST/forum/topic/reply/create";
+    createTopicURL: string ="/ProjectREST/auth/forum/topic/create";
+    createTopicReplyURL: string ="/ProjectREST/auth/forum/topic/reply/create";
     loginURL: string ="/ProjectREST/login";
     adminURL: string ="/ProjectREST/admin";
 

@@ -14,6 +14,13 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -46,6 +53,12 @@ public class TestController {
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
 		
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
@@ -84,7 +97,7 @@ public class TestController {
 		return new ResponseEntity<>(topicList, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = { "forum/topic/create" }, method = RequestMethod.PUT)
+	@RequestMapping(value = { "/auth/forum/topic/create" }, method = RequestMethod.PUT)
 	public void createForumTopic(@RequestHeader Map<String, String> header,
 			@RequestBody Map<String, String> body) {
 		Topic topic = new Topic();
@@ -115,7 +128,7 @@ public class TestController {
 		topicReplyRepository.save(reply);
 	}
 	
-	@RequestMapping(value = { "forum/topic/reply/create" }, method = RequestMethod.PUT)
+	@RequestMapping(value = { "auth/forum/topic/reply/create" }, method = RequestMethod.PUT)
 	public void createForumTopicReply(@RequestHeader Map<String, String> header,
 			@RequestBody Map<String, String> body) {
 		String topicIdStr = body.get("topicId");
@@ -187,6 +200,24 @@ public class TestController {
 	public void register(@RequestBody ApplicationUser user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
+	}
+	
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ResponseEntity<Message> login(@RequestBody LoginInfoMessage payload) {
+		/*Authentication authentication=authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
+		
+		SecurityContextHolder.getContext().setAuthentication(authentication);*/
+		Authentication context=SecurityContextHolder.getContext().getAuthentication();
+		// Reload password post-security so we can generate token
+		UserDetails userDetails=userDetailsService.loadUserByUsername(payload.getUsername());
+		System.out.println(payload.toString());
+		String token = createAuthenticationToken();
+		if (token == null) {
+			return new ResponseEntity<Message>(new Message("Error 566:Authentication Failed."), HttpStatus.BAD_REQUEST);
+		}
+			return new ResponseEntity<Message>(new Message(token),HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
