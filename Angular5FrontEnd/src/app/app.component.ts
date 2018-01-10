@@ -124,4 +124,8 @@ export class AppComponent implements OnInit {
         error => console.log( "Error Creating User:" + error )
         );
     }
+    
+    clearToken(){
+        localStorage.removeItem("token");
+    }
 }

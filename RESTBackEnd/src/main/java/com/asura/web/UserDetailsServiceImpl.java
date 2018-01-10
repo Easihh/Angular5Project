@@ -1,7 +1,10 @@
 package com.asura.web;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+	
+	private static final String ROLE_PREFIX="ROLE_";
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -20,7 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (applicationUser == null) {
             throw new UsernameNotFoundException(username);
         }
-		return new User(applicationUser.getUsername(), applicationUser.getPassword(), new ArrayList<>());
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + applicationUser.getRole().getRole()));
+		return new User(applicationUser.getUsername(), applicationUser.getPassword(), authorities);
 	}
-
 }

@@ -3,6 +3,7 @@ package com.asura.web;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,12 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -98,6 +102,7 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = { "/auth/forum/topic/create" }, method = RequestMethod.PUT)
+	@PreAuthorize("hasRole('ADMIN')")
 	public void createForumTopic(@RequestHeader Map<String, String> header,
 			@RequestBody Map<String, String> body) {
 		Topic topic = new Topic();
@@ -159,16 +164,18 @@ public class TestController {
 		return token;
 	}
 	
-	private String createAuthenticationToken() {
+	private String createAuthenticationToken(UserDetails userDetails) {
 		String token = null;
+		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+		if (userDetails.getAuthorities().size() > 1) {
+			return null;// user can only have 1 role.
+		}
+		SimpleGrantedAuthority roleClaims = authorities.toArray(new SimpleGrantedAuthority[1])[0];
 		try {
 			Algorithm algorith = Algorithm.HMAC256("mysecret");
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.HOUR_OF_DAY, 1);
 			token = JWT.create()
-					.withClaim("name", "John Doe")
-					.withClaim("role", "roleX")
-					.withExpiresAt(cal.getTime())
+					.withClaim("username", userDetails.getUsername())
+					.withClaim("role", roleClaims.getAuthority())
 					.sign(algorith);
 		} catch (UnsupportedEncodingException ee) {
 			// bad encoding UTF-8 not support
@@ -205,15 +212,17 @@ public class TestController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<Message> login(@RequestBody LoginInfoMessage payload) {
-		/*Authentication authentication=authenticationManager
+		/* At this point,user credential has been verified but beware the security context
+		 * is populated with anonymous user since this URL does not requires authentication
+		 */
+		Authentication authentication=authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
-		SecurityContextHolder.getContext().setAuthentication(authentication);*/
-		Authentication context=SecurityContextHolder.getContext().getAuthentication();
 		// Reload password post-security so we can generate token
 		UserDetails userDetails=userDetailsService.loadUserByUsername(payload.getUsername());
-		System.out.println(payload.toString());
-		String token = createAuthenticationToken();
+		//System.out.println(payload.toString());
+		String token = createAuthenticationToken(userDetails);
 		if (token == null) {
 			return new ResponseEntity<Message>(new Message("Error 566:Authentication Failed."), HttpStatus.BAD_REQUEST);
 		}
@@ -221,6 +230,7 @@ public class TestController {
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('SUPERADMIN')")
 	public ResponseEntity<String> someRestrictedFunction(@RequestHeader Map<String,String> header) {
 		String token=header.get("authorization");
 		if (token != null && token.contains("Bearer")) {
