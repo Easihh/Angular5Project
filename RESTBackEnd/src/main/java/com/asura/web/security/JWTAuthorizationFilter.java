@@ -35,7 +35,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 
 		String header = req.getHeader("Authorization");
 		if (header == null || !header.contains("Bearer")) {
-			//URL marked with .authenticated() will fail here  due to SecurityContext authentication being null
+			/*
+			 * entered restricted area without valid token, authorization will fail since
+			 * security contextHolder authentication will be null in a URL that is flagged
+			 * as .authenticated() in websecurityConfig
+			 */
 			chain.doFilter(req, res);
 			return;
 		}
