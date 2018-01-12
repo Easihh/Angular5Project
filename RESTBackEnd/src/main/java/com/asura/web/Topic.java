@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="TOPICS")
 @NamedQueries({
-	@NamedQuery(name="Topic.findOrderByLastUpdate",query="select t from Topic t Order by t.created DESC")
+	@NamedQuery(name="Topic.findOrderByLastUpdate",query="select t from Topic t Order by t.lastUpdated DESC")
 })
 public class Topic {
 	

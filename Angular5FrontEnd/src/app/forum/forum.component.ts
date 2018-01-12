@@ -41,7 +41,7 @@ export class ForumComponent  implements OnInit{
             }
             else {
                 let datePipe = new DatePipe( "en-US" );
-                this.topics[i].lastUpdated = datePipe.transform( lastReplyDate, 'MMM dd, yyyy' );
+                this.topics[i].lastUpdated = datePipe.transform( lastReplyDate, 'MMM d, yyyy' );
             }
         }
     }  

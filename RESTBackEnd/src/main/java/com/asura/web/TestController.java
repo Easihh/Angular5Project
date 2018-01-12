@@ -107,27 +107,21 @@ public class TestController {
 			@RequestBody Map<String, String> body) {
 		Topic topic = new Topic();
 		String title = body.get("title");
-		
-		if (title == null) {
-			//log as this should be stopped at client level
+		String bodyText=body.get("body");
+		if (title == null || bodyText==null) {
+			//this should be stopped at client level and not happen in normal circumstance
+			return;
 		}
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 		topic.setTitle(title);
-		topic.setAuthor("Admin");
+		topic.setAuthor(auth.getName());
 		topic.setCreated(System.currentTimeMillis());
 		topic.setLastUpdated(System.currentTimeMillis());
-		/*String token = getJWTToken(header);
-		if(token==null) {
-			
-		}
-		DecodedJWT dToken = getDecodedJWT(token);
-		if (dToken == null) {
-			return new ResponseEntity<>("Failed to create the topic.", HttpStatus.OK);
-		}*/
 		
 		Topic savedTopic = topicRepository.save(topic);
 		TopicReply reply = new TopicReply();
-		reply.setAuthor("Admin");
-		reply.setReplyComment("Hi");
+		reply.setAuthor(auth.getName());
+		reply.setReplyComment(bodyText);
 		reply.setTopicId(savedTopic.getId());
 		reply.setCreated(System.currentTimeMillis());
 		topicReplyRepository.save(reply);
@@ -136,6 +130,7 @@ public class TestController {
 	@RequestMapping(value = { "auth/forum/topic/reply/create" }, method = RequestMethod.PUT)
 	public void createForumTopicReply(@RequestHeader Map<String, String> header,
 			@RequestBody Map<String, String> body) {
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 		String topicIdStr = body.get("topicId");
 		String commentText = body.get("body");
 		if (topicIdStr != null) {
@@ -143,11 +138,14 @@ public class TestController {
 			Topic topic = topicRepository.findOne(topicId);
 			if (topic != null) {
 				TopicReply reply = new TopicReply();
-				reply.setAuthor("Admin");
+				reply.setAuthor(auth.getName());
 				reply.setCreated(System.currentTimeMillis());
 				reply.setTopicId(topicId);
 				reply.setReplyComment(commentText);
 				topicReplyRepository.save(reply);
+				
+				topic.setLastUpdated(System.currentTimeMillis());
+				topicRepository.save(topic);
 			}
 		}
 	}
