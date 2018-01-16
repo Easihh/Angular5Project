@@ -1,31 +1,64 @@
 import { Injectable } from '@angular/core';
-import { Router,Resolve,ActivatedRouteSnapshot } from "@angular/router";
-import { DataService } from "./data.service";
-import { Observable } from "rxjs/Observable";
 import { Topic } from "./topic";
-import 'rxjs/add/operator/first';
-import 'rxjs/add/observable/of';
+import { TopicReply } from "./topicReply";
+import { TopicReplyWrapper } from "./topicReplyWrapper";
+import { Response } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
-export class TopicService implements Resolve<Topic[]>{
+export class TopicService {
+    getTopicURL: string ="/ProjectREST/forum";
+    getTopicRepliesURL: string ="/ProjectREST/forum/topic";
+    createTopicURL: string ="/ProjectREST/auth/forum/topic/create";
+    createTopicReplyURL: string ="/ProjectREST/auth/forum/topic/reply/create";
 
-  constructor(private dataService: DataService, private router: Router) { }
-
-  resolve(route: ActivatedRouteSnapshot) : Observable<Topic[]>{
-      let id = +route.params['id'];
-      if ( isNaN(id) || id<=1 ) {
-          //no id or trying to access forum/page1 which is the forum main page;
-          console.log( "The URL doesnt contains a valid id, moving to forum first page." );
-          id = 1;
+  constructor(private _http: HttpClient) { }
+  
+  private handleError( error: any ) {
+      if ( error instanceof Response ) {//Backend Error
+          //.json() parsing failed from server
+          console.log( "Error:"+error.text() );
+          return Observable.throw( error.text() );
       }
-      return this.dataService.getForumTopics(id).map(topics =>{
-           return topics;
-       })
-       .catch(error =>{
-           //Usually when Server is down/error response from server.
-           let errMessage=(error.message)? error.message: error.status? error.status+"-"+error.statusText:"Server Error";
-           console.log( "Topics retrieval error:" + errMessage );
-           return Observable.of(null);
-       }).first();
+      //otherwise the server returned error code status
+      console.log("Hello There");
+      return Observable.throw( error );
   }
+      
+  getForumTopics( pageNumber: number ): Observable<Topic[]> {
+      let params = new HttpParams();
+      params = params.append( "pageNumber", pageNumber.toString() );
+      return this._http
+          .get( this.getTopicURL, { params: params } )
+          //.do( data => console.log( "Success:" + data ) )//on success
+          .catch( this.handleError );
+  }
+  
+  getTopicReplies(topicId:number, pageNumber: number ): Observable<TopicReplyWrapper> {
+      let params = new HttpParams();
+      params = params.append( "pageNumber", pageNumber.toString() );
+      params = params.append( "topicId", topicId.toString() );
+      return this._http
+          .get( this.getTopicRepliesURL, { params: params } )
+          //.do( data => console.log( "Success:" + data ) )//on success
+          .catch( this.handleError );
+  }
+   
+   
+   createNewTopic( title: String, body: String ): Observable<any> {
+       return this._http.put( this.createTopicURL, { title: title, body: body } )
+       .do( data => console.log( "Topic:" + data ) )//data return in
+       .catch( this.handleError );
+   }
+   
+   createNewTopicReply( topicId: number, body: String ): Observable<any> {
+       return this._http.put( this.createTopicReplyURL, { topicId: topicId, body: body } )
+       .do( data => console.log( "TopicReply:" + data ) )//data return in
+       .catch( this.handleError );
+   }
 }

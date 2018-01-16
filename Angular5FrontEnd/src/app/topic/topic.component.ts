@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { DataService } from "../data.service";
+import { TopicService } from "../topic.service";
 import { TopicReply } from "../topicReply";
 import { TopicReplyWrapper } from "../topicReplyWrapper";
 
@@ -23,7 +23,7 @@ export class TopicComponent implements OnInit {
     @ViewChild( 'addReplyBtn' ) addReplyBtn;
     @ViewChild('replyDiv', { read: ElementRef }) public replyDiv: ElementRef;
   
-  constructor(private route: ActivatedRoute, private dataService:DataService,private router:Router ) { }
+  constructor(private route: ActivatedRoute, private topicService:TopicService,private router:Router ) { }
 
   ngOnInit() {
       /* Have to subscribe here since ngOnInit is only called once
@@ -70,7 +70,7 @@ export class TopicComponent implements OnInit {
   }
   
   refreshData() {
-      this.dataService.getTopicReplies( this.topicId, this.currentPage ).subscribe( repliesWrapper => {
+      this.topicService.getTopicReplies( this.topicId, this.currentPage ).subscribe( repliesWrapper => {
           this.replies = repliesWrapper.topicReplies;
           this.topicTitle = repliesWrapper.topicTitle;
           this.initPagination(repliesWrapper.repliesCount);
@@ -80,7 +80,7 @@ export class TopicComponent implements OnInit {
   createTopicReply(): void {
       this.addReplyBtn.nativeElement.blur();
       
-      this.dataService.createNewTopicReply( this.topicId, this.topicReplyText)
+      this.topicService.createNewTopicReply( this.topicId, this.topicReplyText)
       .subscribe(
       res => {
           //TopicReply Creation Succeeded,refresh page data so we see it.

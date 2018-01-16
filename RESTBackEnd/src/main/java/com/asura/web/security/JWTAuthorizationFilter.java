@@ -44,7 +44,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 			return;
 		}
 		
-		//should check for banned user here, map cache maybe?
+		//should check for banned user/token here and filted out banned user during /login also
 		
 		if (SecurityContextHolder.getContext().getAuthentication() == null) {
 			UsernamePasswordAuthenticationToken authentication = getAuthentication(req);

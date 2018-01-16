@@ -8,6 +8,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import com.asura.web.entity.TopicReply;
+
 public class TopicReplyRepositoryImpl implements TopicReplyRepositoryCustom{
 	
 	private final int topicsReplyPerPage = 5;

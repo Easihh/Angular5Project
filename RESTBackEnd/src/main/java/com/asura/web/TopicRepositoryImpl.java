@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import com.asura.web.entity.Topic;
+
 public class TopicRepositoryImpl implements TopicRepositoryCustom{
 	
 	private final int topicsPerPage = 5;

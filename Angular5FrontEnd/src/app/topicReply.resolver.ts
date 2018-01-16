@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router,Resolve,ActivatedRouteSnapshot } from "@angular/router";
-import { DataService } from "./data.service";
+import { TopicService } from "./topic.service";
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/first';
 import 'rxjs/add/observable/of';
@@ -9,7 +9,7 @@ import { TopicReplyWrapper } from "./topicReplyWrapper";
 @Injectable()
 export class TopicReplyResolver implements Resolve<TopicReplyWrapper>{
 
-  constructor(private dataService: DataService, private router: Router) { }
+  constructor(private topicService: TopicService, private router: Router) { }
 
   resolve(route: ActivatedRouteSnapshot) : Observable<TopicReplyWrapper>{
       let page = +route.params['page'];
@@ -23,7 +23,7 @@ export class TopicReplyResolver implements Resolve<TopicReplyWrapper>{
           console.log("invalid topicId canceling search.");
           return Observable.of(null);
       }
-      return this.dataService.getTopicReplies(topicId, page).map(replies =>{
+      return this.topicService.getTopicReplies(topicId, page).map(replies =>{
            return replies;
        })
        .catch(error =>{

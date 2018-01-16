@@ -8,7 +8,7 @@ import { NotFoundComponent } from './notfound/notfound.component';
 import { TopicComponent } from './topic/topic.component';
 import { AuthGuard} from './auth.guard';
 import { HomeComponent } from "./home/home.component";
-import { TopicService } from "./topic.service";
+import { TopicResolver } from "./topic.resolver";
 import { Topic } from "./topic";
 import { TopicReplyResolver } from "./topicReply.resolver";
 
@@ -18,8 +18,8 @@ export const router: Routes = [
     { path: 'about', component: AboutComponent , canActivate:[AuthGuard]},
     { path: 'forum/topic/:topicId/page/:page', component: TopicComponent, resolve:{replies:TopicReplyResolver}},
     { path: 'forum/topic/:topicId', component: TopicComponent, resolve:{replies:TopicReplyResolver}},
-    { path: 'forum/page/:id', component: ForumComponent , resolve:{topics:TopicService}},
-    { path: 'forum', component: ForumComponent , resolve:{topics:TopicService}},
+    { path: 'forum/page/:id', component: ForumComponent , resolve:{topics:TopicResolver}},
+    { path: 'forum', component: ForumComponent , resolve:{topics:TopicResolver}},
     { path: '**', component: NotFoundComponent },
 ];
 

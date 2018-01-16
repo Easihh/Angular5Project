@@ -6,6 +6,7 @@ import { JwtModule} from '@auth0/angular-jwt';
 import { AuthGuard} from './auth.guard';
 import { HttpClientModule  } from '@angular/common/http';
 import { DataService } from './data.service';
+import { TopicService } from './topic.service';
 import { AppComponent } from './app.component';
 import { AboutComponent } from './about/about.component';
 import { NotFoundComponent } from './notfound/notfound.component';
@@ -15,7 +16,7 @@ import { ForumComponent } from './forum/forum.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TopicComponent } from './topic/topic.component';
 import { HomeComponent } from './home/home.component';
-import { TopicService } from "./topic.service";
+import { TopicResolver } from "./topic.resolver";
 import { TopicReplyResolver } from "./topicReply.resolver";
 
 @NgModule({
@@ -45,7 +46,7 @@ import { TopicReplyResolver } from "./topicReply.resolver";
     routes
   ],
   exports: [],
-  providers: [DataService,AuthGuard,TopicService,TopicReplyResolver],
+  providers: [DataService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

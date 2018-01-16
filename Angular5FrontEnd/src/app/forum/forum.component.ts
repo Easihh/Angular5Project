@@ -1,7 +1,7 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { Topic } from "../topic";
 import { ActivatedRoute, Router } from "@angular/router";
-import { DataService } from "../data.service";
+import { TopicService } from "../topic.service";
 import { DatePipe } from "@angular/common";
 
 @Component({
@@ -20,7 +20,7 @@ export class ForumComponent  implements OnInit{
     @ViewChild( 'topicBtn' ) topicBtn;
     
 
-    constructor( private route: ActivatedRoute, private dataService: DataService, private router:Router ) { 
+    constructor( private route: ActivatedRoute, private topicService: TopicService, private router:Router ) { 
     }
     
     private initTimestamp() {
@@ -75,7 +75,7 @@ export class ForumComponent  implements OnInit{
     }
     
     refreshData(){
-        this.dataService.getForumTopics(this.currentPage).subscribe(topics=>{
+        this.topicService.getForumTopics(this.currentPage).subscribe(topics=>{
             this.topics=topics;
             this.initData();
         });
@@ -88,7 +88,7 @@ export class ForumComponent  implements OnInit{
         
     createTopic( title: String, topicBody: String ): void {
         
-        this.dataService.createNewTopic( title, topicBody)
+        this.topicService.createNewTopic( title, topicBody)
         .subscribe(
         res => {
             this.isCreatingTopic = false;

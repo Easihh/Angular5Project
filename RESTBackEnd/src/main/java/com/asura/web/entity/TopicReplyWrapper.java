@@ -1,4 +1,4 @@
-package com.asura.web;
+package com.asura.web.entity;
 
 import java.util.List;
 

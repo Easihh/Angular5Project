@@ -1,4 +1,4 @@
-package com.asura.web;
+package com.asura.web.entity;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;

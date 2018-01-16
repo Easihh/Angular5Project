@@ -10,17 +10,11 @@ import 'rxjs/add/operator/catch';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
 import { ITokenResponse } from "./iTokenResponse";
-import { Topic } from "./topic";
-import { TopicReply } from "./topicReply";
-import { TopicReplyWrapper } from "./topicReplyWrapper";
 
 @Injectable()
 export class DataService {
-    getTopicURL: string ="/ProjectREST/forum";
-    getTopicRepliesURL: string ="/ProjectREST/forum/topic";
+
     createNewUserURL: string ="/ProjectREST/register";
-    createTopicURL: string ="/ProjectREST/auth/forum/topic/create";
-    createTopicReplyURL: string ="/ProjectREST/auth/forum/topic/reply/create";
     loginURL: string ="/ProjectREST/login";
     adminURL: string ="/ProjectREST/admin";
 
@@ -59,42 +53,10 @@ export class DataService {
             .catch( this.handleError );
     }
     
-    getForumTopics( pageNumber: number ): Observable<Topic[]> {
-        let params = new HttpParams();
-        params = params.append( "pageNumber", pageNumber.toString() );
-        return this._http
-            .get( this.getTopicURL, { params: params } )
-            //.do( data => console.log( "Success:" + data ) )//on success
-            .catch( this.handleError );
-    }
-    
-    getTopicReplies(topicId:number, pageNumber: number ): Observable<TopicReplyWrapper> {
-        let params = new HttpParams();
-        params = params.append( "pageNumber", pageNumber.toString() );
-        params = params.append( "topicId", topicId.toString() );
-        return this._http
-            .get( this.getTopicRepliesURL, { params: params } )
-            //.do( data => console.log( "Success:" + data ) )//on success
-            .catch( this.handleError );
-    }
-     
-     
-     createNewTopic( title: String, body: String ): Observable<any> {
-         return this._http.put( this.createTopicURL, { title: title, body: body } )
-         .do( data => console.log( "Topic:" + data ) )//data return in
-         .catch( this.handleError );
-     }
-     
-     createNewTopicReply( topicId: number, body: String ): Observable<any> {
-         return this._http.put( this.createTopicReplyURL, { topicId: topicId, body: body } )
-         .do( data => console.log( "TopicReply:" + data ) )//data return in
-         .catch( this.handleError );
-     }
-    
      getUsername(): string {
          const token: string = this.jwtHelperService.tokenGetter();
          let decoded: any = this.jwtHelperService.decodeToken( token );
-         return decoded.name;
+         return decoded.username;
     }
      
      createNewUser(name:string,password:string):Observable<any>{

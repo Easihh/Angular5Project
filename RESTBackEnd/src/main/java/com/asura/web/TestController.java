@@ -2,7 +2,6 @@ package com.asura.web;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,12 +31,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.Topic;
+import com.asura.web.entity.TopicReply;
+import com.asura.web.entity.TopicReplyWrapper;
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 
 @RestController
 public class TestController {
@@ -68,10 +67,10 @@ public class TestController {
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
 			@RequestParam("pageNumber") int pageNumber) throws Exception {
 		Topic topic = topicRepository.findOne(topicId);
-		if (topicId == 999l) {
+		if (topic == null) {
 			throw new Exception("Topic with id:" + topicId + " does not exist.");
 		}
-		String topicTitle = topic == null ? "Topic does not exist" : topic.getTitle();
+		String topicTitle = topic.getTitle();
 		List<TopicReply> topicReplies = topicReplyRepository.getPagedTopicRepliesByTopicId(topicId, pageNumber);
 		int total = topicReplyRepository.getTotalTopicRepliesByTopicId(topicId);
 		TopicReplyWrapper wrapper = new TopicReplyWrapper(total, topicReplies, topicTitle);
@@ -149,19 +148,7 @@ public class TestController {
 			}
 		}
 	}
-	private DecodedJWT getDecodedJWT(String token) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	private String getJWTToken(Map<String, String> header) {
-		String token = header.get("authorization");
-		if (token != null && token.contains("Bearer")) {
-			token = token.substring(7, token.length());// retrieve the encoded token
-		}
-		return token;
-	}
-	
 	private String createAuthenticationToken(UserDetails userDetails) {
 		String token = null;
 		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
@@ -185,44 +172,24 @@ public class TestController {
 		return token;
 	}
 	
-	private boolean hasValidToken(String token) {
-		try {
-			Algorithm algorithm = Algorithm.HMAC256("mysecret");
-			JWTVerifier verifier = JWT.require(algorithm).build();
-			DecodedJWT jwt = verifier.verify(token);
-		} catch (UnsupportedEncodingException exception) {
-			// UTF-8 encoding not supported
-			System.out.println("Error:"+exception);
-			return false;
-		} catch (JWTVerificationException exception) {
-			// Invalid signature/claims/expired
-			System.out.println("Error:"+exception);
-			return false;
-		}
-		return true;
-	}
 	@RequestMapping(value = "/register", method = RequestMethod.PUT)
 	public void register(@RequestBody ApplicationUser user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
 	
-	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<Message> login(@RequestBody LoginInfoMessage payload) {
-		/* At this point,user credential has been verified but beware the security context
-		 * is populated with anonymous user since this URL does not requires authentication
-		 */
+
 		Authentication authentication=authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
-		// Reload password post-security so we can generate token
 		UserDetails userDetails=userDetailsService.loadUserByUsername(payload.getUsername());
-		//System.out.println(payload.toString());
+		
 		String token = createAuthenticationToken(userDetails);
 		if (token == null) {
-			return new ResponseEntity<Message>(new Message("Error 566:Authentication Failed."), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Message>(new Message("Error 566:Token Creation Failed."), HttpStatus.BAD_REQUEST);
 		}
 			return new ResponseEntity<Message>(new Message(token),HttpStatus.OK);
 	}
@@ -230,11 +197,6 @@ public class TestController {
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('SUPERADMIN')")
 	public ResponseEntity<String> someRestrictedFunction(@RequestHeader Map<String,String> header) {
-		String token=header.get("authorization");
-		if (token != null && token.contains("Bearer")) {
-			token = token.substring(7, token.length());//retrieve the encoded token
-			return new ResponseEntity<String>(hasValidToken(token) ? "OK" : "NOT OK", HttpStatus.OK);
-		}
-		return new ResponseEntity<String>("Session Token Missing or Invalid", HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
