@@ -29,7 +29,10 @@
 						<span class="topic-title">
 							<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">{{topic.title}}</span>
 						</span>
-						<span class="topic-comment">{{topic.repliesCounter}}</span>
+						<span class="topic-comment">
+							<i class="fa fa-comment-o icon-color" aria-hidden="true"></i>
+							<span>{{topic.repliesCounter}}</span>
+						</span>
 						<span class="topic-author">{{topic.author}}</span> 
 						<span class="topic-timestamp">{{topic.lastUpdated}}</span>
 					</div>

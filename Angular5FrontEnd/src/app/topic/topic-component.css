@@ -10,6 +10,11 @@
 	height: 100%;
 }
 
+.reply-form{
+	margin-left:20%;
+	margin-right:20%;
+}
+
 .reply-user{
 	border: 1px red solid;
 	width:50%;

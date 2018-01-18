@@ -73,9 +73,12 @@
 }
 .topic-comment{
 	display:inline-block;
-	width:15%;
+	width:10%;
 /* 	border: 1px blue solid; */
 	overflow: hidden;
+}
+.icon-color{
+	color:#FF8800;
 }
 .topic-author{
 	display:inline-block;

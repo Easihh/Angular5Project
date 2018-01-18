@@ -18,6 +18,7 @@ import { TopicComponent } from './topic/topic.component';
 import { HomeComponent } from './home/home.component';
 import { TopicResolver } from "./topic.resolver";
 import { TopicReplyResolver } from "./topicReply.resolver";
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 @NgModule({
   declarations: [     
@@ -34,6 +35,7 @@ import { TopicReplyResolver } from "./topicReply.resolver";
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    AngularFontAwesomeModule,
     JwtModule.forRoot({
         config: {
             tokenGetter:()=>{

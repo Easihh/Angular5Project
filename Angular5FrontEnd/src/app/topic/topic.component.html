@@ -23,12 +23,12 @@
 	    </li>
   </div>
 
-	<div *ngIf="displayReplyForm" #replyDiv>
+	<div class="reply-form" *ngIf="displayReplyForm" #replyDiv>
 		<form (ngSubmit)="createTopicReply()">
 			<fieldset>
 				<legend>Reply</legend>
 				<div class="form-group">
-					<textarea [(ngModel)]="topicReplyText" class="form-control" name="newTopicReplyBody" rows="3"></textarea>
+					<textarea [(ngModel)]="topicReplyText" class="form-control" name="newTopicReplyBody" rows="6"></textarea>
 				</div>
 				<button #addReplyBtn type="submit" class="btn btn-success">ADD REPLY</button>
 			</fieldset>
