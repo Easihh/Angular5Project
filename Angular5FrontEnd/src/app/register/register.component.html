@@ -1,0 +1,12 @@
+<p>register works!</p>
+
+<form (ngSubmit)="registerNewAccount()">
+	<fieldset>
+		<legend>Account Registration</legend>
+		<label for="account-name">Username:</label>
+		<input [(ngModel)]="username" name="account-name" id="account-name" type="text"><br>
+		<label for="account-pwd">Password:</label>
+		<input [(ngModel)]="password" name="account-pwd" id="account-pwd" type="password"><br>
+		<button type="submit" class="btn btn-primary">Create</button>
+	</fieldset>
+</form>

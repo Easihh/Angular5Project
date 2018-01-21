@@ -19,6 +19,7 @@ import { HomeComponent } from './home/home.component';
 import { TopicResolver } from "./topic.resolver";
 import { TopicReplyResolver } from "./topicReply.resolver";
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [     
@@ -29,7 +30,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     LoginFormComponent,
     ForumComponent,
     TopicComponent,
-    HomeComponent
+    HomeComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

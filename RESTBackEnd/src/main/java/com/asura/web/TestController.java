@@ -32,9 +32,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.Role;
 import com.asura.web.entity.Topic;
 import com.asura.web.entity.TopicReply;
 import com.asura.web.entity.TopicReplyWrapper;
+import com.asura.web.entity.UserRole;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -175,6 +177,8 @@ public class TestController {
 	@RequestMapping(value = "/register", method = RequestMethod.PUT)
 	public void register(@RequestBody ApplicationUser user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		Role role = new Role(UserRole.USER);
+		user.setRole(role);
 		userRepository.save(user);
 	}
 	

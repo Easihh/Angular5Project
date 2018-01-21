@@ -16,7 +16,7 @@
 		<div *ngIf="isOnline">Welcome <b>{{username}}</b>
 			<button type="button" (click)="logout()" class="btn btn-primary">Logout</button>
 		</div>
-		<button *ngIf="!isOnline" type="button" (click)="register()" class="btn btn-primary">Register</button>
+		<a *ngIf="!isOnline" routerLink="register"  >Register</a>
 		
  </nav>
 <router-outlet></router-outlet>

@@ -15,6 +15,13 @@ public class Role {
 	
 	@Column(name="ROLE")
 	private String role;
+	
+	public Role() {}//default construct required
+
+	public Role(UserRole user) {
+		id = user.getId();
+		role = user.name();
+	}
 
 	public Long getId() {
 		return id;

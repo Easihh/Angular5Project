@@ -32,10 +32,6 @@ export class LoginFormComponent implements OnInit {
           },
           error => console.log( "ERROR LOGIN:" + error )
           );
-      console.log( username, password );
-    //if(username=="admin" && password=="admin"){
-    //    this.router.navigate(['about']);
-    //}
   }  
 
 }
