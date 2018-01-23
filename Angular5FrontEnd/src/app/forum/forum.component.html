@@ -1,57 +1,10 @@
-
-<body class="forum">
-	forum works!
+forum list page work!
+<div class="forum-body">
 	<div class="forum-container">
-		<div>
-			<button #topicBtn type="button"  (click)="showTopicForm()" class="btn btn-primary btn-hover">New Topic</button>
-		</div>
-		<div *ngIf="isCreatingTopic" class="topicCreation-container">
-			<div>
-				<form (ngSubmit)="createTopic(newTopicTitle.value,newTopicBody.value)" >
-					<fieldset>
-						<legend>New Topic</legend>
-						<input type="text" #newTopicTitle class="form-control create-topic-form"
-							value="Title">
-						<div class="form-group">
-							<label for="create-topic-textarea">text (optional)</label>
-							<textarea #newTopicBody class="form-control" id="create-topic-textarea"
-								rows="3"></textarea>
-						</div>
-						<button type="submit" class="btn btn-success">CREATE TOPIC</button>
-					</fieldset>
-				</form>
-			</div>
-		</div>
-		<div class="topic-container">
-			<div *ngFor="let topic of topics">
-				<a class="topic-link" [routerLink]="['/forum/topic',topic.id]">
-					<div class="topic-details">
-						<span class="topic-title">
-							<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">{{topic.title}}</span>
-						</span>
-						<span class="topic-comment">
-							<i class="fa fa-comment-o icon-color" aria-hidden="true"></i>
-							<span>{{topic.repliesCounter}}</span>
-						</span>
-						<span class="topic-author">{{topic.author}}</span> 
-						<span class="topic-timestamp">{{topic.lastUpdated}}</span>
-					</div>
-				</a>
+		<div *ngFor="let forum of forumList">
+			<div class="forum">
+				<a class="forum-link" [routerLink]="['/forum/',forum.id]">{{forum.name}}</a>
 			</div>
 		</div>
 	</div>
-	<!-- 	<data-table [dataList]="topicList" [header]="" (rowClick)="test($event)"></data-table> -->
-
-<div class="float_center">
-	<ul class="pagination">
-    <li *ngIf="showPrevPage" class="page-item">
-      <a *ngIf="currentPage-1!=1" class="btn btn-outline-warning"  routerLink="/forum/page/{{currentPage-1}}"> &lt; PREVIOUS</a>
-      <a *ngIf="currentPage-1==1" class="btn btn-outline-warning"  routerLink="/forum"> &lt; PREVIOUS</a>
-      <span> Page {{currentPage}}</span>
-    </li>
-    <li class="page-item">
-      <a class="btn btn-outline-warning"  routerLink="/forum/page/{{currentPage+1}}">NEXT &gt;</a>
-    </li>
-  </ul>
 </div>
-</body>

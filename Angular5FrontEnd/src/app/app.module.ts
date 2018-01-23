@@ -20,6 +20,7 @@ import { TopicResolver } from "./topic.resolver";
 import { TopicReplyResolver } from "./topicReply.resolver";
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { RegisterComponent } from './register/register.component';
+import { TopicReplyComponent } from './topic-reply/topic-reply.component';
 
 @NgModule({
   declarations: [     
@@ -31,7 +32,8 @@ import { RegisterComponent } from './register/register.component';
     ForumComponent,
     TopicComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    TopicReplyComponent
   ],
   imports: [
     BrowserModule,

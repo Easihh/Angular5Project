@@ -3,13 +3,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
  <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+        <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="forum" routerLinkActive="active">Forum</a>
+        <a class="nav-link" routerLink="/forum" routerLinkActive="active">Forum</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="about" routerLinkActive="active">about</a>
+        <a class="nav-link" routerLink="/about" routerLinkActive="active">About</a>
       </li>
     </ul>
 		<login-form *ngIf="!isOnline" (loggedIn)="initLogIn($event)">show login form</login-form>

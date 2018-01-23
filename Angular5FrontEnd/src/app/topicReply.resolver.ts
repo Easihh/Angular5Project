@@ -12,6 +12,7 @@ export class TopicReplyResolver implements Resolve<TopicReplyWrapper>{
   constructor(private topicService: TopicService, private router: Router) { }
 
   resolve(route: ActivatedRouteSnapshot) : Observable<TopicReplyWrapper>{
+      console.log("HIYA");
       let page = +route.params['page'];
       let topicId=+route.params['topicId'];
       if ( isNaN(page)) {

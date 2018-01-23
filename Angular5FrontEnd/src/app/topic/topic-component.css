@@ -1,60 +1,110 @@
-
-
-.forum {
-	min-height: 600px;
+.float_center {
+	float: right;
+	position: relative;
+	left: -50%;
+	text-align: left;
 }
 
-.reply-container{
+.float_center>.child {
+	position: relative;
+	left: 50%;
+}
+
+.forum {
+/* 	min-height: 600px; */
+	overflow: auto;
+}
+
+.topic-container{
 	display:block;
 	font-size: 1.0625rem;
 	height: 100%;
 }
 
-.reply-form{
-	margin-left:20%;
-	margin-right:20%;
+.topicCreation-container{
+	min-height:400px;
 }
 
-.reply-user{
-	border: 1px red solid;
-	width:50%;
-	display:inline-block;
-	height:100%;
-	vertical-align:top;
+.create-topic-form {
+	background-color: transparent;
+	border: none;
+	color: white;
 }
 
-.reply-avatar{
-	border: 1px pink solid;
-	width:48%;
-	display:inline-block;
-	height:100%;
+.create-topic-form:focus {
+	background-color: transparent;
+	border: none;
+	color: white;
+	outline: none;
+	box-shadow: none;
 }
 
-.reply-userInfo{
-	display:inline-block;
-	width:20%;
-}
-
-.reply-comment{
-	border: 1px purple solid;
-	width:75%;
-	display:inline-block;
-}
-
-.reply-details{
+.topic-details{
 	padding: .875rem 0 .875rem .875rem;
 	min-height:60px;
-	
+}
+
+
+@media only screen and (min-width: 641px) {
+	.topic-details {
+/* 		padding: 0; */
+	}
+}
+
+.topic-link {
+	display: inline-block;
+	width: 100%;
 	border-top-color: rgba(255, 255, 255, .15);
 	border-top-style: solid;
 	border-top-width: 1px;
 	border-bottom-color: rgba(255, 255, 255, .15);
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
-	
-	margin:2.5rem;
 }
 
-.inline{
+.topic-title{
 	display:inline-block;
+	width:50%;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+/* 	border: 1px red solid; */
+	
+}
+.topic-comment{
+	display:inline-block;
+	width:10%;
+/* 	border: 1px blue solid; */
+	overflow: hidden;
+}
+.icon-color{
+	color:#FF8800;
+}
+.topic-author{
+	display:inline-block;
+	width:15%;
+/* 	border: 1px purple solid; */
+	overflow: hidden;
+}
+.topic-timestamp{
+	display:inline-block;
+	width:15%;
+	text-align: right;
+/* 	border: 1px orange solid; */
+	overflow: hidden;
+}
+
+.topic-title-wrapper{
+	display:inline-block;
+}
+
+.forum-container{
+ 	margin: 5rem; 
+}
+
+.topic-container a:hover {
+	text-decoration: none;
+}
+.btn-hover{
+	cursor: pointer;
 }

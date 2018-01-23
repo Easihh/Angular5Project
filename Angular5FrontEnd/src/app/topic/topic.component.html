@@ -1,38 +1,57 @@
+
 <body class="forum">
-  topic page works!
-  		<div *ngIf="displayReplyForm">
-			<button #replyBtn type="button" (click)="moveToReplyForm()" class="btn btn-primary btn-hover">Reply</button>
+	forum works!
+	<div class="forum-container">
+		<div>
+			<button #topicBtn type="button"  (click)="showTopicForm()" class="btn btn-primary btn-hover">New Topic</button>
 		</div>
-  <div class="reply-container">
-  {{topicTitle}}
-	<div *ngFor="let reply of replies" class="reply-details">
-		<div class="reply-userInfo">
-			<img class="reply-avatar" width="150" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-			<span class="reply-user">{{reply.author}}</span>
+		<div *ngIf="isCreatingTopic" class="topicCreation-container">
+			<div>
+				<form (ngSubmit)="createTopic(newTopicTitle.value,newTopicBody.value)" >
+					<fieldset>
+						<legend>New Topic</legend>
+						<input type="text" #newTopicTitle class="form-control create-topic-form"
+							value="Title">
+						<div class="form-group">
+							<label for="create-topic-textarea">text (optional)</label>
+							<textarea #newTopicBody class="form-control" id="create-topic-textarea"
+								rows="3"></textarea>
+						</div>
+						<button type="submit" class="btn btn-success">CREATE TOPIC</button>
+					</fieldset>
+				</form>
+			</div>
 		</div>
-		<span class="reply-comment">{{reply.replyComment}}</span>
+		<div class="topic-container">
+			<div *ngFor="let topic of topics">
+				<a class="topic-link" [routerLink]="['/forum/',7777,'topic',topic.id]">
+					<div class="topic-details">
+						<span class="topic-title">
+							<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">{{topic.title}}</span>
+						</span>
+						<span class="topic-comment">
+							<i class="fa fa-comment-o icon-color" aria-hidden="true"></i>
+							<span>{{topic.repliesCounter}}</span>
+						</span>
+						<span class="topic-author">{{topic.author}}</span> 
+						<span class="topic-timestamp">{{topic.lastUpdated}}</span>
+					</div>
+				</a>
+			</div>
+		</div>
 	</div>
-  </div>
-  
-  <div *ngFor="let page of pageholder" class="pagination inline">
-	    <li *ngIf="page==currentPage" class="page-item active">
-	      <a class="page-link" >{{page}}</a>
-	    </li>
-		<li *ngIf="page!=currentPage" class="page-item">
-	      <a class="page-link" routerLink="/forum/topic/{{topicId}}/page/{{page}}">{{page}}</a>
-	    </li>
-  </div>
+	<!-- 	<data-table [dataList]="topicList" [header]="" (rowClick)="test($event)"></data-table> -->
 
-	<div class="reply-form" *ngIf="displayReplyForm" #replyDiv>
-		<form (ngSubmit)="createTopicReply()">
-			<fieldset>
-				<legend>Reply</legend>
-				<div class="form-group">
-					<textarea [(ngModel)]="topicReplyText" class="form-control" name="newTopicReplyBody" rows="6"></textarea>
-				</div>
-				<button #addReplyBtn type="submit" class="btn btn-success">ADD REPLY</button>
-			</fieldset>
-		</form>
-	</div>
+<div class="float_center">
+	<ul class="pagination">
+    <li *ngIf="showPrevPage" class="page-item">
+      <a *ngIf="currentPage-1!=1" class="btn btn-outline-warning"  routerLink="/forum/page/{{currentPage-1}}"> &lt; PREVIOUS</a>
+      <a *ngIf="currentPage-1==1" class="btn btn-outline-warning"  routerLink="/forum"> &lt; PREVIOUS</a>
+      <span> Page {{currentPage}}</span>
+    </li>
+    <li class="page-item">
+      <a class="btn btn-outline-warning"  routerLink="/forum/page/{{currentPage+1}}">NEXT &gt;</a>
+    </li>
+  </ul>
+</div>
 </body>
-

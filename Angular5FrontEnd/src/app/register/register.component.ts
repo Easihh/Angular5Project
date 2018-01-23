@@ -16,7 +16,7 @@ export class RegisterComponent {
   
   registerNewAccount():void{
       this.dataService.createNewUser(this.username, this.password).subscribe(data=>{
-          this.router.navigate(["/home"]);
+          this.router.navigate(["/"]);
       });
   }
 }

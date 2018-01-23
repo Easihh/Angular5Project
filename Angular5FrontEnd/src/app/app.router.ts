@@ -12,16 +12,17 @@ import { TopicResolver } from "./topic.resolver";
 import { Topic } from "./topic";
 import { TopicReplyResolver } from "./topicReply.resolver";
 import { RegisterComponent } from "./register/register.component";
+import { TopicReplyComponent } from "./topic-reply/topic-reply.component";
 
 export const router: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent},
+
+    { path: '', component: HomeComponent,pathMatch: 'full'},
     { path: 'register', component: RegisterComponent},
     { path: 'about', component: AboutComponent , canActivate:[AuthGuard]},
-    { path: 'forum/topic/:topicId/page/:page', component: TopicComponent, resolve:{replies:TopicReplyResolver}},
-    { path: 'forum/topic/:topicId', component: TopicComponent, resolve:{replies:TopicReplyResolver}},
-    { path: 'forum/page/:id', component: ForumComponent , resolve:{topics:TopicResolver}},
-    { path: 'forum', component: ForumComponent , resolve:{topics:TopicResolver}},
+    { path: 'forum/:forumId/topic/:topicId/page/:page', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver}},
+    { path: 'forum/:forumId/topic/:topicId', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver}},
+    { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver}},
+    { path: 'forum', component: ForumComponent},
     { path: '**', component: NotFoundComponent },
 ];
 
