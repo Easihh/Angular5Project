@@ -32,11 +32,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.News;
 import com.asura.web.entity.Role;
 import com.asura.web.entity.Topic;
 import com.asura.web.entity.TopicReply;
 import com.asura.web.entity.TopicReplyWrapper;
 import com.asura.web.entity.UserRole;
+import com.asura.web.repository.NewsRepository;
+import com.asura.web.repository.TopicReplyRepository;
+import com.asura.web.repository.TopicRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -52,6 +56,9 @@ public class TestController {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private NewsRepository newsRepository;
 	
 	@Autowired
 	private TopicReplyRepository topicReplyRepository;
@@ -203,5 +210,11 @@ public class TestController {
 	@PreAuthorize("hasRole('SUPERADMIN')")
 	public ResponseEntity<String> someRestrictedFunction(@RequestHeader Map<String,String> header) {
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/news", method = RequestMethod.GET)
+	public ResponseEntity<List<News>> getLatestNews(@RequestHeader Map<String, String> header) {
+		List<News> newsList = newsRepository.getAllNews();
+		return new ResponseEntity<>(newsList, HttpStatus.OK);
 	}
 }

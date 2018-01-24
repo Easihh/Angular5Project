@@ -10,6 +10,7 @@ import 'rxjs/add/operator/catch';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
 import { ITokenResponse } from "./iTokenResponse";
+import { News } from "./news";
 
 @Injectable()
 export class DataService {
@@ -17,6 +18,7 @@ export class DataService {
     createNewUserURL: string ="/ProjectREST/register";
     loginURL: string ="/ProjectREST/login";
     adminURL: string ="/ProjectREST/admin";
+    getNewsURL: string ="/ProjectREST/news";
 
     constructor( private _http: HttpClient, private jwtHelperService:JwtHelperService ) {
         console.log("DataService Constructor");
@@ -62,6 +64,11 @@ export class DataService {
      createNewUser(name:string,password:string):Observable<any>{
          return this._http.put( this.createNewUserURL, { username: name, password: password } )
          .do( data => console.log( "createUser:" + data ) )//data return in
+         .catch( this.handleError );
+     }
+     
+     getNews():Observable<News[]>{
+         return this._http.get(this.getNewsURL)
          .catch( this.handleError );
      }
 }

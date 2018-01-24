@@ -1,4 +1,4 @@
-package com.asura.web;
+package com.asura.web.repository;
 
 import org.springframework.data.repository.CrudRepository;
 

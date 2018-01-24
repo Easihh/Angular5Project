@@ -1,4 +1,4 @@
-package com.asura.web;
+package com.asura.web.repository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,6 +28,7 @@ public class TopicReplyRepositoryImpl implements TopicReplyRepositoryCustom{
 		return retVal;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int getTotalTopicRepliesByTopicId(long topicId) {
 		String sql = "Select count(*) from TOPIC_REPLIES tr where tr.topic_Id=:topicId";

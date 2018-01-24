@@ -1,13 +1,13 @@
 <body class="home">
   home works!
-  <div class="news-container">
+  <div *ngFor="let news of myNews" class="news-container">
   	<div class="news-details">
-		<div class="news-title">News Title</div>
+		<div class="news-title">{{news.title}}</div>
 		<div class="">
-			<span>December 20, 2017</span>
+			<span>{{news.created}}</span>
 			By<span class="news-author"> Admin</span>
 		</div>
-		<div class="text-primary">Comments</div>
+		<div class="text-primary">{{news.content}}</div><br>
 	</div>  
   </div>
 </body>
