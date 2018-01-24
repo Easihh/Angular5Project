@@ -6,5 +6,5 @@ import com.asura.web.entity.Topic;
 
 public interface TopicRepositoryCustom {
 	
-	List<Topic> getTopicByPageOrderByLastUpdated(int pageNumber);
+	List<Topic> getTopicByPageOrderByLastUpdated(int pageNumber,long forumId);
 }

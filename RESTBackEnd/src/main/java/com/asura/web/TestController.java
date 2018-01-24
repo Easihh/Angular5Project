@@ -80,13 +80,14 @@ public class TestController {
 	}
 
 	@RequestMapping(value = { "forum" }, method = RequestMethod.GET)
-	public ResponseEntity<List<Topic>> getForumTopics(@RequestParam("pageNumber") int pageNumber) {
+	public ResponseEntity<List<Topic>> getForumTopics(@RequestParam("pageNumber") int pageNumber,
+			@RequestParam("forumId") long forumId) {
 		Map<Long, Long> orderInfoMap = new HashMap<Long, Long>();
 		
 		Query query = entityManager
 				.createNativeQuery("select tr.topic_id,count(*) from TOPIC_REPLIES tr " + "group by tr.topic_id");
 		
-		List<Topic> topicList = topicRepository.getTopicByPageOrderByLastUpdated(pageNumber);
+		List<Topic> topicList = topicRepository.getTopicByPageOrderByLastUpdated(pageNumber,forumId);
 
 		List<Object[]> test = query.getResultList();
 		for (Object[] objArr : test) {
@@ -104,13 +105,13 @@ public class TestController {
 	
 	@RequestMapping(value = { "/auth/forum/topic/create" }, method = RequestMethod.PUT)
 	@PreAuthorize("hasRole('ADMIN')")
-	public void createForumTopic(@RequestHeader Map<String, String> header,
-			@RequestBody Map<String, String> body) {
+	public void createForumTopic(@RequestBody Map<String, String> body) {
 		Topic topic = new Topic();
 		String title = body.get("title");
 		String bodyText=body.get("body");
-		if (title == null || bodyText==null) {
-			//this should be stopped at client level and not happen in normal circumstance
+		Long forumId = Long.valueOf(body.get("forumId"));
+		if (title == null || bodyText == null || forumId == null) {
+			// this should be stopped at client level and not happen in normal circumstance
 			return;
 		}
 		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
@@ -118,7 +119,7 @@ public class TestController {
 		topic.setAuthor(auth.getName());
 		topic.setCreated(System.currentTimeMillis());
 		topic.setLastUpdated(System.currentTimeMillis());
-		
+		topic.setForumId(forumId);
 		Topic savedTopic = topicRepository.save(topic);
 		TopicReply reply = new TopicReply();
 		reply.setAuthor(auth.getName());

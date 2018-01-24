@@ -13,14 +13,13 @@ export class TopicResolver implements Resolve<Topic[]>{
 
   resolve(route: ActivatedRouteSnapshot) : Observable<Topic[]>{
       let id = +route.params['id'];
-      console.log("wtf");
-      if ( isNaN(id) || id<=1 ) {
-          //no id or trying to access forum/page1 which is the forum main page;
+      let forumId = route.params['forumId'];
+      if ( isNaN(id) || id<=1) {
+          //no id or trying to access forum/:forumid/page1 which is the forum main page;
           console.log( "The URL doesnt contains a valid id, moving to forum first page." );
           id = 1;
       }
-      return this.topicService.getForumTopics(id).map(topics =>{
-          console.log("Data Returned:"+topics[0].title);
+      return this.topicService.getForumTopics(id,forumId).map(topics =>{
            return topics;
        })
        .catch(error =>{

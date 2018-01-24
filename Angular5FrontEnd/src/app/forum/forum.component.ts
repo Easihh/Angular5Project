@@ -15,8 +15,8 @@ export class ForumComponent{
     forumList:Forum[]=[];
 
     constructor(){
-        this.forumList.push(new Forum(7777,"General"));
-        this.forumList.push(new Forum(9999,"Off-Topic"));
+        this.forumList.push(new Forum(7777,"General","Discuss bla bla bla strategies in this forum."));
+        this.forumList.push(new Forum(9999,"Off-Topic","Almost anything goes in this forum."));
     }
  
 }

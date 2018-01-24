@@ -12,11 +12,10 @@ export class TopicReplyResolver implements Resolve<TopicReplyWrapper>{
   constructor(private topicService: TopicService, private router: Router) { }
 
   resolve(route: ActivatedRouteSnapshot) : Observable<TopicReplyWrapper>{
-      console.log("HIYA");
       let page = +route.params['page'];
       let topicId=+route.params['topicId'];
       if ( isNaN(page)) {
-          //we are on the first page of topic replies forum/topic/:id
+          //we are on the first page of topic replies forum/:forumid/topic/:id
           page=1;
       }
       if(isNaN(topicId)){

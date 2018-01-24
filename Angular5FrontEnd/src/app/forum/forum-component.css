@@ -5,12 +5,14 @@
 
 .forum{
 	padding:2.5rem;
-	outline: 1px purple solid;
+ 	outline: 1px cyan solid; 
 }
 
 .forum-link{
 	width:100%;
 	display: inline-block;
+	font-size: 1.25rem;
+	font-weight: bold;
 }
 
 .forum-container{
@@ -19,7 +21,7 @@
 	margin-right:20%;
 	margin-top:10%;
 	display: block;
-	outline: 1px cyan solid;
+/* 	outline: 1px purple solid; */
 }
 
 .forum-container a:hover{

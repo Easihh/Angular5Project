@@ -16,8 +16,9 @@ public class TopicRepositoryImpl implements TopicRepositoryCustom{
 	private EntityManager em;
 	
 	@Override
-	public List<Topic> getTopicByPageOrderByLastUpdated(int pageNumber) {
+	public List<Topic> getTopicByPageOrderByLastUpdated(int pageNumber,long forumId) {
 		TypedQuery<Topic> query = em.createNamedQuery("Topic.findOrderByLastUpdate", Topic.class);
+		query.setParameter("forumId", forumId);
 		query.setFirstResult((topicsPerPage * pageNumber) - topicsPerPage);
 		query.setMaxResults(topicsPerPage);
 		List<Topic> retVal = query.getResultList();

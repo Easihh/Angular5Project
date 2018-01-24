@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="TOPICS")
 @NamedQueries({
-	@NamedQuery(name="Topic.findOrderByLastUpdate",query="select t from Topic t Order by t.lastUpdated DESC")
+	@NamedQuery(name="Topic.findOrderByLastUpdate",query="select t from Topic t where t.forumId=:forumId Order by t.lastUpdated DESC")
 })
 public class Topic {
 	
@@ -22,6 +22,9 @@ public class Topic {
 	@SequenceGenerator(name = "TOPICS_SEQ",sequenceName = "TOPICS_SEQ", allocationSize = 1)
 	@Column(name = "ID")
 	private Long id;
+	
+	@Column(name = "FORUM_ID")
+	private Long forumId;
 	
 	@Column(name = "TITLE")
 	private String title;
@@ -83,5 +86,13 @@ public class Topic {
 
 	public void setLastUpdated(Long lastUpdated) {
 		this.lastUpdated = lastUpdated;
+	}
+	
+	public Long getForumId() {
+		return forumId;
+	}
+
+	public void setForumId(Long forumId) {
+		this.forumId = forumId;
 	}
 }

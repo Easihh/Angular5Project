@@ -30,9 +30,10 @@ export class TopicService {
       return Observable.throw( error );
   }
       
-  getForumTopics( pageNumber: number ): Observable<Topic[]> {
+  getForumTopics( pageNumber: number,forumId:number ): Observable<Topic[]> {
       let params = new HttpParams();
       params = params.append( "pageNumber", pageNumber.toString() );
+      params = params.append( "forumId", forumId.toString() );
       return this._http
           .get( this.getTopicURL, { params: params } )
           //.do( data => console.log( "Success:" + data ) )//on success
@@ -50,8 +51,8 @@ export class TopicService {
   }
    
    
-   createNewTopic( title: String, body: String ): Observable<any> {
-       return this._http.put( this.createTopicURL, { title: title, body: body } )
+   createNewTopic( title: String, body: String,forumId:number ): Observable<any> {
+       return this._http.put( this.createTopicURL, { title: title, body: body,forumId:forumId } )
        .do( data => console.log( "Topic:" + data ) )//data return in
        .catch( this.handleError );
    }

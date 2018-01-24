@@ -4,6 +4,7 @@ forum list page work!
 		<div *ngFor="let forum of forumList">
 			<div class="forum">
 				<a class="forum-link" [routerLink]="['/forum/',forum.id]">{{forum.name}}</a>
+				{{forum.description}}
 			</div>
 		</div>
 	</div>

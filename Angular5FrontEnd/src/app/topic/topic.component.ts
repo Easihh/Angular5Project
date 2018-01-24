@@ -14,6 +14,7 @@ export class TopicComponent  implements OnInit{
     perPageTopic: number = 5;
     //topicCount: number;
     currentPage: number;
+    currentForum:number;
     topics: Topic[] = [];
     showPrevPage: boolean;
     isCreatingTopic: boolean = false;
@@ -52,7 +53,11 @@ export class TopicComponent  implements OnInit{
          */      
         this.route.data.subscribe((data:any) =>{
             this.topics=this.route.snapshot.data['topics'];
-            console.log("Data:"+data);
+            this.currentForum=this.route.snapshot.params['forumId'];
+            
+            if ( this.topics.length == 0 ) {
+                this.router.navigateByUrl( "/error");
+            }
             let pageNumber = this.route.snapshot.params['id'];
             if ( pageNumber == null ) {
                 //we are in the main forum page
@@ -71,12 +76,11 @@ export class TopicComponent  implements OnInit{
     
     initData(){
         this.showPrevPage = this.currentPage == 1 ? false : true;
-        //this.topicCount = this.topics.length;
         this.initTimestamp();
     }
     
     refreshData(){
-        this.topicService.getForumTopics(this.currentPage).subscribe(topics=>{
+        this.topicService.getForumTopics(this.currentPage,this.currentForum).subscribe(topics=>{
             this.topics=topics;
             this.initData();
         });
@@ -89,7 +93,7 @@ export class TopicComponent  implements OnInit{
         
     createTopic( title: String, topicBody: String ): void {
         
-        this.topicService.createNewTopic( title, topicBody)
+        this.topicService.createNewTopic( title, topicBody,this.currentForum)
         .subscribe(
         res => {
             this.isCreatingTopic = false;
@@ -99,7 +103,7 @@ export class TopicComponent  implements OnInit{
             which will load the new data.Rerouting to the same page you are currently viewing
             will not activate anything as per angular.*/
             if ( this.currentPage != 1 ) {
-                this.router.navigateByUrl( "/forum" );
+                this.router.navigateByUrl( "/forum/"+this.currentForum );
             }
             else{
                 this.refreshData();
