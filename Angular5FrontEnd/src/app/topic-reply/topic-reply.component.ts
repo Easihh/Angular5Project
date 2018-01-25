@@ -31,8 +31,10 @@ export class TopicReplyComponent implements OnInit {
        */      
       this.route.data.subscribe(data => {
           let wrapper: TopicReplyWrapper = data['replies'];
-          if ( wrapper == null ) {
+          if ( wrapper == null || wrapper.topicIsLocked) {
               this.displayReplyForm = false;
+          }
+          if(wrapper == null){
               return;//Server did not return any replies due to an Error
           }
           this.replies = wrapper.topicReplies;

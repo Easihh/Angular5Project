@@ -28,9 +28,10 @@
 					<div class="topic-details">
 						<span class="topic-title">
 							<span class="topic-title-wrapper" placement="bottom" ngbTooltip="Topic tooltip ">{{topic.title}}</span>
+							<i *ngIf="topic.locked" class="fa fa-lock text-warning" aria-hidden="true"></i>
 						</span>
 						<span class="topic-comment">
-							<i class="fa fa-comment-o icon-color" aria-hidden="true"></i>
+							<i class="fa fa-comment-o text-warning" aria-hidden="true"></i>
 							<span>{{topic.repliesCounter}}</span>
 						</span>
 						<span class="topic-author">{{topic.author}}</span> 

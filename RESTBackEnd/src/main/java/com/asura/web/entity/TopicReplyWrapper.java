@@ -13,11 +13,14 @@ public class TopicReplyWrapper {
 	private String topicTitle;
 
 	private List<TopicReply> topicReplies;
+	
+	private boolean topicIsLocked;
 
-	public TopicReplyWrapper(int count, List<TopicReply> repliesLst, String title) {
+	public TopicReplyWrapper(int count, List<TopicReply> repliesLst, String title, boolean topicIsLocked) {
 		this.repliesCount = count;
 		this.topicReplies = repliesLst;
 		this.topicTitle = title;
+		this.topicIsLocked = topicIsLocked;
 	}
 	
 	public long getRepliesCount() {
@@ -30,5 +33,9 @@ public class TopicReplyWrapper {
 	
 	public String getTopicTitle() {
 		return topicTitle;
+	}
+	
+	public boolean isTopicIsLocked() {
+		return topicIsLocked;
 	}
 }

@@ -82,7 +82,7 @@ public class TestController {
 		String topicTitle = topic.getTitle();
 		List<TopicReply> topicReplies = topicReplyRepository.getPagedTopicRepliesByTopicId(topicId, pageNumber);
 		int total = topicReplyRepository.getTotalTopicRepliesByTopicId(topicId);
-		TopicReplyWrapper wrapper = new TopicReplyWrapper(total, topicReplies, topicTitle);
+		TopicReplyWrapper wrapper = new TopicReplyWrapper(total, topicReplies, topicTitle,topic.isLocked());
 		return new ResponseEntity<>(wrapper, HttpStatus.OK);
 	}
 

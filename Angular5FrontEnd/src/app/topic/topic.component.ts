@@ -54,7 +54,6 @@ export class TopicComponent  implements OnInit{
         this.route.data.subscribe((data:any) =>{
             this.topics=this.route.snapshot.data['topics'];
             this.currentForum=this.route.snapshot.params['forumId'];
-            
             if ( this.topics.length == 0 ) {
                 this.router.navigateByUrl( "/error");
             }

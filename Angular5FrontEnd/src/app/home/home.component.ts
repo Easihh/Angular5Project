@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
           for ( let i = 0; i < this.myNews.length; i++ ) {
               let createdDate = new Date( this.myNews[i].created )
               let datePipe = new DatePipe( "en-US" );
-              this.myNews[i].created = datePipe.transform( createdDate, 'MMM d, yyyy' );
+              this.myNews[i].created = datePipe.transform( createdDate, 'MMM d, yyyy' );         
           }
       }),
       error=>{

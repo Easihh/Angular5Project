@@ -7,6 +7,7 @@ export class TopicReplyWrapper {
     constructor(
         public topicTitle:string,
         public repliesCount:number,
-        public topicReplies:TopicReply[]
+        public topicReplies:TopicReply[],
+        public topicIsLocked:boolean
     ) {}
 }

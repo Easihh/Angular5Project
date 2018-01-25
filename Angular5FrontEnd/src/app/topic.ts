@@ -5,6 +5,7 @@ export class Topic {
         public forumId:number,
         public repliesCounter: number,
         public author: string,
+        public locked:boolean,
         public lastUpdated: string
     ) {}
 }
