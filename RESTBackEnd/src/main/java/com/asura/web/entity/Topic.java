@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="TOPICS")
 @NamedQueries({
-	@NamedQuery(name="Topic.findOrderByLastUpdate",query="select t from Topic t where t.forumId=:forumId Order by t.locked desc,t.lastUpdated DESC")
+	@NamedQuery(name="Topic.findOrderByLastUpdate",query="select t from Topic t where t.forumId=:forumId Order by t.sticky desc,t.lastUpdated DESC")
 })
 public class Topic {
 	
@@ -25,6 +25,9 @@ public class Topic {
 	
 	@Column(name = "IS_LOCKED")
 	private boolean locked;
+	
+	@Column(name = "IS_STICKY")
+	private boolean sticky;
 
 	@Column(name = "FORUM_ID")
 	private Long forumId;
@@ -105,5 +108,13 @@ public class Topic {
 
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+	
+	public boolean isSticky() {
+		return sticky;
+	}
+
+	public void setSticky(boolean sticky) {
+		this.sticky = sticky;
 	}
 }

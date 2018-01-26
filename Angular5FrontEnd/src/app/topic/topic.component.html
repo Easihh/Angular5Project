@@ -46,12 +46,12 @@
 <div class="float_center">
 	<ul class="pagination">
     <li *ngIf="showPrevPage" class="page-item">
-      <a *ngIf="currentPage-1!=1" class="btn btn-outline-warning"  routerLink="/forum/page/{{currentPage-1}}"> &lt; PREVIOUS</a>
-      <a *ngIf="currentPage-1==1" class="btn btn-outline-warning"  routerLink="/forum"> &lt; PREVIOUS</a>
+      <a *ngIf="currentPage-1!=1" class="btn btn-outline-warning"  routerLink="/forum/{{currentForum}}/page/{{currentPage-1}}"> &lt; PREVIOUS</a>
+      <a *ngIf="currentPage-1==1" class="btn btn-outline-warning"  routerLink="/forum/{{currentForum}}"> &lt; PREVIOUS</a>
       <span> Page {{currentPage}}</span>
     </li>
     <li class="page-item">
-      <a class="btn btn-outline-warning"  routerLink="/forum/page/{{currentPage+1}}">NEXT &gt;</a>
+      <a class="btn btn-outline-warning"  routerLink="/forum/{{currentForum}}/page/{{currentPage+1}}">NEXT &gt;</a>
     </li>
   </ul>
 </div>

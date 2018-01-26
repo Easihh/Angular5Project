@@ -19,6 +19,7 @@ export class TopicReplyComponent implements OnInit {
     topicTitle:string;
     topicReplyText:string="";
     displayReplyForm: boolean = true;
+    forum:number;
     @ViewChild( 'replyBtn' ) replyBtn;
     @ViewChild( 'addReplyBtn' ) addReplyBtn;
     @ViewChild('replyDiv', { read: ElementRef }) public replyDiv: ElementRef;
@@ -46,6 +47,7 @@ export class TopicReplyComponent implements OnInit {
   initPagination(totalRepliesCount:number){
       let pageNumber = this.route.snapshot.params['page'];
       this.topicId = this.route.snapshot.params['topicId'];
+      this.forum=this.route.snapshot.params['forumId'];
       if ( isNaN(pageNumber)) {
           //we are in the main topic-reply page
           this.currentPage = 1;

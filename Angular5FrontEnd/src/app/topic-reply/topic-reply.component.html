@@ -19,7 +19,7 @@
 	      <a class="page-link" >{{page}}</a>
 	    </li>
 		<li *ngIf="page!=currentPage" class="page-item">
-	      <a class="page-link" routerLink="/forum/topic/{{topicId}}/page/{{page}}">{{page}}</a>
+	      <a class="page-link" routerLink="/forum/{{forum}}/topic/{{topicId}}/page/{{page}}">{{page}}</a>
 	    </li>
   </div>
 

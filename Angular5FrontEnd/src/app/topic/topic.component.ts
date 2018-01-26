@@ -12,7 +12,7 @@ import { DatePipe } from "@angular/common";
 export class TopicComponent  implements OnInit{
     
     perPageTopic: number = 5;
-    //topicCount: number;
+    showNextPage: boolean = true;
     currentPage: number;
     currentForum:number;
     topics: Topic[] = [];
@@ -21,7 +21,7 @@ export class TopicComponent  implements OnInit{
     @ViewChild( 'topicBtn' ) topicBtn;
     
 
-    constructor( private route: ActivatedRoute, private topicService: TopicService, private router:Router ) { 
+    constructor( private route: ActivatedRoute, private topicService: TopicService, private router:Router ) {
     }
     
     private initTimestamp() {
@@ -57,7 +57,7 @@ export class TopicComponent  implements OnInit{
             if ( this.topics.length == 0 ) {
                 this.router.navigateByUrl( "/error");
             }
-            let pageNumber = this.route.snapshot.params['id'];
+            let pageNumber = this.route.snapshot.params['page'];
             if ( pageNumber == null ) {
                 //we are in the main forum page
                 this.currentPage = 1;
@@ -75,6 +75,7 @@ export class TopicComponent  implements OnInit{
     
     initData(){
         this.showPrevPage = this.currentPage == 1 ? false : true;
+        //this.topics.length<=this.perPageTopic
         this.initTimestamp();
     }
     

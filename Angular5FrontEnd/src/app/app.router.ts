@@ -16,11 +16,12 @@ import { TopicReplyComponent } from "./topic-reply/topic-reply.component";
 
 export const router: Routes = [
 
-    { path: '', component: HomeComponent,pathMatch: 'full'},
+    { path: '', component: HomeComponent},
     { path: 'register', component: RegisterComponent},
     { path: 'about', component: AboutComponent , canActivate:[AuthGuard]},
     { path: 'forum/:forumId/topic/:topicId/page/:page', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver}},
     { path: 'forum/:forumId/topic/:topicId', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver}},
+    { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver}},
     { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver}},
     { path: 'forum', component: ForumComponent},
     { path: '**', component: NotFoundComponent },
