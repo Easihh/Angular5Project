@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.BasicUser;
 import com.asura.web.entity.News;
 import com.asura.web.entity.Role;
 import com.asura.web.entity.Topic;
@@ -159,17 +160,16 @@ public class TestController {
 		}
 	}
 
-	private String createAuthenticationToken(UserDetails userDetails) {
+	private String createAuthenticationToken(String username, Collection<? extends GrantedAuthority> authorities) {
 		String token = null;
-		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-		if (userDetails.getAuthorities().size() > 1) {
+		if (authorities.size() > 1) {
 			return null;// user can only have 1 role.
 		}
 		SimpleGrantedAuthority roleClaims = authorities.toArray(new SimpleGrantedAuthority[1])[0];
 		try {
 			Algorithm algorith = Algorithm.HMAC256("mysecret");
 			token = JWT.create()
-					.withClaim("username", userDetails.getUsername())
+					.withClaim("username", username)
 					.withClaim("role", roleClaims.getAuthority())
 					.sign(algorith);
 		} catch (UnsupportedEncodingException ee) {
@@ -183,7 +183,7 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.PUT)
-	public void register(@RequestBody ApplicationUser user) {
+	public void register(@RequestBody BasicUser user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		Role role = new Role(UserRole.USER);
 		user.setRole(role);
@@ -196,10 +196,8 @@ public class TestController {
 		Authentication authentication=authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
-		UserDetails userDetails=userDetailsService.loadUserByUsername(payload.getUsername());
-		
-		String token = createAuthenticationToken(userDetails);
+			
+		String token = createAuthenticationToken(authentication.getName(),authentication.getAuthorities());
 		if (token == null) {
 			return new ResponseEntity<Message>(new Message("Error 566:Token Creation Failed."), HttpStatus.BAD_REQUEST);
 		}

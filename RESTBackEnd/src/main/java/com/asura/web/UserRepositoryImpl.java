@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.BasicUser;
 
 public class UserRepositoryImpl implements UserRepositoryCustom{
 		
@@ -14,10 +14,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
 	private EntityManager em;
 
 	@Override
-	public ApplicationUser findByUsername(String name) {
-		TypedQuery<ApplicationUser> user = em.createNamedQuery("ApplicationUser.findByUsername", ApplicationUser.class);
+	public BasicUser findByUsername(String name) {
+		TypedQuery<BasicUser> user = em.createNamedQuery("BasicUser.findByUsername", BasicUser.class);
 		user.setParameter("name", name);
-		List<ApplicationUser> userList = user.getResultList();
+		List<BasicUser> userList = user.getResultList();
 
 		return userList.size() == 0 ? null : userList.get(0);
 	}

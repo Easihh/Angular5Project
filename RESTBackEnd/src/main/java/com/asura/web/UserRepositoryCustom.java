@@ -1,8 +1,8 @@
 package com.asura.web;
 
-import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.BasicUser;
 
 public interface UserRepositoryCustom{
 	
-	ApplicationUser findByUsername(String name);
+	BasicUser findByUsername(String name);
 }

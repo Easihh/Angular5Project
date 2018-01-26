@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.BasicUser;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -23,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ApplicationUser applicationUser = userRepository.findByUsername(username);
+        BasicUser applicationUser = userRepository.findByUsername(username);
         if (applicationUser == null) {
             throw new UsernameNotFoundException(username);
         }
