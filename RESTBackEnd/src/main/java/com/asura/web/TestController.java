@@ -39,6 +39,8 @@ import com.asura.web.entity.Topic;
 import com.asura.web.entity.TopicReply;
 import com.asura.web.entity.TopicReplyWrapper;
 import com.asura.web.entity.UserRole;
+import com.asura.web.repository.ApplicationUserRepository;
+import com.asura.web.repository.BasicUserRepository;
 import com.asura.web.repository.NewsRepository;
 import com.asura.web.repository.TopicReplyRepository;
 import com.asura.web.repository.TopicRepository;

@@ -1,4 +1,4 @@
-package com.asura.web;
+package com.asura.web.repository.impl;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.asura.web.entity.ApplicationUser;
+import com.asura.web.repository.custom.ApplicationUserRepositoryCustom;
 
 public class ApplicationUserRepositoryImpl implements ApplicationUserRepositoryCustom{
 		

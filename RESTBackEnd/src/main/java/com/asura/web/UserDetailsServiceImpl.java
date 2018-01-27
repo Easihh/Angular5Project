@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.asura.web.entity.ApplicationUser;
 import com.asura.web.entity.BasicUser;
+import com.asura.web.repository.BasicUserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

@@ -1,4 +1,4 @@
-package com.asura.web;
+package com.asura.web.repository.custom;
 
 import com.asura.web.entity.BasicUser;
 

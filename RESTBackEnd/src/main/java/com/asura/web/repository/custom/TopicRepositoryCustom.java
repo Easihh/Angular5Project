@@ -1,4 +1,4 @@
-package com.asura.web.repository;
+package com.asura.web.repository.custom;
 
 import java.util.List;
 

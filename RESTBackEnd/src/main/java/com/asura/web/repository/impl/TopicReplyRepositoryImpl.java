@@ -1,4 +1,4 @@
-package com.asura.web.repository;
+package com.asura.web.repository.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.asura.web.entity.TopicReply;
+import com.asura.web.repository.custom.TopicReplyRepositoryCustom;
 
 public class TopicReplyRepositoryImpl implements TopicReplyRepositoryCustom{
 	
