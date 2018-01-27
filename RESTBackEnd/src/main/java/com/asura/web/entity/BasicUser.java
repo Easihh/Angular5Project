@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-/** Used to Create and Login users only as we don't want to expose password when returning topic's user info for example.*/
+/** Used to Create users only as we don't want to expose password and other info such as ids when returning topic's user info for example.*/
 
 @Entity
 @Table(name = "DB_USERS")

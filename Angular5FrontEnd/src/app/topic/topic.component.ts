@@ -3,6 +3,7 @@ import { Topic } from "../topic";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TopicService } from "../topic.service";
 import { DatePipe } from "@angular/common";
+import { RoleEnum } from "../role-enum";
 
 @Component({
   selector: 'app-topic',
@@ -111,5 +112,9 @@ export class TopicComponent  implements OnInit{
         },
         error => console.log( "ERROR:" + error )
         );
+    }
+    
+    isAdmin( roleId: number ) {
+        return roleId == RoleEnum.ADMIN;
     }
 }

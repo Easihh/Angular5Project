@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface Topic {
     id: number;
     title: string;
@@ -7,4 +9,5 @@ export interface Topic {
     locked: boolean;
     sticky: boolean;
     lastUpdated: string;
+    createdBy:User;
 }

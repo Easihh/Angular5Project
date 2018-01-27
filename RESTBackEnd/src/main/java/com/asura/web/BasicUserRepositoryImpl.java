@@ -8,7 +8,7 @@ import javax.persistence.TypedQuery;
 
 import com.asura.web.entity.BasicUser;
 
-public class UserRepositoryImpl implements UserRepositoryCustom{
+public class BasicUserRepositoryImpl implements BasicUserRepositoryCustom{
 		
 	@PersistenceContext 
 	private EntityManager em;

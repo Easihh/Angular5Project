@@ -56,7 +56,7 @@ public class TestController {
 	private TopicRepository topicRepository;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private BasicUserRepository userRepository;
 	
 	@Autowired
 	private NewsRepository newsRepository;
@@ -71,7 +71,7 @@ public class TestController {
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private ApplicationUserRepository applicationUserRepository;
 		
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
@@ -122,9 +122,10 @@ public class TestController {
 			// this should be stopped at client level and not happen in normal circumstance
 			return;
 		}
-		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		ApplicationUser currentUser = applicationUserRepository.findByUsername(auth.getName());
 		topic.setTitle(title);
-		topic.setAuthor(auth.getName());
+		topic.setCreatedBy(currentUser);
 		topic.setCreated(System.currentTimeMillis());
 		topic.setLastUpdated(System.currentTimeMillis());
 		topic.setForumId(forumId);

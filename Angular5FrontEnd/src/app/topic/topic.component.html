@@ -34,7 +34,7 @@
 							<i class="fa fa-comment-o text-warning" aria-hidden="true"></i>
 							<span>{{topic.repliesCounter}}</span>
 						</span>
-						<span class="topic-author">{{topic.author}}</span> 
+						<span class="topic-author" [ngClass]="{'text-danger':isAdmin(topic.createdBy.role.id)}">{{topic.createdBy.username}}</span> 
 						<span class="topic-timestamp">{{topic.lastUpdated}}</span>
 					</div>
 				</a>

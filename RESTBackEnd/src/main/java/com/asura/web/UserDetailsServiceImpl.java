@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private static final String ROLE_PREFIX="ROLE_";
 	
 	@Autowired
-	private UserRepository userRepository;
+	private BasicUserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

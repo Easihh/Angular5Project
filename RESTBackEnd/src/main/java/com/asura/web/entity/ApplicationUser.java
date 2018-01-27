@@ -2,6 +2,8 @@ package com.asura.web.entity;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +14,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "DB_USERS")
-/* Do not expose password in this class since it is sent via http response */
+@NamedQueries({
+	@NamedQuery(name="ApplicationUser.findByUsername",query="select t from ApplicationUser t where t.username=:name")
+})
+/* Do not expose password in this class since this class information is sent via http response */
 public class ApplicationUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DBUSERS_SEQ")
