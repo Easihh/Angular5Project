@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
     username: string;
     isOnline: boolean = false;
     private lastPoppedUrl: string;
+    private currentUrl:string;
     private yScrollStack: number[] = [];
     constructor( private dataService: DataService, el: ElementRef,private router: Router, private location: Location ) { this.init();}
     
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
                 if (ev.url != this.lastPoppedUrl)
                     this.yScrollStack.push(window.scrollY);
             } else if (ev instanceof NavigationEnd) {
+                this.currentUrl=ev.url;
                 if (ev.url == this.lastPoppedUrl) {
                     this.lastPoppedUrl = undefined;
                     window.scrollTo(0, this.yScrollStack.pop());
@@ -65,5 +67,9 @@ export class AppComponent implements OnInit {
         localStorage.removeItem( "token" );
         this.isOnline = false;
         this.username = "";
+        console.log( "navigating to:" + this.currentUrl );
+        /*reload current page as we may be for example in topic-reply page which requires login to post.
+        this will trigger refresh data method on the component if its setup.*/
+        this.router.navigateByUrl( this.currentUrl );
     }
 }

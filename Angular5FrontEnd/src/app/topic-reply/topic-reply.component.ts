@@ -104,18 +104,10 @@ export class TopicReplyComponent implements OnInit {
       .subscribe(
       res => {
           //TopicReply Creation Succeeded,refresh page data so we see it.
-          
-          /*If we are currently on main page(1) refresh data, otherwise reroute to main page
-          which will load the new data.Rerouting to the same page you are currently viewing
-          will not activate anything as per angular.*/
-          if ( this.currentPage != 1 ) {
-              this.router.navigateByUrl( "/forum/topic/"+this.topicId);
-          }
-          else{
-              this.refreshData();
-              this.topicReplyText = "";
-              window.scrollTo( 0, 0 );
-          }
+
+          this.refreshData();
+          this.topicReplyText = "";
+          window.scrollTo( 0, 0 );
       },
       error => console.log( "ERROR:" + error )
       );
