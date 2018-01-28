@@ -29,27 +29,13 @@ export class TopicReplyComponent implements OnInit {
   constructor(private dataService:DataService,private route: ActivatedRoute, private topicService:TopicService,private router:Router ) { }
 
   ngOnInit() {
-      this.isOnline = this.dataService.loggedIn();
-      this.router.events.subscribe((e: any) => {
-          // If it is a NavigationEnd event re-initalise the component even on same-path reload.
-          if (e instanceof NavigationEnd) {
-            this.refreshData();
-          }
-        });
+
       /* Have to subscribe here since ngOnInit is only called once
-       * when going in the same path ie from forum/forumid/topic/:topicId/page2 to forum/forumid/topic/:topicId/page3
-       */      
+       * when going in the same path ie from forum/forumid/topic/:topicId/page2 to forum/forumid/topic/:topicId/page3   
+       * this part is called after the resolve guard with the data required */      
       this.route.data.subscribe(data => {
-          let wrapper: TopicReplyWrapper = data['replies'];
-          if ( wrapper == null || wrapper.topicIsLocked) {
-              this.displayReplyForm = false;
-          }
-          if(wrapper == null){
-              return;//Server did not return any replies due to an Error
-          }
-          this.replies = wrapper.topicReplies;
-          this.topicTitle = wrapper.topicTitle;
-          this.initPagination(wrapper.repliesCount);
+          let repliesWrapper:TopicReplyWrapper=data['replies'];
+          this.refreshData(repliesWrapper);
       } );
   }
   
@@ -82,19 +68,20 @@ export class TopicReplyComponent implements OnInit {
       this.replyDiv.nativeElement.scrollIntoView();
   }
   
-  refreshData() {
-      this.topicService.getTopicReplies( this.topicId, this.currentPage ).subscribe( repliesWrapper => {
-          if ( repliesWrapper == null || repliesWrapper.topicIsLocked) {
-              this.displayReplyForm = false;
-          }
-          if(repliesWrapper == null){
-              return;//Server did not return any replies due to an Error
-          }
-          this.replies = repliesWrapper.topicReplies;
-          this.topicTitle = repliesWrapper.topicTitle;
-          this.initPagination(repliesWrapper.repliesCount);
-          this.isOnline = this.dataService.loggedIn();
-      } );
+  refreshData( repliesWrapper: TopicReplyWrapper ) {
+      console.log("refreshing topic-reply data.");
+      this.topicReplyText = "";
+      window.scrollTo( 0, 0 );
+      if ( repliesWrapper == null || repliesWrapper.topicIsLocked ) {
+          this.displayReplyForm = false;
+      }
+      if ( repliesWrapper == null ) {
+          return;//Server did not return any replies due to an Error
+      }
+      this.replies = repliesWrapper.topicReplies;
+      this.topicTitle = repliesWrapper.topicTitle;
+      this.initPagination( repliesWrapper.repliesCount );
+      this.isOnline = this.dataService.loggedIn();
   }
   
   createTopicReply(): void {
@@ -103,11 +90,9 @@ export class TopicReplyComponent implements OnInit {
       this.topicService.createNewTopicReply( this.topicId, this.topicReplyText)
       .subscribe(
       res => {
-          //TopicReply Creation Succeeded,refresh page data so we see it.
+          /*TopicReply Creation Succeeded,refresh to first page of topicReply */
+          this.router.navigateByUrl("/forum/"+this.forum+"/topic/"+this.topicId);
 
-          this.refreshData();
-          this.topicReplyText = "";
-          window.scrollTo( 0, 0 );
       },
       error => console.log( "ERROR:" + error )
       );
