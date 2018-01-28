@@ -17,13 +17,12 @@ export class AppComponent implements OnInit {
     isOnline: boolean = false;
     private lastPoppedUrl: string;
     private yScrollStack: number[] = [];
-    
-    @Input('testData') testData:string;
     constructor( private dataService: DataService, el: ElementRef,private router: Router, private location: Location ) { this.init();}
     
     init() {}
     
     ngOnInit(): void {
+ 
         let isOnline = this.dataService.loggedIn();
         if ( isOnline ) {
             this.username = this.dataService.getUsername();
@@ -46,12 +45,7 @@ export class AppComponent implements OnInit {
             }
         });
     }
-          
-    initLogIn( event: any ) {
-        this.username = event.username;
-        this.isOnline = true
-    }
-    
+           
     register() {
         this.dataService.createNewUser( "Admin", "1234" )
         .subscribe( data => {
@@ -59,6 +53,12 @@ export class AppComponent implements OnInit {
         },
         error => console.log( "Error Creating User:" + error )
         );
+    }
+    
+    /* Event from login form to tell main component to reload login form since user has loged in*/
+    initLogIn( event: any ) {
+        this.username = event.username;
+        this.isOnline = true
     }
     
     logout() {

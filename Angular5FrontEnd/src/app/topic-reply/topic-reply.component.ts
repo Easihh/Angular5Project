@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { TopicService } from "../topic.service";
 import { TopicReply } from "../topicReply";
 import { TopicReplyWrapper } from "../topicReplyWrapper";
+import { DataService } from "../data.service";
 
 @Component({
   selector: 'app-topic-reply',
@@ -20,15 +21,23 @@ export class TopicReplyComponent implements OnInit {
     topicReplyText:string="";
     displayReplyForm: boolean = true;
     forum:number;
+    isOnline: boolean = false;
     @ViewChild( 'replyBtn' ) replyBtn;
     @ViewChild( 'addReplyBtn' ) addReplyBtn;
     @ViewChild('replyDiv', { read: ElementRef }) public replyDiv: ElementRef;
   
-  constructor(private route: ActivatedRoute, private topicService:TopicService,private router:Router ) { }
+  constructor(private dataService:DataService,private route: ActivatedRoute, private topicService:TopicService,private router:Router ) { }
 
   ngOnInit() {
+      this.isOnline = this.dataService.loggedIn();
+      this.router.events.subscribe((e: any) => {
+          // If it is a NavigationEnd event re-initalise the component even on same-path reload.
+          if (e instanceof NavigationEnd) {
+            this.refreshData();
+          }
+        });
       /* Have to subscribe here since ngOnInit is only called once
-       * when going in the same path ie from forum/topic/:topicId/page2 to forum/topic/:topicId/page3
+       * when going in the same path ie from forum/forumid/topic/:topicId/page2 to forum/forumid/topic/:topicId/page3
        */      
       this.route.data.subscribe(data => {
           let wrapper: TopicReplyWrapper = data['replies'];
@@ -75,9 +84,16 @@ export class TopicReplyComponent implements OnInit {
   
   refreshData() {
       this.topicService.getTopicReplies( this.topicId, this.currentPage ).subscribe( repliesWrapper => {
+          if ( repliesWrapper == null || repliesWrapper.topicIsLocked) {
+              this.displayReplyForm = false;
+          }
+          if(repliesWrapper == null){
+              return;//Server did not return any replies due to an Error
+          }
           this.replies = repliesWrapper.topicReplies;
           this.topicTitle = repliesWrapper.topicTitle;
           this.initPagination(repliesWrapper.repliesCount);
+          this.isOnline = this.dataService.loggedIn();
       } );
   }
   

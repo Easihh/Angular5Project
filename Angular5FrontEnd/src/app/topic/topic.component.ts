@@ -103,6 +103,8 @@ export class TopicComponent  implements OnInit{
             /*If we are currently on main page(1) refresh data, otherwise reroute to main page
             which will load the new data.Rerouting to the same page you are currently viewing
             will not activate anything as per angular.*/
+            
+            //in angular 5.1 it is possible to use reloadsameRoute.
             if ( this.currentPage != 1 ) {
                 this.router.navigateByUrl( "/forum/"+this.currentForum );
             }

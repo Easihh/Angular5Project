@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { Router} from '@angular/router';
+import { Router, NavigationEnd} from '@angular/router';
 import { DataService} from '../data.service';
 
 @Component({
@@ -10,11 +10,17 @@ import { DataService} from '../data.service';
 export class LoginFormComponent implements OnInit {
 
     @Output( 'loggedIn' ) loggedIn = new EventEmitter<any>();
+    currentUrl:string;
+    constructor(private router: Router, private service: DataService ) { }
+    
+    ngOnInit() {        
+        this.router.events.subscribe(( ev: any ) => {
+            if ( ev instanceof NavigationEnd ) {
+                this.currentUrl = ev.url;
+            }
+        } );
+    }
 
-    constructor( private router: Router, private service: DataService ) { }
-  
-    ngOnInit() {}
-  
   onSubmit( event: Event ): void {
       //should not be required anymore with ngSubmit with Form module imported
       //event.preventDefault();
@@ -23,12 +29,12 @@ export class LoginFormComponent implements OnInit {
       this.service.tryLogin( username, password )
           .subscribe(
           res => {
-              console.log("about to save token")
-              console.log( res.data );
               localStorage.setItem( "token", res.data );
               this.loggedIn.emit({
                   username:username             
               });
+              console.log("navigating to:"+this.currentUrl);
+              this.router.navigateByUrl(this.currentUrl);
           },
           error => console.log( "ERROR LOGIN:" + error )
           );

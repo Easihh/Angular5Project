@@ -35,22 +35,16 @@ export class DataService {
         return Observable.throw( error );
     }
     
-    loggedIn() : boolean {
+    loggedIn(): boolean {
         const token: string = this.jwtHelperService.tokenGetter();
         if ( !token ) {
             return false;
         }
-        const tokenExpired: boolean = this.jwtHelperService.isTokenExpired( token );
-        return !tokenExpired;
+        return true;
     }
     
     tryLogin( username: String, password: String ): Observable<ITokenResponse> {
-        //let search = new URLSearchParams();
-        //search.set( 'user', 'moo' );
-        //search.set( 'password', '123' );
-        console.log( "Current Token:" + localStorage.getItem( 'token' ) );
         return this._http.post( this.loginURL, { username: username, password: password } )
-            //.map(( response: Response ) => response.json() )
             .do( data => console.log( "Key:" + data ) )//data return in
             .catch( this.handleError );
     }

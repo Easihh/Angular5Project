@@ -18,7 +18,7 @@ export const router: Routes = [
 
     { path: '', component: HomeComponent},
     { path: 'register', component: RegisterComponent},
-    { path: 'about', component: AboutComponent , canActivate:[AuthGuard]},
+    { path: 'about', component: AboutComponent , canActivate:[AuthGuard], runGuardsAndResolvers: 'always',},
     { path: 'forum/:forumId/topic/:topicId/page/:page', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver}},
     { path: 'forum/:forumId/topic/:topicId', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver}},
     { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver}},
@@ -27,6 +27,6 @@ export const router: Routes = [
     { path: '**', component: NotFoundComponent },
 ];
 
-export const routes: ModuleWithProviders = RouterModule.forRoot( router );
+export const routes: ModuleWithProviders = RouterModule.forRoot( router,{onSameUrlNavigation:'reload'} );
 
 
