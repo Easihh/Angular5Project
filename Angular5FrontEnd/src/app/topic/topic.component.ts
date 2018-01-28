@@ -51,40 +51,33 @@ export class TopicComponent  implements OnInit{
         /* Have to subscribe here since ngOnInit is only called once
          * when going in the same path ie from forum/page2 to forum/page3
          * 
-         */      
+         *this part is called after the resolve guard with the data required */
+        
         this.route.data.subscribe((data:any) =>{
-            this.topics=this.route.snapshot.data['topics'];
-            this.currentForum=this.route.snapshot.params['forumId'];
-            if ( this.topics.length == 0 ) {
-                this.router.navigateByUrl( "/error");
-            }
-            let pageNumber = this.route.snapshot.params['page'];
-            if ( pageNumber == null ) {
-                //we are in the main forum page
-                this.currentPage = 1;
-            }
-            else {
-                this.currentPage = parseInt( pageNumber );
-            }
-            this.initData();
+            this.refreshData(data);
         });
-    }
-    
-    increasePage(){
-        this.currentPage++;
     }
     
     initData(){
         this.showPrevPage = this.currentPage == 1 ? false : true;
-        //this.topics.length<=this.perPageTopic
         this.initTimestamp();
     }
     
-    refreshData(){
-        this.topicService.getForumTopics(this.currentPage,this.currentForum).subscribe(topics=>{
-            this.topics=topics;
-            this.initData();
-        });
+    refreshData( data: any ) {
+        this.topics = this.route.snapshot.data['topics'];
+        this.currentForum = this.route.snapshot.params['forumId'];
+        if ( this.topics.length == 0 ) {
+            this.router.navigateByUrl( "/error" );
+        }
+        let pageNumber = this.route.snapshot.params['page'];
+        if ( pageNumber == null ) {
+            //we are in the main forum page
+            this.currentPage = 1;
+        }
+        else {
+            this.currentPage = parseInt( pageNumber );
+        }
+        this.initData();
     }
     
     showTopicForm(){
@@ -98,19 +91,9 @@ export class TopicComponent  implements OnInit{
         .subscribe(
         res => {
             this.isCreatingTopic = false;
-            //Topic Creation Succeeded,refresh page data so we see it.
-            
-            /*If we are currently on main page(1) refresh data, otherwise reroute to main page
-            which will load the new data.Rerouting to the same page you are currently viewing
-            will not activate anything as per angular.*/
-            
-            //in angular 5.1 it is possible to use reloadsameRoute.
-            if ( this.currentPage != 1 ) {
-                this.router.navigateByUrl( "/forum/"+this.currentForum );
-            }
-            else{
-                this.refreshData();
-            }
+            //Topic Creation Succeeded,refresh to main forum page data so we see it.
+                     
+             this.router.navigateByUrl( "/forum/"+this.currentForum );
         },
         error => console.log( "ERROR:" + error )
         );

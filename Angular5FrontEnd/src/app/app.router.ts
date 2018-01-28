@@ -21,8 +21,8 @@ export const router: Routes = [
     { path: 'about', component: AboutComponent , canActivate:[AuthGuard], runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId/topic/:topicId/page/:page', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId/topic/:topicId', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver},runGuardsAndResolvers: 'always'},
-    { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver}},
-    { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver}},
+    { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
+    { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum', component: ForumComponent},
     { path: '**', component: NotFoundComponent },
 ];
