@@ -21,6 +21,7 @@ import { TopicReplyResolver } from "./topicReply.resolver";
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { RegisterComponent } from './register/register.component';
 import { TopicReplyComponent } from './topic-reply/topic-reply.component';
+import { MarkdownModule } from 'ngx-md';
 
 @NgModule({
   declarations: [     
@@ -48,6 +49,7 @@ import { TopicReplyComponent } from './topic-reply/topic-reply.component';
             //whitelistedDomains:['localhost:8090']
         }
     }),
+    MarkdownModule.forRoot(),
     NgbModule.forRoot(),
     routes
   ],
