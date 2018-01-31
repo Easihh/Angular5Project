@@ -114,7 +114,7 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = { "/auth/forum/topic/create" }, method = RequestMethod.PUT)
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('Admin')")
 	public void createForumTopic(@RequestBody Map<String, String> body) {
 		Topic topic = new Topic();
 		String title = body.get("title");
@@ -126,6 +126,7 @@ public class TestController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		ApplicationUser currentUser = applicationUserRepository.findByUsername(auth.getName());
+		currentUser.setPostCount(currentUser.getPostCount() + 1);
 		topic.setTitle(title);
 		topic.setCreatedBy(currentUser);
 		topic.setCreated(System.currentTimeMillis());
@@ -133,25 +134,28 @@ public class TestController {
 		topic.setForumId(forumId);
 		Topic savedTopic = topicRepository.save(topic);
 		TopicReply reply = new TopicReply();
-		reply.setAuthor(auth.getName());
+		reply.setCreatedBy(currentUser);
 		reply.setReplyComment(bodyText);
 		reply.setTopicId(savedTopic.getId());
 		reply.setCreated(System.currentTimeMillis());
 		topicReplyRepository.save(reply);
+		applicationUserRepository.save(currentUser);
 	}
 	
 	@RequestMapping(value = { "auth/forum/topic/reply/create" }, method = RequestMethod.PUT)
 	public void createForumTopicReply(@RequestHeader Map<String, String> header,
 			@RequestBody Map<String, String> body) {
 		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		ApplicationUser currentUser = applicationUserRepository.findByUsername(auth.getName());
 		String topicIdStr = body.get("topicId");
 		String commentText = body.get("body");
 		if (topicIdStr != null) {
 			long topicId = Long.valueOf(topicIdStr);
 			Topic topic = topicRepository.findOne(topicId);
 			if (topic != null) {
+				currentUser.setPostCount(currentUser.getPostCount() + 1);
 				TopicReply reply = new TopicReply();
-				reply.setAuthor(auth.getName());
+				reply.setCreatedBy(currentUser);
 				reply.setCreated(System.currentTimeMillis());
 				reply.setTopicId(topicId);
 				reply.setReplyComment(commentText);
@@ -159,6 +163,7 @@ public class TestController {
 				
 				topic.setLastUpdated(System.currentTimeMillis());
 				topicRepository.save(topic);
+				applicationUserRepository.save(currentUser);
 			}
 		}
 	}

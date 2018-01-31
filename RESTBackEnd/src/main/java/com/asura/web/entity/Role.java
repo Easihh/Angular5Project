@@ -13,14 +13,14 @@ public class Role {
 	@Column(name="ID")
 	private Long id;
 	
-	@Column(name="ROLE")
-	private String role;
+	@Column(name="ROLE_NAME")
+	private String rolename;
 	
 	public Role() {}//default construct required
 
 	public Role(UserRole user) {
 		id = user.getId();
-		role = user.name();
+		rolename = user.name();
 	}
 
 	public Long getId() {
@@ -30,12 +30,12 @@ public class Role {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getRole() {
-		return role;
+	
+	public String getRolename() {
+		return rolename;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setRolename(String rolename) {
+		this.rolename = rolename;
 	}
 }

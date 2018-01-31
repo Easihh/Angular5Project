@@ -5,8 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,8 +28,9 @@ public class TopicReply {
 	@Column(name="TOPIC_ID")
 	private Long topicId;
 	
-	@Column(name = "AUTHOR")
-	private String author;
+	@OneToOne
+	@JoinColumn(name="CREATED_BY", referencedColumnName="ID")
+	private ApplicationUser createdBy;
 	
 	@Column(name="REPLY_COMMENT")
 	private String replyComment;
@@ -43,14 +46,6 @@ public class TopicReply {
 		this.id = id;
 	}
 	
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
 	public Long getCreated() {
 		return created;
 	}
@@ -73,5 +68,13 @@ public class TopicReply {
 
 	public void setReplyComment(String replyComment) {
 		this.replyComment = replyComment;
+	}
+	
+	public ApplicationUser getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(ApplicationUser createdBy) {
+		this.createdBy = createdBy;
 	}
 }

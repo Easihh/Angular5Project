@@ -32,6 +32,9 @@ public class ApplicationUser {
 	@JoinColumn(name="ROLE_ID", referencedColumnName="ID")
 	private Role role;
 	
+	@Column(name="POST_COUNT")
+	private long postCount;
+	
 	public Long getId() {
 		return id;
 	}
@@ -54,5 +57,13 @@ public class ApplicationUser {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	public long getPostCount() {
+		return postCount;
+	}
+
+	public void setPostCount(long postCount) {
+		this.postCount = postCount;
 	}
 }
