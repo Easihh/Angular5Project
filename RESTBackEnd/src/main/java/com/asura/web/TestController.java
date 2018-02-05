@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -87,6 +89,13 @@ public class TestController {
 		System.out.println("I got here.");
 		//this.template.convertAndSend("/chat","Hello");
 		return new String("Hello");
+	}
+	
+	@Scheduled(fixedDelay=5000)
+	public void testing() throws Exception {
+		Topic topic=new Topic();
+		topic.setTitle("TESTING STUFF");
+		this.template.convertAndSend("/chat",topic);
 	}
 		
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)

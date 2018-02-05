@@ -2,6 +2,10 @@
 
 <body>
 This is the about page
-<input type="button" (click)="test()">;
+<input type="button" (click)="test()">
+<div *ngFor="let obj of testArr">
+	{{obj.title }}
+	<input type="button">{{obj.title}}
+</div>
 </body>
 

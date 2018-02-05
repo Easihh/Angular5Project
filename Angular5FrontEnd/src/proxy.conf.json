@@ -7,6 +7,7 @@
        "port": 8090
      },
      "secure": false,
+     "ws":true,
      "changeOrigin": true,
      "logLevel": "info"
    }
