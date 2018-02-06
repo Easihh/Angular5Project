@@ -5,6 +5,7 @@ import { ICountry } from './icountry';
 import { RankedPlayer} from './ranked-player';
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { Location, PopStateEvent } from "@angular/common";
+import { WebsocketService } from "./websocket.service";
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
     private lastPoppedUrl: string;
     private currentUrl:string;
     private yScrollStack: number[] = [];
-    constructor( private dataService: DataService, el: ElementRef,private router: Router, private location: Location ) { this.init();}
+    constructor(private websocketService:WebsocketService, private dataService: DataService, el: ElementRef,private router: Router, private location: Location ) { this.init();}
     
     init() {}
     
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit {
         if ( isOnline ) {
             this.username = this.dataService.getUsername();
             this.isOnline = true;
+            this.initWebsocket();
         }
         
         this.location.subscribe((ev:PopStateEvent) => {
@@ -61,6 +63,11 @@ export class AppComponent implements OnInit {
     initLogIn( event: any ) {
         this.username = event.username;
         this.isOnline = true
+        this.initWebsocket();
+    }
+    
+    initWebsocket():void{
+        this.websocketService.initializeWebSocketConnection();
     }
     
     logout() {

@@ -22,6 +22,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { RegisterComponent } from './register/register.component';
 import { TopicReplyComponent } from './topic-reply/topic-reply.component';
 import { MarkdownModule } from 'ngx-md';
+import { DeckComponent } from './deck/deck.component';
+import { WebsocketService } from "./websocket.service";
 
 @NgModule({
   declarations: [     
@@ -34,7 +36,8 @@ import { MarkdownModule } from 'ngx-md';
     TopicComponent,
     HomeComponent,
     RegisterComponent,
-    TopicReplyComponent
+    TopicReplyComponent,
+    DeckComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,7 @@ import { MarkdownModule } from 'ngx-md';
     routes
   ],
   exports: [],
-  providers: [DataService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver],
+  providers: [DataService,WebsocketService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
