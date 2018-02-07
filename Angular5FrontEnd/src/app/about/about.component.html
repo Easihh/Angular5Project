@@ -3,9 +3,19 @@
 <body>
 This is the about page
 <input type="button" (click)="test()">
-<div *ngFor="let obj of testArr">
-	{{obj.title }}
-	<input type="button">{{obj.title}}
-</div>
+<table class="table table-hover">
+ <thead>
+	<tr>
+		<th scope="col">Name</th>
+		<th scope="col">Level</th>
+		<th scope="col">Action</th>
+	</tr>
+</thead>
+<tr *ngFor="let battler of battlers">
+	<td>{{battler.name}}</td>
+	<td>{{battler.level}}</td>
+	<td><input text="button" class="btn btn-outline-primary" (click)=testing(battler.id) value="Attack"></td>
+</tr>
+</table>
 </body>
 

@@ -1,4 +1,4 @@
-package com.asura.web;
+package com.asura.web.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;

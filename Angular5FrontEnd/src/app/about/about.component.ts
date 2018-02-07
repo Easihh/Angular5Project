@@ -5,6 +5,7 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { Topic } from "../topic";
 import { WebsocketService } from "../websocket.service";
+import { Battler } from "../battler";
 @Component({
   selector: 'about',
   templateUrl: './about.component.html',
@@ -14,13 +15,13 @@ import { WebsocketService } from "../websocket.service";
 
 export class AboutComponent implements OnInit,OnDestroy{
     
-    testArr:Topic[]=[];
+    battlers:Battler[]=[];
     
     constructor(private websocketService:WebsocketService){}
     
     ngOnInit(): void {
         this.websocketService.getObservable().subscribe(data=>{
-            this.testArr.push(data);
+            this.battlers.push(data);
         })
     }
         
@@ -33,5 +34,8 @@ export class AboutComponent implements OnInit,OnDestroy{
         //this.stompClient.send("/app/send/message",{},"Testing Stuff");
     }
     
+    testing(id:number){
+        alert("Clicked Id:"+id);
+    }
     
 }

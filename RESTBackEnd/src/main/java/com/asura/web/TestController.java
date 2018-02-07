@@ -14,11 +14,6 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,8 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -38,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asura.web.entity.ApplicationUser;
 import com.asura.web.entity.BasicUser;
+import com.asura.web.entity.Battler;
 import com.asura.web.entity.News;
 import com.asura.web.entity.Role;
 import com.asura.web.entity.Topic;
@@ -46,6 +40,7 @@ import com.asura.web.entity.TopicReplyWrapper;
 import com.asura.web.entity.UserRole;
 import com.asura.web.repository.ApplicationUserRepository;
 import com.asura.web.repository.BasicUserRepository;
+import com.asura.web.repository.BattlerRepository;
 import com.asura.web.repository.NewsRepository;
 import com.asura.web.repository.TopicReplyRepository;
 import com.asura.web.repository.TopicRepository;
@@ -55,12 +50,15 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 
 @RestController
 public class TestController {
-		
+	
 	@PersistenceContext
 	EntityManager entityManager;
 	
 	@Autowired
 	private TopicRepository topicRepository;
+	
+	@Autowired
+	private BattlerRepository battlerRepository;
 	
 	@Autowired
 	private BasicUserRepository userRepository;
@@ -79,25 +77,7 @@ public class TestController {
 	
 	@Autowired
 	private ApplicationUserRepository applicationUserRepository;
-	
-	@Autowired
-	private SimpMessagingTemplate template;
-	
-	@MessageMapping("/send/message")
-	@SendTo("/chat")
-	public String send(String message) throws Exception {
-		System.out.println("I got here.");
-		//this.template.convertAndSend("/chat","Hello");
-		return new String("Hello");
-	}
-	
-	@Scheduled(fixedDelay=5000)
-	public void testing() throws Exception {
-		Topic topic=new Topic();
-		topic.setTitle("TESTING STUFF");
-		this.template.convertAndSend("/chat",topic);
-	}
-		
+			
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
 			@RequestParam("pageNumber") int pageNumber) throws Exception {
@@ -218,7 +198,16 @@ public class TestController {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		Role role = new Role(UserRole.USER);
 		user.setRole(role);
-		userRepository.save(user);
+		user=userRepository.save(user);
+		
+		Battler battler=new Battler();
+		battler.setCurrentExp(0);
+		battler.setLevel(1);
+		battler.setNextLvl(500);
+		battler.setCurrentExp(0);
+		battler.setUserId(user.getId());
+		battler.setName(user.getUsername());
+		battlerRepository.save(battler);
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
