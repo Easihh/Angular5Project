@@ -2,7 +2,9 @@
 
 <body>
 This is the about page
-<input type="button" (click)="test()">
+<input type="button" (click)="test()" class="btn btn-outline-primary" value="Stop Real Time Update">
+<input *ngIf="!isArenaParticipant" type="button" (click)="enterArena()" class="btn btn-outline-primary" value="Enter the Arena">
+<input *ngIf="isArenaParticipant" type="button" (click)="leaveArena()" class="btn btn-outline-primary" value="Leave the Arena">
 <table class="table table-hover">
  <thead>
 	<tr>

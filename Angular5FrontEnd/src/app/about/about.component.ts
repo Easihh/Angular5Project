@@ -16,10 +16,13 @@ import { Battler } from "../battler";
 export class AboutComponent implements OnInit,OnDestroy{
     
     battlers:Battler[]=[];
+    isArenaParticipant: boolean;
     
     constructor(private websocketService:WebsocketService){}
     
     ngOnInit(): void {
+        this.isArenaParticipant = localStorage.getItem( "arenaKey" ) ? true : false;
+            
         this.websocketService.getObservable().subscribe(data=>{
             this.battlers.push(data);
         })
@@ -36,6 +39,11 @@ export class AboutComponent implements OnInit,OnDestroy{
     
     testing(id:number){
         alert("Clicked Id:"+id);
+    }
+    
+    enterArena(){
+        //todo:call backend to to update status +send info to other player
+        localStorage.setItem("arenaKey","true");
     }
     
 }
