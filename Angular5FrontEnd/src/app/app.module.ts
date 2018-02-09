@@ -47,7 +47,7 @@ import { WebsocketService } from "./websocket.service";
     JwtModule.forRoot({
         config: {
             tokenGetter:()=>{
-                return localStorage.getItem('token');
+                return sessionStorage.getItem('token');
             },
             //whitelistedDomains:['localhost:8090']
         }

@@ -71,9 +71,10 @@ export class AppComponent implements OnInit {
     }
     
     logout() {
-        localStorage.removeItem( "token" );
+        sessionStorage.removeItem( "token" );
         this.isOnline = false;
         this.username = "";
+        this.websocketService.disconnect();
         console.log( "navigating to:" + this.currentUrl );
         /*reload current page as we may be for example in topic-reply page which requires login to post.
         this will trigger refresh data method on the component if its setup.*/

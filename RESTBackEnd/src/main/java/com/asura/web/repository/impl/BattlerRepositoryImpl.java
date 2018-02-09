@@ -15,8 +15,9 @@ public class BattlerRepositoryImpl implements BattlerRepositoryCustom{
 	private EntityManager em;
 	
 	@Override
-	public Battler findByName(String name) {
+	public Battler findByName(String battlerName) {
 		TypedQuery<Battler> query = em.createNamedQuery("Battler.findByName", Battler.class);
+		query.setParameter("name", battlerName);
 		List<Battler> retVal = query.getResultList();
 		return retVal.get(0);
 	}

@@ -21,7 +21,8 @@ export class AboutComponent implements OnInit,OnDestroy{
     constructor(private websocketService:WebsocketService){}
     
     ngOnInit(): void {
-        this.isArenaParticipant = localStorage.getItem( "arenaKey" ) ? true : false;
+        let status: number = parseInt(sessionStorage.getItem("status"));
+        this.isArenaParticipant = status == 1 ? true : false;
             
         this.websocketService.getObservable().subscribe(data=>{
             this.battlers.push(data);
@@ -43,7 +44,8 @@ export class AboutComponent implements OnInit,OnDestroy{
     
     enterArena(){
         //todo:call backend to to update status +send info to other player
-        localStorage.setItem("arenaKey","true");
+        this.isArenaParticipant=true 
+        //sessionStorage.setItem("status","1");
     }
     
 }

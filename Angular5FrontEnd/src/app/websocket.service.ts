@@ -32,7 +32,7 @@ export class WebsocketService {
       this.topicSubscription=that.stompClient.subscribe("/chat", (message:any) => {
           let battler:Battler=JSON.parse(message.body);
           that.stompSubject.next(battler);
-         console.log("Message Received from Server:"+battler);
+         //console.log("Message Received from Server:"+battler);
      });
   }
       

@@ -216,12 +216,21 @@ public class TestController {
 		Authentication authentication=authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-			
-		String token = createAuthenticationToken(authentication.getName(),authentication.getAuthorities());
-		if (token == null) {
-			return new ResponseEntity<Message>(new Message("Error 566:Token Creation Failed."), HttpStatus.BAD_REQUEST);
+		
+		Battler battler = battlerRepository.findByName(payload.getUsername());
+		
+		if (battler == null) {
+			return new ResponseEntity<Message>(
+					new ExceptionResponse(ErrorType.BATTLER_MISSING.getErrorCode(),
+							ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + payload.getUsername()),
+					HttpStatus.BAD_REQUEST);
 		}
-			return new ResponseEntity<Message>(new Message(token),HttpStatus.OK);
+			
+		String token =createAuthenticationToken(authentication.getName(),authentication.getAuthorities());
+		if (token == null) {
+			return new ResponseEntity<Message>(new ExceptionResponse(ErrorType.TOKEN_CREATION_FAILED.getErrorCode(),ErrorType.TOKEN_CREATION_FAILED.getErrorMessage()), HttpStatus.BAD_REQUEST);
+		}
+			return new ResponseEntity<Message>(new AuthenticationReplyMessage(token,battler),HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)

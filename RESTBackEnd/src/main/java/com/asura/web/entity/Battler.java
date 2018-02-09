@@ -30,7 +30,10 @@ public class Battler {
 	
 	@Column(name="NAME")
 	private String name;
-
+	
+	@Column(name="PLAYER_STATUS")
+	private long playerStatus;
+	
 	@Column(name="BATTLER_LEVEL")
 	private long level;
 	
@@ -86,5 +89,13 @@ public class Battler {
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+	
+	public long getPlayerStatus() {
+		return playerStatus;
+	}
+
+	public void setPlayerStatus(long playerStatus) {
+		this.playerStatus = playerStatus;
 	}
 }

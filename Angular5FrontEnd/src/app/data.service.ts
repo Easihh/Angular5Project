@@ -9,8 +9,8 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
-import { ITokenResponse } from "./iTokenResponse";
 import { News } from "./news";
+import { AuthenticationResponse } from "./authenticationResponse";
 
 @Injectable()
 export class DataService {
@@ -20,12 +20,10 @@ export class DataService {
     adminURL: string ="/ProjectREST/admin";
     getNewsURL: string ="/ProjectREST/news";
 
-    constructor( private _http: HttpClient, private jwtHelperService:JwtHelperService ) {
-        console.log("DataService Constructor");
-    }
+    constructor( private _http: HttpClient, private jwtHelperService:JwtHelperService ) {}
     
     private handleError( error: any ) {
-        if ( error instanceof Response ) {//Backend Error
+        if ( error instanceof Response ) {
             //.json() parsing failed from server
             console.log( "Error:"+error.text() );
             return Observable.throw( error.text() );
@@ -43,9 +41,9 @@ export class DataService {
         return true;
     }
     
-    tryLogin( username: String, password: String ): Observable<ITokenResponse> {
-        return this._http.post( this.loginURL, { username: username, password: password } )
-            .do( data => console.log( "Key:" + data ) )//data return in
+    tryLogin( username: String, password: String ): Observable<AuthenticationResponse> {
+        return this._http.post<AuthenticationResponse>( this.loginURL, { username: username, password: password } )
+            //.do( data => console.log( "Key:" + data )//data return in
             .catch( this.handleError );
     }
     

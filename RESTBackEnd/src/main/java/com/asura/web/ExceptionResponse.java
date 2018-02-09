@@ -1,10 +1,15 @@
 package com.asura.web;
 
-public class ExceptionResponse {
+public class ExceptionResponse implements Message{
 	private String errorCode;
 	private String errorMessage;
 	
 	public ExceptionResponse() {};
+	
+	public ExceptionResponse(String errCode,String errMessage) {
+		errorCode = errCode;
+		errorMessage = errMessage;
+	}
 	
 	public String getErrorCode() {
 		return errorCode;

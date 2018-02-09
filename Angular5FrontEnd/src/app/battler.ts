@@ -5,5 +5,6 @@ export interface Battler {
     name: string;
     level:number;
     currentExp:number;
-    nextLvl:number
+    nextLvl:number;
+    playerStatus:number;
 }
