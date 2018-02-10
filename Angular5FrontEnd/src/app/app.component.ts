@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
         );
     }
     
-    /* Event from login form to tell main component to reload login form since user has loged in*/
+    /* Event from login form to tell main component to reload login form since user has logged in*/
     initLogIn( event: any ) {
         this.username = event.username;
         this.isOnline = true

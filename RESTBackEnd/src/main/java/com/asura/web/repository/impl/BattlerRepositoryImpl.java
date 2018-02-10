@@ -19,6 +19,6 @@ public class BattlerRepositoryImpl implements BattlerRepositoryCustom{
 		TypedQuery<Battler> query = em.createNamedQuery("Battler.findByName", Battler.class);
 		query.setParameter("name", battlerName);
 		List<Battler> retVal = query.getResultList();
-		return retVal.get(0);
+		return retVal.isEmpty() ? null : retVal.get(0);
 	}
 }

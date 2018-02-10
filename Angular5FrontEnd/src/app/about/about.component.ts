@@ -18,15 +18,28 @@ export class AboutComponent implements OnInit,OnDestroy{
     battlers:Battler[]=[];
     isArenaParticipant: boolean;
     
-    constructor(private websocketService:WebsocketService){}
+    constructor(private websocketService:WebsocketService,private dataService:DataService){}
     
     ngOnInit(): void {
-        let status: number = parseInt(sessionStorage.getItem("status"));
-        this.isArenaParticipant = status == 1 ? true : false;
-            
+        if ( this.dataService.getPlayer() == null ) {
+            this.dataService.retrievePlayer().subscribe(data=>{
+                this.dataService.setPlayer(data);
+                this.initArenaParticipation();
+            });
+        }
+        else {
+            console.log("wtf:"+this.dataService.getPlayer );
+            this.initArenaParticipation();
+        }
+          
         this.websocketService.getObservable().subscribe(data=>{
             this.battlers.push(data);
         })
+    }
+    
+    initArenaParticipation(): void {
+        let status: number = this.dataService.getPlayer().playerStatus;
+        this.isArenaParticipant = status == 1 ? true : false;
     }
         
     ngOnDestroy(): void {
@@ -44,8 +57,16 @@ export class AboutComponent implements OnInit,OnDestroy{
     
     enterArena(){
         //todo:call backend to to update status +send info to other player
-        this.isArenaParticipant=true 
-        //sessionStorage.setItem("status","1");
+        this.dataService.enterArena().subscribe(data=>{
+            this.isArenaParticipant=true ;
+        });
+    }
+    
+    leaveArena(){
+        //todo:call backend to to update status +send info to other player
+        this.dataService.leaveArena().subscribe(data=>{
+            this.isArenaParticipant=false ;
+        });
     }
     
 }

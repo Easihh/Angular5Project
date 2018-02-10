@@ -11,6 +11,7 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
 import { News } from "./news";
 import { AuthenticationResponse } from "./authenticationResponse";
+import { Battler } from "./battler";
 
 @Injectable()
 export class DataService {
@@ -19,8 +20,21 @@ export class DataService {
     loginURL: string ="/ProjectREST/login";
     adminURL: string ="/ProjectREST/admin";
     getNewsURL: string ="/ProjectREST/news";
+    enterArenaURL: string ="/ProjectREST/auth/arena/enter";
+    leaveArenaURL: string ="/ProjectREST/auth/arena/leave";
+    retrievePlayerURL: string ="/ProjectREST/auth/battler";
+
+    private playerInfo: Battler;
 
     constructor( private _http: HttpClient, private jwtHelperService:JwtHelperService ) {}
+    
+    setPlayer( battler: Battler ) {
+        this.playerInfo = battler;
+    }
+    
+    getPlayer(): Battler {
+        return this.playerInfo;
+    }
     
     private handleError( error: any ) {
         if ( error instanceof Response ) {
@@ -56,6 +70,25 @@ export class DataService {
      createNewUser(name:string,password:string):Observable<any>{
          return this._http.put( this.createNewUserURL, { username: name, password: password } )
          .do( data => console.log( "createUser:" + data ) )//data return in
+         .catch( this.handleError );
+     }
+     
+     /*2nd param needed(non-empty payload) in http put but server won't trust it
+     and will instead read the name in the sent jwt token.*/
+     enterArena():Observable<Battler>{
+         return this._http.put( this.enterArenaURL,{username: this.getUsername()})
+         .catch( this.handleError );
+     }
+     
+     /*2nd param needed(non-empty payload) in http put but server won't trust it
+     and will instead read the name in the sent jwt token.*/
+     leaveArena(): Observable<Battler> {
+         return this._http.put( this.leaveArenaURL, { username: this.getUsername() } )
+             .catch( this.handleError );
+     }
+     
+     retrievePlayer(): Observable<Battler> {
+         return this._http.get( this.retrievePlayerURL )
          .catch( this.handleError );
      }
      

@@ -244,4 +244,49 @@ public class TestController {
 		List<News> newsList = newsRepository.getAllNews();
 		return new ResponseEntity<>(newsList, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "auth/arena/enter", method = RequestMethod.PUT)
+	public ResponseEntity<Battler> enterArena() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		Battler battler = battlerRepository.findByName(auth.getName());
+		if (battler == null) {
+			throw new Exception(ErrorType.BATTLER_MISSING.getErrorCode() + ":"
+					+ ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + auth.getName());
+		}
+		
+		battler.setPlayerStatus(1);
+		battler = battlerRepository.save(battler);
+		
+		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "auth/arena/leave", method = RequestMethod.PUT)
+	public ResponseEntity<Battler> leaveArena() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		Battler battler = battlerRepository.findByName(auth.getName());
+		if (battler == null) {
+			throw new Exception(ErrorType.BATTLER_MISSING.getErrorCode() + ":"
+					+ ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + auth.getName());
+		}
+		
+		battler.setPlayerStatus(0);
+		battler = battlerRepository.save(battler);
+		
+		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "auth/battler", method = RequestMethod.GET)
+	public ResponseEntity<Battler> getLoggedBattler() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		Battler battler = battlerRepository.findByName(auth.getName());
+		if (battler == null) {
+			throw new Exception(ErrorType.BATTLER_MISSING.getErrorCode() + ":"
+					+ ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + auth.getName());
+		}
+		
+		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
+	}
 }

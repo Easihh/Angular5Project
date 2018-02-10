@@ -32,7 +32,7 @@ export class LoginFormComponent implements OnInit {
           .subscribe(
           res => {
               sessionStorage.setItem( "token", res.jwtoken);
-              sessionStorage.setItem( "status", ""+res.battler.playerStatus);
+              this.service.setPlayer(res.battler);
               this.loggedIn.emit({
                   username:username             
               });
@@ -43,7 +43,7 @@ export class LoginFormComponent implements OnInit {
               if ( err instanceof HttpErrorResponse ) {
                   let errorString = JSON.stringify( err.error );
                   let errResponse: ErrorResponse = JSON.parse( errorString );
-                  console.log( "ERROR LOGIN:" + errResponse.errorCode + " -" + errResponse.errorMessage );
+                  console.log( "Error during login:" + errResponse.errorCode + " -" + errResponse.errorMessage );
               }
               else console.log( "unusual error:" + err );
           });
