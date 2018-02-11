@@ -22,8 +22,9 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { RegisterComponent } from './register/register.component';
 import { TopicReplyComponent } from './topic-reply/topic-reply.component';
 import { MarkdownModule } from 'ngx-md';
-import { DeckComponent } from './deck/deck.component';
 import { WebsocketService } from "./websocket.service";
+import { EnemyDetailsComponent } from './enemy-details/enemy-details.component';
+import { BattlerComponent } from "./battler/battler.component";
 
 @NgModule({
   declarations: [     
@@ -37,7 +38,8 @@ import { WebsocketService } from "./websocket.service";
     HomeComponent,
     RegisterComponent,
     TopicReplyComponent,
-    DeckComponent
+    BattlerComponent,
+    EnemyDetailsComponent
   ],
   imports: [
     BrowserModule,

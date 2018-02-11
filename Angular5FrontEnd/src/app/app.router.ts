@@ -13,17 +13,21 @@ import { Topic } from "./topic";
 import { TopicReplyResolver } from "./topicReply.resolver";
 import { RegisterComponent } from "./register/register.component";
 import { TopicReplyComponent } from "./topic-reply/topic-reply.component";
+import { EnemyDetailsComponent } from "./enemy-details/enemy-details.component";
+import { BattlerComponent } from "./battler/battler.component";
 
 export const router: Routes = [
 
     { path: '', component: HomeComponent},
     { path: 'register', component: RegisterComponent},
-    { path: 'about', component: AboutComponent , canActivate:[AuthGuard], runGuardsAndResolvers: 'always'},
+    { path: 'about', component: AboutComponent , runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId/topic/:topicId/page/:page', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId/topic/:topicId', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum', component: ForumComponent},
+    { path: 'enemy/:enemyId', component: EnemyDetailsComponent},
+    { path: 'battler', component: BattlerComponent},
     { path: '**', component: NotFoundComponent },
 ];
 

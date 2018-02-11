@@ -1,0 +1,40 @@
+.deck {
+	min-height: 600px;
+	border:1px blue solid;
+}
+
+.deck-container{
+	margin-top:5rem;
+	border:1px red solid;
+ 	margin-left:25%; 
+ 	margin-right:25%; 
+}
+
+.deck-option{
+	min-height:5rem;
+	height:100%;
+	width:20%;
+	outline:1px gray solid;
+	margin:2.5rem;
+	display:inline-block;
+}
+
+.deck-option-details{
+	border:1px pink solid;
+	width:100%;
+	height:100%;
+	display:block;
+}
+
+.deck-link{
+	display:block;
+	min-height:5rem;
+	width:100%;
+	height:100%;
+	text-align:center;
+	padding:1.5rem;
+}
+
+.deck-container a:hover{
+	text-decoration: none;
+}
