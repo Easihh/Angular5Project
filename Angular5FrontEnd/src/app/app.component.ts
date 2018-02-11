@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from './data.service';
 import { OnInit, Input, ElementRef } from '@angular/core';
-import { ICountry } from './icountry';
 import { RankedPlayer} from './ranked-player';
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { Location, PopStateEvent } from "@angular/common";

@@ -15,7 +15,7 @@ import { Battler } from "../battler";
 
 export class AboutComponent implements OnInit,OnDestroy{
     
-    battlers:Battler[]=[];
+    arenaBattlers:Battler[]=[];
     isArenaParticipant: boolean;
     
     constructor(private websocketService:WebsocketService,private dataService:DataService){}
@@ -28,13 +28,28 @@ export class AboutComponent implements OnInit,OnDestroy{
             });
         }
         else {
-            console.log("wtf:"+this.dataService.getPlayer );
             this.initArenaParticipation();
         }
           
-        this.websocketService.getObservable().subscribe(data=>{
-            this.battlers.push(data);
-        })
+        this.loadArenaParticipants();
+    }
+    
+    loadArenaParticipants() {
+        this.dataService.getArenaParticipants().subscribe( battlers => {
+            this.arenaBattlers = battlers;
+            this.subscribeToArenaParticipants();
+        } )
+    }
+    
+    subscribeToArenaParticipants() {
+        this.websocketService.getObservable().subscribe( battler => {
+            if ( battler.playerStatus == 1 ) {
+                this.arenaBattlers.push( battler );
+            }
+            else {
+                this.arenaBattlers = this.arenaBattlers.filter( item => battler.id != item.id );
+            }
+        } )
     }
     
     initArenaParticipation(): void {

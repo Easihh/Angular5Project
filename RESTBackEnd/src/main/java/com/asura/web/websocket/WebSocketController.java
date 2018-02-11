@@ -26,7 +26,7 @@ public class WebSocketController {
 		return new String("Hello");
 	}
 	
-	@Scheduled(fixedDelay = 5000)
+	/*@Scheduled(fixedDelay = 5000)
 	public void testing() throws Exception {
 		Battler battler = new Battler();
 		battler.setName("Battler" + testId);
@@ -35,5 +35,5 @@ public class WebSocketController {
 		battler.setNextLvl(500);
 		battler.setId(testId++);
 		this.template.convertAndSend("/chat", battler);
-	}
+	}*/
 }

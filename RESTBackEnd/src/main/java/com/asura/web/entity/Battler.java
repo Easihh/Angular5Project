@@ -13,7 +13,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="BATTLERS")
 @NamedQueries({
-	@NamedQuery(name="Battler.findByName",query="select b from Battler b where b.name=:name")
+	@NamedQuery(name="Battler.findByName",query="select b from Battler b where b.name=:name"),
+	@NamedQuery(name="Battler.findByPlayerStatus",query="select b from Battler b where b.playerStatus=:playerStatus")
 })
 public class Battler {
 	

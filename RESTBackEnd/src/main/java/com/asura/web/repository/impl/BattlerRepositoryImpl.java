@@ -21,4 +21,12 @@ public class BattlerRepositoryImpl implements BattlerRepositoryCustom{
 		List<Battler> retVal = query.getResultList();
 		return retVal.isEmpty() ? null : retVal.get(0);
 	}
+
+	@Override
+	public List<Battler> findByPlayerStatus(long status) {
+		TypedQuery<Battler> query = em.createNamedQuery("Battler.findByPlayerStatus", Battler.class);
+		query.setParameter("playerStatus", status);
+		List<Battler> retVal = query.getResultList();
+		return retVal;
+	}
 }

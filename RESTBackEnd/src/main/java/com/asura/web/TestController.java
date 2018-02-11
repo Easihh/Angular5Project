@@ -14,6 +14,7 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -77,6 +78,9 @@ public class TestController {
 	
 	@Autowired
 	private ApplicationUserRepository applicationUserRepository;
+	
+	@Autowired
+	private SimpMessagingTemplate template;
 			
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
@@ -258,6 +262,7 @@ public class TestController {
 		battler.setPlayerStatus(1);
 		battler = battlerRepository.save(battler);
 		
+		template.convertAndSend("/chat", battler);
 		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
 	}
 	
@@ -274,6 +279,7 @@ public class TestController {
 		battler.setPlayerStatus(0);
 		battler = battlerRepository.save(battler);
 		
+		template.convertAndSend("/chat", battler);
 		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
 	}
 	
@@ -288,5 +294,13 @@ public class TestController {
 		}
 		
 		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "auth/arena/getParticipants", method = RequestMethod.GET)
+	public ResponseEntity<List<Battler>> getParticipants() throws Exception {
+
+		List<Battler> battlers = battlerRepository.findByPlayerStatus(1);
+		
+		return new ResponseEntity<List<Battler>>(battlers, HttpStatus.OK);
 	}
 }

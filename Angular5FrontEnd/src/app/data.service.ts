@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { ICountry } from './icountry';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/throw';
@@ -23,6 +22,7 @@ export class DataService {
     enterArenaURL: string ="/ProjectREST/auth/arena/enter";
     leaveArenaURL: string ="/ProjectREST/auth/arena/leave";
     retrievePlayerURL: string ="/ProjectREST/auth/battler";
+    getArenaParticipantURL: string ="/ProjectREST/auth/arena/getParticipants";
 
     private playerInfo: Battler;
 
@@ -85,6 +85,11 @@ export class DataService {
      leaveArena(): Observable<Battler> {
          return this._http.put( this.leaveArenaURL, { username: this.getUsername() } )
              .catch( this.handleError );
+     }
+     
+     getArenaParticipants():Observable<Battler[]>{
+         return this._http.get(this.getArenaParticipantURL)
+         .catch( this.handleError );
      }
      
      retrievePlayer(): Observable<Battler> {

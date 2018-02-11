@@ -13,7 +13,7 @@ This is the about page
 		<th scope="col">Action</th>
 	</tr>
 </thead>
-<tr *ngFor="let battler of battlers">
+<tr *ngFor="let battler of arenaBattlers">
 	<td>{{battler.name}}</td>
 	<td>{{battler.level}}</td>
 	<td><input text="button" class="btn btn-outline-primary" (click)=testing(battler.id) value="Attack"></td>
