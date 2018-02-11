@@ -2,6 +2,7 @@ package com.asura.web;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.ArenaMatch;
 import com.asura.web.entity.BasicUser;
 import com.asura.web.entity.Battler;
 import com.asura.web.entity.News;
@@ -40,6 +42,7 @@ import com.asura.web.entity.TopicReply;
 import com.asura.web.entity.TopicReplyWrapper;
 import com.asura.web.entity.UserRole;
 import com.asura.web.repository.ApplicationUserRepository;
+import com.asura.web.repository.ArenaMatchRepository;
 import com.asura.web.repository.BasicUserRepository;
 import com.asura.web.repository.BattlerRepository;
 import com.asura.web.repository.NewsRepository;
@@ -78,6 +81,9 @@ public class TestController {
 	
 	@Autowired
 	private ApplicationUserRepository applicationUserRepository;
+	
+	@Autowired
+	private ArenaMatchRepository arenaMatchRepository;
 	
 	@Autowired
 	private SimpMessagingTemplate template;
@@ -209,6 +215,8 @@ public class TestController {
 		battler.setLevel(1);
 		battler.setNextLvl(500);
 		battler.setCurrentExp(0);
+		battler.setAttack(0);
+		battler.setDefense(0);
 		battler.setUserId(user.getId());
 		battler.setName(user.getUsername());
 		battlerRepository.save(battler);
@@ -283,7 +291,8 @@ public class TestController {
 		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "auth/battler", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "auth/myBattler", method = RequestMethod.GET)
 	public ResponseEntity<Battler> getLoggedBattler() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -296,11 +305,52 @@ public class TestController {
 		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "auth/arena/getParticipants", method = RequestMethod.GET)
-	public ResponseEntity<List<Battler>> getParticipants() throws Exception {
-
-		List<Battler> battlers = battlerRepository.findByPlayerStatus(1);
+	@RequestMapping(value = "auth/otherBattler", method = RequestMethod.GET)
+	public ResponseEntity<Battler> getOtherBattler(@RequestParam("userId") long enemyBattlerUserId) throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
-		return new ResponseEntity<List<Battler>>(battlers, HttpStatus.OK);
+		Battler battler = battlerRepository.findByUserId(enemyBattlerUserId);
+		if (battler == null) {
+			throw new Exception(ErrorType.BATTLER_MISSING.getErrorCode() + ":"
+					+ ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + auth.getName());
+		}
+		
+		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "auth/arena/getMatch", method = RequestMethod.GET)
+	public ResponseEntity<ArenaMatch> getParticipants(@RequestParam("matchId") String matchId) throws Exception {
+		
+		ArenaMatch match = arenaMatchRepository.findByMatchId(matchId);
+		
+		return new ResponseEntity<ArenaMatch>(match, HttpStatus.OK);
+	}
+	
+
+	@RequestMapping(value = "auth/arena/getParticipants", method = RequestMethod.GET)
+	public ResponseEntity<List<ArenaParticipant>> getArenaMatch() throws Exception {
+		
+		List<ArenaParticipant> participants = new ArrayList<ArenaParticipant>();
+		List<ArenaMatch> ongoingMatch = arenaMatchRepository.findAllByMatchStatus(1);
+		
+		for (ArenaMatch match : ongoingMatch) {
+			ArenaParticipant temp = new ArenaParticipant(match.getMainBattler().getName(), match.getMatchId(),
+					match.getMainBattler().getPlayerStatus());
+			participants.add(temp);
+		}
+
+		return new ResponseEntity<List<ArenaParticipant>>(participants, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "auth/arena/battle", method = RequestMethod.POST)
+	public ResponseEntity<HttpStatus> arenaBatle(@RequestBody Map<String, String> body) throws Exception {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		long enemyId = Long.valueOf(body.get("id"));
+		Battler defendingBattler = battlerRepository.findOne(enemyId);
+		Battler attackingBattler = battlerRepository.findByName(auth.getName());
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

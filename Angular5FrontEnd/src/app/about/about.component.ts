@@ -6,6 +6,7 @@ import * as SockJS from 'sockjs-client';
 import { Topic } from "../topic";
 import { WebsocketService } from "../websocket.service";
 import { Battler } from "../battler";
+import { ArenaParticipant } from "../arena.participant";
 @Component({
   selector: 'about',
   templateUrl: './about.component.html',
@@ -15,7 +16,7 @@ import { Battler } from "../battler";
 
 export class AboutComponent implements OnInit,OnDestroy{
     
-    arenaBattlers:Battler[]=[];
+    arenaBattlers:ArenaParticipant[]=[];
     isArenaParticipant: boolean;
     
     constructor(private websocketService:WebsocketService,private dataService:DataService){}
@@ -47,7 +48,7 @@ export class AboutComponent implements OnInit,OnDestroy{
                 this.arenaBattlers.push( battler );
             }
             else {
-                this.arenaBattlers = this.arenaBattlers.filter( item => battler.id != item.id );
+                this.arenaBattlers = this.arenaBattlers.filter( item => battler.name != item.name );
             }
         } )
     }
@@ -61,24 +62,33 @@ export class AboutComponent implements OnInit,OnDestroy{
         console.log("I was destroyed.");
     }
         
-    test(){
+    stopUpdate(){
         this.websocketService.disconnect();
         //this.stompClient.send("/app/send/message",{},"Testing Stuff");
     }
     
-    testing(id:number){
-        alert("Clicked Id:"+id);
+    attackFighter( id: number ) {
+        if ( id == this.dataService.getPlayer().id ) {
+            alert( "Cannot Attack yourself" );
+        }
+        else {
+            this.dataService.arenaBattle( "" + id ).subscribe( data => {
+                //receive http response OK status may reply something more later.
+                console.log("received data from battle");
+            },
+            err=>{
+                console.log("received error from battling id:"+id+ " "+err);
+            })
+        }
     }
     
     enterArena(){
-        //todo:call backend to to update status +send info to other player
         this.dataService.enterArena().subscribe(data=>{
             this.isArenaParticipant=true ;
         });
     }
     
     leaveArena(){
-        //todo:call backend to to update status +send info to other player
         this.dataService.leaveArena().subscribe(data=>{
             this.isArenaParticipant=false ;
         });

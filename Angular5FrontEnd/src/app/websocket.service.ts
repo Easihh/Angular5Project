@@ -4,13 +4,14 @@ import * as SockJS from 'sockjs-client';
 import { Subject } from "rxjs/Subject";
 import { Observable } from "rxjs/Observable";
 import { Battler } from "./battler";
+import { ArenaParticipant } from "./arena.participant";
 
 @Injectable()
 export class WebsocketService {
     
     private serverUrl = 'http://localhost:8090/ProjectREST/socket'
     private stompClient;
-    private stompSubject : Subject<Battler> = new Subject<Battler>();
+    private stompSubject : Subject<ArenaParticipant> = new Subject<ArenaParticipant>();
     private topicSubscription;
 
   constructor() { }
@@ -30,13 +31,13 @@ export class WebsocketService {
   private initTopicSubscription():void{
       let that=this;
       this.topicSubscription=that.stompClient.subscribe("/chat", (message:any) => {
-          let battler:Battler=JSON.parse(message.body);
+          let battler:ArenaParticipant=JSON.parse(message.body);
           that.stompSubject.next(battler);
          //console.log("Message Received from Server:"+battler);
      });
   }
       
-  getObservable():Observable<Battler>{
+  getObservable():Observable<ArenaParticipant>{
       return this.stompSubject.asObservable();
   }
   

@@ -7,4 +7,6 @@ export interface Battler {
     currentExp:number;
     nextLvl:number;
     playerStatus:number;
+    attack:number
+    defense:number;
 }

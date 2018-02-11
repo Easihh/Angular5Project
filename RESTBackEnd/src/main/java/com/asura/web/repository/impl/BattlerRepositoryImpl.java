@@ -29,4 +29,12 @@ public class BattlerRepositoryImpl implements BattlerRepositoryCustom{
 		List<Battler> retVal = query.getResultList();
 		return retVal;
 	}
+
+	@Override
+	public Battler findByUserId(long userId) {
+		TypedQuery<Battler> query = em.createNamedQuery("Battler.findByUserId", Battler.class);
+		query.setParameter("userId", userId);
+		List<Battler> retVal = query.getResultList();
+		return retVal.isEmpty() ? null : retVal.get(0);
+	}
 }

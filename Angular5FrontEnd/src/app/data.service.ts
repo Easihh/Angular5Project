@@ -11,6 +11,8 @@ import { URLSearchParams } from '@angular/http';
 import { News } from "./news";
 import { AuthenticationResponse } from "./authenticationResponse";
 import { Battler } from "./battler";
+import { ArenaParticipant } from "./arena.participant";
+import { ArenaMatch } from "./arena.match";
 
 @Injectable()
 export class DataService {
@@ -21,8 +23,11 @@ export class DataService {
     getNewsURL: string ="/ProjectREST/news";
     enterArenaURL: string ="/ProjectREST/auth/arena/enter";
     leaveArenaURL: string ="/ProjectREST/auth/arena/leave";
-    retrievePlayerURL: string ="/ProjectREST/auth/battler";
+    retrievePlayerURL: string ="/ProjectREST/auth/myBattler";
+    retrieveOtherPlayerURL: string ="/ProjectREST/auth/otherBattler";
     getArenaParticipantURL: string ="/ProjectREST/auth/arena/getParticipants";
+    getArenaMatchURL: string ="/ProjectREST/auth/arena/getMatch";
+    arenaBattleURL: string ="/ProjectREST/auth/arena/battle";
 
     private playerInfo: Battler;
 
@@ -87,14 +92,40 @@ export class DataService {
              .catch( this.handleError );
      }
      
-     getArenaParticipants():Observable<Battler[]>{
+     getArenaParticipants():Observable<ArenaParticipant[]>{
          return this._http.get(this.getArenaParticipantURL)
          .catch( this.handleError );
      }
      
+     arenaBattle( id: String ): Observable<any> {
+         return this._http.post( this.arenaBattleURL, { id: id } )
+             .catch( this.handleError );
+     }    
+     
+     /* Returns all info of the battler; used for logged player only*/
      retrievePlayer(): Observable<Battler> {
          return this._http.get( this.retrievePlayerURL )
          .catch( this.handleError );
+     }
+     
+     /* returns info of a given player and may return hidden value as ??? if player 
+      * should not be able to see them NYI?*/
+     findBattler(userId: number): Observable<Battler> {
+         let params = new HttpParams();
+         params = params.append( "userId", userId.toString() );
+         return this._http
+             .get( this.retrieveOtherPlayerURL, { params: params } )
+             .catch( this.handleError );
+     }
+     
+     /* returns info of a given battle and may return hidden value as ??? if player 
+      * should not be able to see them NYI?*/
+     findArenaMatch(matchId: string): Observable<ArenaMatch> {
+         let params = new HttpParams();
+         params = params.append( "matchId", matchId.toString() );
+         return this._http
+             .get( this.getArenaMatchURL, { params: params } )
+             .catch( this.handleError );
      }
      
      getNews():Observable<News[]>{

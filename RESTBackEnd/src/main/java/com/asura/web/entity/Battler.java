@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Table(name="BATTLERS")
 @NamedQueries({
 	@NamedQuery(name="Battler.findByName",query="select b from Battler b where b.name=:name"),
+	@NamedQuery(name="Battler.findByUserId",query="select b from Battler b where b.userId=:userId"),
 	@NamedQuery(name="Battler.findByPlayerStatus",query="select b from Battler b where b.playerStatus=:playerStatus")
 })
 public class Battler {
@@ -43,6 +44,12 @@ public class Battler {
 	
 	@Column(name="NEXT_LVL")
 	private long nextLvl;
+	
+	@Column(name="ATTACK")
+	private long attack;
+	
+	@Column(name="DEFENSE")
+	private long defense;
 	
 	public Long getId() {
 		return id;
@@ -98,5 +105,21 @@ public class Battler {
 
 	public void setPlayerStatus(long playerStatus) {
 		this.playerStatus = playerStatus;
+	}
+	
+	public long getAttack() {
+		return attack;
+	}
+
+	public void setAttack(long attack) {
+		this.attack = attack;
+	}
+
+	public long getDefense() {
+		return defense;
+	}
+
+	public void setDefense(long defense) {
+		this.defense = defense;
 	}
 }

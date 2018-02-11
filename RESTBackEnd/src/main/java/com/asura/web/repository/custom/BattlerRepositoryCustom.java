@@ -8,5 +8,8 @@ public interface BattlerRepositoryCustom {
 	
 	Battler findByName(String name);
 	
+	Battler findByUserId(long userId);
+	
 	List<Battler> findByPlayerStatus(long status);
+	
 }
