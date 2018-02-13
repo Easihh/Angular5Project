@@ -25,6 +25,7 @@ import { MarkdownModule } from 'ngx-md';
 import { WebsocketService } from "./websocket.service";
 import { EnemyDetailsComponent } from './enemy-details/enemy-details.component';
 import { BattlerComponent } from "./battler/battler.component";
+import { ArenaMatchResolver } from "./arena.match.resolver";
 
 @NgModule({
   declarations: [     
@@ -59,7 +60,7 @@ import { BattlerComponent } from "./battler/battler.component";
     routes
   ],
   exports: [],
-  providers: [DataService,WebsocketService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver],
+  providers: [DataService,WebsocketService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver,ArenaMatchResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

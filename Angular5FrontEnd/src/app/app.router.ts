@@ -15,6 +15,7 @@ import { RegisterComponent } from "./register/register.component";
 import { TopicReplyComponent } from "./topic-reply/topic-reply.component";
 import { EnemyDetailsComponent } from "./enemy-details/enemy-details.component";
 import { BattlerComponent } from "./battler/battler.component";
+import { ArenaMatchResolver } from "./arena.match.resolver";
 
 export const router: Routes = [
 
@@ -26,7 +27,7 @@ export const router: Routes = [
     { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum', component: ForumComponent},
-    { path: 'enemy/:enemyId', component: EnemyDetailsComponent},
+    { path: 'enemy/:matchId', component: EnemyDetailsComponent,resolve:{arenaMatch:ArenaMatchResolver},runGuardsAndResolvers: 'always'},
     { path: 'battler', component: BattlerComponent},
     { path: '**', component: NotFoundComponent },
 ];

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Battler } from "../battler";
 import { DataService } from "../data.service";
+import { ArenaBattle } from "../arena.battle";
+import { ArenaMatch } from "../arena.match";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-enemy-details',
@@ -10,17 +13,16 @@ import { DataService } from "../data.service";
 export class EnemyDetailsComponent implements OnInit {
     
    enemyBattler:Battler;
-   matchId:string="Abadfxasd";
+   arenaBattles:ArenaBattle[]=[];
 
-  constructor(private dataService:DataService) { }
+  constructor(private dataService:DataService,private route: ActivatedRoute) { }
 
   ngOnInit() {
-      this.dataService.findArenaMatch(this.matchId).subscribe(battler=>{
-          this.enemyBattler=battler.mainBattler;
-      },
-      err=>{
-          console.log("error retrieving match with id:"+this.matchId);
-      });
+      this.route.data.subscribe(( data: any ) => {
+          let arenaMatch: ArenaMatch = this.route.snapshot.data['arenaMatch'];
+          this.enemyBattler = arenaMatch.mainBattler;
+          this.arenaBattles = arenaMatch.arenaBattles;
+      } );
   }
 
 }

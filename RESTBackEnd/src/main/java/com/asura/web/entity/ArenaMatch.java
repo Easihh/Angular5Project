@@ -1,5 +1,8 @@
 package com.asura.web.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,9 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="ARENA_MATCHES")
@@ -70,4 +75,16 @@ public class ArenaMatch {
 		this.matchStatus = matchStatus;
 	}
 	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "ARENA_MATCH_ID")
+	private List<ArenaBattle> arenaBattles;
+
+	public void setArenaBattles(List<ArenaBattle> arenaBattles) {
+		this.arenaBattles = arenaBattles;
+	}
+
+	public List<ArenaBattle> getArenaBattles() {
+		return arenaBattles;
+	}
+
 }

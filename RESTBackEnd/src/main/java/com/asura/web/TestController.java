@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asura.web.entity.ApplicationUser;
+import com.asura.web.entity.ArenaBattle;
 import com.asura.web.entity.ArenaMatch;
 import com.asura.web.entity.BasicUser;
 import com.asura.web.entity.Battler;
@@ -42,6 +43,7 @@ import com.asura.web.entity.TopicReply;
 import com.asura.web.entity.TopicReplyWrapper;
 import com.asura.web.entity.UserRole;
 import com.asura.web.repository.ApplicationUserRepository;
+import com.asura.web.repository.ArenaBattleRepository;
 import com.asura.web.repository.ArenaMatchRepository;
 import com.asura.web.repository.BasicUserRepository;
 import com.asura.web.repository.BattlerRepository;
@@ -84,6 +86,9 @@ public class TestController {
 	
 	@Autowired
 	private ArenaMatchRepository arenaMatchRepository;
+	
+	@Autowired
+	private ArenaBattleRepository arenaBattleRepository;
 	
 	@Autowired
 	private SimpMessagingTemplate template;
@@ -322,7 +327,10 @@ public class TestController {
 	public ResponseEntity<ArenaMatch> getParticipants(@RequestParam("matchId") String matchId) throws Exception {
 		
 		ArenaMatch match = arenaMatchRepository.findByMatchId(matchId);
+
+		//List<ArenaBattle> battles = arenaBattleRepository.findByArenaMatchId(match.getId());
 		
+		//match.setArenaBattles(battles);
 		return new ResponseEntity<ArenaMatch>(match, HttpStatus.OK);
 	}
 	
