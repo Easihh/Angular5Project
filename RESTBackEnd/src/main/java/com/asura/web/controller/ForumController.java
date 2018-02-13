@@ -1,8 +1,7 @@
-package com.asura.web;
+package com.asura.web.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,6 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,9 +29,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asura.web.AuthenticationReplyMessage;
+import com.asura.web.ErrorType;
+import com.asura.web.ExceptionResponse;
+import com.asura.web.LoginInfoMessage;
+import com.asura.web.Message;
 import com.asura.web.entity.ApplicationUser;
-import com.asura.web.entity.ArenaBattle;
-import com.asura.web.entity.ArenaMatch;
 import com.asura.web.entity.BasicUser;
 import com.asura.web.entity.Battler;
 import com.asura.web.entity.News;
@@ -43,8 +44,6 @@ import com.asura.web.entity.TopicReply;
 import com.asura.web.entity.TopicReplyWrapper;
 import com.asura.web.entity.UserRole;
 import com.asura.web.repository.ApplicationUserRepository;
-import com.asura.web.repository.ArenaBattleRepository;
-import com.asura.web.repository.ArenaMatchRepository;
 import com.asura.web.repository.BasicUserRepository;
 import com.asura.web.repository.BattlerRepository;
 import com.asura.web.repository.NewsRepository;
@@ -55,7 +54,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
 @RestController
-public class TestController {
+/** HTTP endpoint that deal with everything Forum or Website-related */
+public class ForumController {
 	
 	@PersistenceContext
 	EntityManager entityManager;
@@ -84,15 +84,6 @@ public class TestController {
 	@Autowired
 	private ApplicationUserRepository applicationUserRepository;
 	
-	@Autowired
-	private ArenaMatchRepository arenaMatchRepository;
-	
-	@Autowired
-	private ArenaBattleRepository arenaBattleRepository;
-	
-	@Autowired
-	private SimpMessagingTemplate template;
-			
 	@RequestMapping(value = { "forum/topic" }, method = RequestMethod.GET)
 	public ResponseEntity<TopicReplyWrapper> getTopicReplies(@RequestParam("topicId") long topicId,
 			@RequestParam("pageNumber") int pageNumber) throws Exception {
@@ -215,7 +206,7 @@ public class TestController {
 		user.setRole(role);
 		user=userRepository.save(user);
 		
-		Battler battler=new Battler();
+		Battler battler = new Battler();
 		battler.setCurrentExp(0);
 		battler.setLevel(1);
 		battler.setNextLvl(500);
@@ -260,105 +251,5 @@ public class TestController {
 	public ResponseEntity<List<News>> getLatestNews(@RequestHeader Map<String, String> header) {
 		List<News> newsList = newsRepository.getAllNews();
 		return new ResponseEntity<>(newsList, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "auth/arena/enter", method = RequestMethod.PUT)
-	public ResponseEntity<Battler> enterArena() throws Exception {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		Battler battler = battlerRepository.findByName(auth.getName());
-		if (battler == null) {
-			throw new Exception(ErrorType.BATTLER_MISSING.getErrorCode() + ":"
-					+ ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + auth.getName());
-		}
-		
-		battler.setPlayerStatus(1);
-		battler = battlerRepository.save(battler);
-		
-		template.convertAndSend("/chat", battler);
-		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "auth/arena/leave", method = RequestMethod.PUT)
-	public ResponseEntity<Battler> leaveArena() throws Exception {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		Battler battler = battlerRepository.findByName(auth.getName());
-		if (battler == null) {
-			throw new Exception(ErrorType.BATTLER_MISSING.getErrorCode() + ":"
-					+ ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + auth.getName());
-		}
-		
-		battler.setPlayerStatus(0);
-		battler = battlerRepository.save(battler);
-		
-		template.convertAndSend("/chat", battler);
-		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
-	}
-	
-	
-	@RequestMapping(value = "auth/myBattler", method = RequestMethod.GET)
-	public ResponseEntity<Battler> getLoggedBattler() throws Exception {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		Battler battler = battlerRepository.findByName(auth.getName());
-		if (battler == null) {
-			throw new Exception(ErrorType.BATTLER_MISSING.getErrorCode() + ":"
-					+ ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + auth.getName());
-		}
-		
-		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "auth/otherBattler", method = RequestMethod.GET)
-	public ResponseEntity<Battler> getOtherBattler(@RequestParam("userId") long enemyBattlerUserId) throws Exception {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		
-		Battler battler = battlerRepository.findByUserId(enemyBattlerUserId);
-		if (battler == null) {
-			throw new Exception(ErrorType.BATTLER_MISSING.getErrorCode() + ":"
-					+ ErrorType.BATTLER_MISSING.getErrorMessage() + "Name:" + auth.getName());
-		}
-		
-		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "auth/arena/getMatch", method = RequestMethod.GET)
-	public ResponseEntity<ArenaMatch> getParticipants(@RequestParam("matchId") String matchId) throws Exception {
-		
-		ArenaMatch match = arenaMatchRepository.findByMatchId(matchId);
-
-		//List<ArenaBattle> battles = arenaBattleRepository.findByArenaMatchId(match.getId());
-		
-		//match.setArenaBattles(battles);
-		return new ResponseEntity<ArenaMatch>(match, HttpStatus.OK);
-	}
-	
-
-	@RequestMapping(value = "auth/arena/getParticipants", method = RequestMethod.GET)
-	public ResponseEntity<List<ArenaParticipant>> getArenaMatch() throws Exception {
-		
-		List<ArenaParticipant> participants = new ArrayList<ArenaParticipant>();
-		List<ArenaMatch> ongoingMatch = arenaMatchRepository.findAllByMatchStatus(1);
-		
-		for (ArenaMatch match : ongoingMatch) {
-			ArenaParticipant temp = new ArenaParticipant(match.getMainBattler().getName(), match.getMatchId(),
-					match.getMainBattler().getPlayerStatus());
-			participants.add(temp);
-		}
-
-		return new ResponseEntity<List<ArenaParticipant>>(participants, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "auth/arena/battle", method = RequestMethod.POST)
-	public ResponseEntity<HttpStatus> arenaBatle(@RequestBody Map<String, String> body) throws Exception {
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		
-		long enemyId = Long.valueOf(body.get("id"));
-		Battler defendingBattler = battlerRepository.findOne(enemyId);
-		Battler attackingBattler = battlerRepository.findByName(auth.getName());
-		
-		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

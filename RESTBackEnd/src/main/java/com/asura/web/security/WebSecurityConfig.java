@@ -38,6 +38,7 @@ public class WebSecurityConfig{
 	@Order(1)
 	private class AuthenticatedSecurityConfig extends WebSecurityConfigurerAdapter {
 		
+		@SuppressWarnings("unused")
 		public AuthenticatedSecurityConfig(){}
 		
 		@Override
@@ -67,6 +68,7 @@ public class WebSecurityConfig{
 	@Configuration
 	private  class DefaultSecurityConfig extends WebSecurityConfigurerAdapter {
 		
+		@SuppressWarnings("unused")
 		public DefaultSecurityConfig() {}
 		
 		@Override

@@ -1,10 +1,13 @@
-package com.asura.web;
+package com.asura.web.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.asura.web.ErrorType;
+import com.asura.web.ExceptionResponse;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
