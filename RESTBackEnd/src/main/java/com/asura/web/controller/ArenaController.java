@@ -20,10 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asura.web.ArenaParticipant;
 import com.asura.web.ErrorType;
+import com.asura.web.entity.ArenaBattle;
 import com.asura.web.entity.ArenaMatch;
 import com.asura.web.entity.Battler;
+import com.asura.web.repository.ArenaBattleRepository;
 import com.asura.web.repository.ArenaMatchRepository;
 import com.asura.web.repository.BattlerRepository;
+import com.asura.web.utility.MatchUtility;
 
 
 /** HTTP endpoint that deal with everything Arena-related */
@@ -40,10 +43,13 @@ public class ArenaController {
 	private ArenaMatchRepository arenaMatchRepository;
 	
 	@Autowired
+	private ArenaBattleRepository arenaBattleRepository;
+	
+	@Autowired
 	private SimpMessagingTemplate template;
 			
 	@RequestMapping(value = "auth/arena/enter", method = RequestMethod.PUT)
-	public ResponseEntity<Battler> enterArena() throws Exception {
+	public ResponseEntity<ArenaParticipant> enterArena() throws Exception {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		Battler battler = battlerRepository.findByName(auth.getName());
@@ -55,8 +61,18 @@ public class ArenaController {
 		battler.setPlayerStatus(1);
 		battler = battlerRepository.save(battler);
 		
-		template.convertAndSend("/chat", battler);
-		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
+		ArenaMatch newMatch = new ArenaMatch();
+		newMatch.setMainBattler(battler);
+		newMatch.setMatchStatus(1);
+		newMatch.setMatchId(MatchUtility.generateMatchIdentifier(20));
+		
+		arenaMatchRepository.save(newMatch);
+		
+		ArenaParticipant participant = new ArenaParticipant(battler.getName(), newMatch.getMatchId(),
+				battler.getPlayerStatus());
+
+		template.convertAndSend("/chat", participant);
+		return new ResponseEntity<ArenaParticipant>(participant, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "auth/arena/leave", method = RequestMethod.PUT)
@@ -104,14 +120,28 @@ public class ArenaController {
 	}
 	
 	@RequestMapping(value = "auth/arena/battle", method = RequestMethod.POST)
-	public ResponseEntity<HttpStatus> arenaBatle(@RequestBody Map<String, String> body) throws Exception {
+	public ResponseEntity<ArenaMatch> arenaMatchBatle(@RequestBody Map<String, String> body) throws Exception {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
-		long enemyId = Long.valueOf(body.get("id"));
-		battlerRepository.findOne(enemyId);
-		battlerRepository.findByName(auth.getName());
+		String matchId = body.get("matchId");
 		
-		return new ResponseEntity<>(HttpStatus.OK);
+		ArenaMatch currentMatch = arenaMatchRepository.findByMatchId(matchId);
+		Battler attacker = battlerRepository.findByName(auth.getName());
+		
+		//some battle stuff here to determine winner.pretend attacker won here so change match status for now
+		
+		ArenaBattle battleResult = new ArenaBattle();
+		battleResult.setMatchId(currentMatch.getId());
+		battleResult.setWinnerBattler(attacker);
+		battleResult.setAttackerBattler(attacker);
+		battleResult.setDefenderBattler(currentMatch.getMainBattler());
+		
+		currentMatch.addArenaBattle(battleResult);
+		currentMatch.setMatchStatus(0);
+		
+		currentMatch = arenaMatchRepository.save(currentMatch);
+
+		return new ResponseEntity<ArenaMatch>(currentMatch, HttpStatus.OK);
 	}
 }

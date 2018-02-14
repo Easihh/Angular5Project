@@ -1,7 +1,8 @@
 <body class="forum">
   enemy-details works!
     <div class="reply-container">
- 	title
+ 	<div>title</div>
+ 	<div>Match Status:{{matchStatusText}}</div>
 	<div  class="reply-details">
 		<div class="reply-userInfo">
 			<div class="reply-avatar-container">
@@ -16,7 +17,7 @@
 			</div>		
 		</div>
 		<div class="reply-comment" >
-		<input type="button" class="btn btn-outline-primary" value="Attack">
+		<input type="button" (click)="attack()"class="btn btn-outline-primary" value="Attack">
 		<input type="button" class="btn btn-outline-primary" value="Run">
 		</div>
 	</div>

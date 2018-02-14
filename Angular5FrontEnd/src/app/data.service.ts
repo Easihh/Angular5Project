@@ -97,8 +97,8 @@ export class DataService {
          .catch( this.handleError );
      }
      
-     arenaBattle( id: String ): Observable<any> {
-         return this._http.post( this.arenaBattleURL, { id: id } )
+     arenaBattle( matchId: String ): Observable<any> {
+         return this._http.post( this.arenaBattleURL, { matchId: matchId } )
              .catch( this.handleError );
      }    
      

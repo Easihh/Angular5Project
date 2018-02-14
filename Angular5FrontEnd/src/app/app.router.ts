@@ -27,7 +27,7 @@ export const router: Routes = [
     { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum', component: ForumComponent},
-    { path: 'enemy/:matchId', component: EnemyDetailsComponent,resolve:{arenaMatch:ArenaMatchResolver},runGuardsAndResolvers: 'always'},
+    { path: 'arena/match/:matchId', component: EnemyDetailsComponent,resolve:{arenaMatch:ArenaMatchResolver},runGuardsAndResolvers: 'always'},
     { path: 'battler', component: BattlerComponent},
     { path: '**', component: NotFoundComponent },
 ];

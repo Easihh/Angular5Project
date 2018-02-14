@@ -18,7 +18,7 @@ This is the about page
 <tr *ngFor="let battler of arenaBattlers">
 	<td>{{battler.name}}</td>
 	<td>Some text by battler</td>
-	<a class="topic-link" [routerLink]="['/enemy/',battler.matchId]">Stuff</a>
+	<a class="topic-link" [routerLink]="['/arena/match/',battler.matchId]">Stuff</a>
 	<td>None</td>
 	<td><input text="button" class="btn btn-outline-primary" (click)=attackFighter(battler.id) value="Prepare to Attack"></td>
 </tr>

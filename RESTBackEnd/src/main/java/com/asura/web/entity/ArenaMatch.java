@@ -1,5 +1,6 @@
 package com.asura.web.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -76,14 +77,14 @@ public class ArenaMatch {
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "ARENA_MATCH_ID")
-	private List<ArenaBattle> arenaBattles;
-
-	public void setArenaBattles(List<ArenaBattle> arenaBattles) {
-		this.arenaBattles = arenaBattles;
-	}
+	private List<ArenaBattle> arenaBattles = new ArrayList<ArenaBattle>();
 
 	public List<ArenaBattle> getArenaBattles() {
 		return arenaBattles;
+	}
+	
+	public void addArenaBattle(ArenaBattle battle) {
+		this.arenaBattles.add(battle);
 	}
 
 }
