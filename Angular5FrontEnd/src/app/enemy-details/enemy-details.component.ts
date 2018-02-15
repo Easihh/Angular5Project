@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, ElementRef, ViewChild, QueryList } from '@angular/core';
 import { Battler } from "../battler";
 import { DataService } from "../data.service";
 import { ArenaBattle } from "../arena.battle";
@@ -16,6 +16,7 @@ export class EnemyDetailsComponent implements OnInit {
    arenaBattles:ArenaBattle[]=[];
    matchStatusText:string;
    private matchId:string;
+   attackIsDisabled: boolean;
 
   constructor(private dataService:DataService,private route: ActivatedRoute) { }
 
@@ -25,17 +26,18 @@ export class EnemyDetailsComponent implements OnInit {
           this.enemyBattler = arenaMatch.mainBattler;
           this.matchId = arenaMatch.matchId;
           this.arenaBattles = arenaMatch.arenaBattles;
-          this.matchStatusText = arenaMatch.matchStatus == 1 ? "Ongoing" : "Defeated";
+          this.attackIsDisabled = arenaMatch.matchStatus == 1 ? false : true;
+          this.matchStatusText = this.attackIsDisabled ? "Ended" : "Ongoing";
       } );
   }
   
   attack(): void {
       this.dataService.arenaBattle(this.matchId).subscribe( arenaMatch => {
           this.arenaBattles = arenaMatch.arenaBattles;
-          this.matchStatusText = arenaMatch.matchStatus == 1 ? "Ongoing" : "Defeated";
+          this.attackIsDisabled = arenaMatch.matchStatus == 1 ? false : true;
+          this.matchStatusText = this.attackIsDisabled ? "Ended" : "Ongoing";
       },
       err => console.log( "Error during battle in match:" + this.matchId +" "+err)
        );
   }
-
 }

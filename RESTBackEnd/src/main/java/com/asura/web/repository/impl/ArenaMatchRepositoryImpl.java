@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.asura.web.entity.ArenaMatch;
+import com.asura.web.entity.ArenaMatchStatus;
 import com.asura.web.repository.custom.ArenaMatchRepositoryCustom;
 
 public class ArenaMatchRepositoryImpl implements ArenaMatchRepositoryCustom{
@@ -23,7 +24,7 @@ public class ArenaMatchRepositoryImpl implements ArenaMatchRepositoryCustom{
 	}
 
 	@Override
-	public List<ArenaMatch> findAllByMatchStatus(long mstatus) {
+	public List<ArenaMatch> findAllByMatchStatus(ArenaMatchStatus mstatus) {
 		TypedQuery<ArenaMatch> query = em.createNamedQuery("ArenaMatch.findAllByMatchStatus", ArenaMatch.class);
 		query.setParameter("mstatus", mstatus);
 		List<ArenaMatch> retVal = query.getResultList();

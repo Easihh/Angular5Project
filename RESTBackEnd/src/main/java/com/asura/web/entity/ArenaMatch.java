@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,7 +43,8 @@ public class ArenaMatch {
 	private Battler mainBattler;
 	
 	@Column(name="MATCH_STATUS")
-	private long matchStatus;
+	@Enumerated(EnumType.ORDINAL)
+	private ArenaMatchStatus matchStatus;
 
 	public Long getId() {
 		return id;
@@ -66,15 +69,15 @@ public class ArenaMatch {
 	public void setMainBattler(Battler mainBattler) {
 		this.mainBattler = mainBattler;
 	}
-
-	public long getMatchStatus() {
+	
+	public ArenaMatchStatus getMatchStatus() {
 		return matchStatus;
 	}
 
-	public void setMatchStatus(long matchStatus) {
+	public void setMatchStatus(ArenaMatchStatus matchStatus) {
 		this.matchStatus = matchStatus;
 	}
-	
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "ARENA_MATCH_ID")
 	private List<ArenaBattle> arenaBattles = new ArrayList<ArenaBattle>();

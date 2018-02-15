@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.asura.web.entity.ApplicationUser;
 import com.asura.web.entity.BasicUser;
 import com.asura.web.repository.BasicUserRepository;
 

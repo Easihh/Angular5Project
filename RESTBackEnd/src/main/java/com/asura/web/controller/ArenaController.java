@@ -22,6 +22,7 @@ import com.asura.web.ArenaParticipant;
 import com.asura.web.ErrorType;
 import com.asura.web.entity.ArenaBattle;
 import com.asura.web.entity.ArenaMatch;
+import com.asura.web.entity.ArenaMatchStatus;
 import com.asura.web.entity.Battler;
 import com.asura.web.repository.ArenaBattleRepository;
 import com.asura.web.repository.ArenaMatchRepository;
@@ -63,7 +64,7 @@ public class ArenaController {
 		
 		ArenaMatch newMatch = new ArenaMatch();
 		newMatch.setMainBattler(battler);
-		newMatch.setMatchStatus(1);
+		newMatch.setMatchStatus(ArenaMatchStatus.ONGOING);
 		newMatch.setMatchId(MatchUtility.generateMatchIdentifier(20));
 		
 		arenaMatchRepository.save(newMatch);
@@ -108,7 +109,7 @@ public class ArenaController {
 	public ResponseEntity<List<ArenaParticipant>> getArenaMatch() throws Exception {
 		
 		List<ArenaParticipant> participants = new ArrayList<ArenaParticipant>();
-		List<ArenaMatch> ongoingMatch = arenaMatchRepository.findAllByMatchStatus(1);
+		List<ArenaMatch> ongoingMatch = arenaMatchRepository.findAllByMatchStatus(ArenaMatchStatus.ONGOING);
 		
 		for (ArenaMatch match : ongoingMatch) {
 			ArenaParticipant temp = new ArenaParticipant(match.getMainBattler().getName(), match.getMatchId(),
@@ -138,7 +139,7 @@ public class ArenaController {
 		battleResult.setDefenderBattler(currentMatch.getMainBattler());
 		
 		currentMatch.addArenaBattle(battleResult);
-		currentMatch.setMatchStatus(0);
+		currentMatch.setMatchStatus(ArenaMatchStatus.ENDED);
 		
 		currentMatch = arenaMatchRepository.save(currentMatch);
 

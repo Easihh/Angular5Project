@@ -17,7 +17,7 @@
 			</div>		
 		</div>
 		<div class="reply-comment" >
-		<input type="button" (click)="attack()"class="btn btn-outline-primary" value="Attack">
+		<input type="button" (click)="attack()"class="btn btn-outline-primary" [ngClass]="{'disabled':attackIsDisabled}" value="Attack">
 		<input type="button" class="btn btn-outline-primary" value="Run">
 		</div>
 	</div>
