@@ -25,8 +25,13 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
  
         let isOnline = this.dataService.loggedIn();
+        //on manual page reload since that does not destroy session token..
         if ( isOnline ) {
             this.username = this.dataService.getUsername();
+            //service cached data will be wiped; need to reload player data
+            this.dataService.retrievePlayer().subscribe(battler=>{
+                this.dataService.setPlayer(battler);
+            })
             this.isOnline = true;
             this.initWebsocket();
         }

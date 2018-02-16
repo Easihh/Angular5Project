@@ -20,7 +20,7 @@ This is the about page
 	<td>Some text by battler</td>
 	<a class="topic-link" [routerLink]="['/arena/match/',battler.matchId]">Stuff</a>
 	<td>None</td>
-	<td><input text="button" class="btn btn-outline-primary" (click)=attackFighter(battler.id) value="Prepare to Attack"></td>
+	<td><input text="button" class="btn btn-outline-primary" (click)=prepareAttack(battler) value="Prepare to Attack"></td>
 </tr>
 </table>
 </body>

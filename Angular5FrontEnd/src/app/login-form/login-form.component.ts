@@ -33,10 +33,10 @@ export class LoginFormComponent implements OnInit {
           res => {
               sessionStorage.setItem( "token", res.jwtoken);
               this.service.setPlayer(res.battler);
+              console.log("Logged Battler:"+res.battler);
               this.loggedIn.emit({
                   username:username             
               });
-              console.log("navigating to:"+this.currentUrl);
               this.router.navigateByUrl(this.currentUrl);
           },
           err => {

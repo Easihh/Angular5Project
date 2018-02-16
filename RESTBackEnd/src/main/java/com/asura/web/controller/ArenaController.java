@@ -116,7 +116,7 @@ public class ArenaController {
 					match.getMainBattler().getPlayerStatus());
 			participants.add(temp);
 		}
-
+		
 		return new ResponseEntity<List<ArenaParticipant>>(participants, HttpStatus.OK);
 	}
 	
@@ -128,6 +128,10 @@ public class ArenaController {
 		String matchId = body.get("matchId");
 		
 		ArenaMatch currentMatch = arenaMatchRepository.findByMatchId(matchId);
+		
+		if(currentMatch.getMatchStatus()!=ArenaMatchStatus.ONGOING) {
+			throw new Exception("Cannot Attack this player since the match has already ended.");
+		}
 		Battler attacker = battlerRepository.findByName(auth.getName());
 		
 		//some battle stuff here to determine winner.pretend attacker won here so change match status for now

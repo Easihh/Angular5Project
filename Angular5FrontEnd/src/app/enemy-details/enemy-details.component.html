@@ -1,6 +1,10 @@
 <body class="forum">
   enemy-details works!
     <div class="reply-container">
+    <div *ngFor="let alerts of alertMessages" class="alert alert-dismissible alert-danger">
+	  <button type="button" class="close" (click)="close(alerts.id)" data-dismiss="alert">&times;</button>
+	  <strong>Oh snap!</strong>{{alerts.message}}
+	</div>
  	<div>title</div>
  	<div>Match Status:{{matchStatusText}}</div>
 	<div  class="reply-details">
@@ -17,7 +21,7 @@
 			</div>		
 		</div>
 		<div class="reply-comment" >
-		<input type="button" (click)="attack()"class="btn btn-outline-primary" [ngClass]="{'disabled':attackIsDisabled}" value="Attack">
+		<input type="button" (click)="attack()"class="btn btn-outline-primary"  value="Attack">
 		<input type="button" class="btn btn-outline-primary" value="Run">
 		</div>
 	</div>

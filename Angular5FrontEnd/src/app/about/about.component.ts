@@ -7,6 +7,7 @@ import { Topic } from "../topic";
 import { WebsocketService } from "../websocket.service";
 import { Battler } from "../battler";
 import { ArenaParticipant } from "../arena.participant";
+import { Router } from "@angular/router";
 @Component({
   selector: 'about',
   templateUrl: './about.component.html',
@@ -19,7 +20,7 @@ export class AboutComponent implements OnInit,OnDestroy{
     arenaBattlers:ArenaParticipant[]=[];
     isArenaParticipant: boolean;
     
-    constructor(private websocketService:WebsocketService,private dataService:DataService){}
+    constructor(private websocketService:WebsocketService,private dataService:DataService,private router:Router){}
     
     ngOnInit(): void {
         if ( this.dataService.getPlayer() == null ) {
@@ -67,19 +68,8 @@ export class AboutComponent implements OnInit,OnDestroy{
         //this.stompClient.send("/app/send/message",{},"Testing Stuff");
     }
     
-    attackFighter( id: number ) {
-        if ( id == this.dataService.getPlayer().id ) {
-            alert( "Cannot Attack yourself" );
-        }
-        else {
-            this.dataService.arenaBattle( "" + id ).subscribe( data => {
-                //receive http response OK status may reply something more later.
-                console.log("received data from battle");
-            },
-            err=>{
-                console.log("received error from battling id:"+id+ " "+err);
-            })
-        }
+    prepareAttack( participant: ArenaParticipant ) {
+        this.router.navigate( ["/arena/match/" + participant.matchId] );
     }
     
     enterArena(){

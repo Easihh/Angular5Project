@@ -21,14 +21,14 @@ export const router: Routes = [
 
     { path: '', component: HomeComponent},
     { path: 'register', component: RegisterComponent},
-    { path: 'about', component: AboutComponent , runGuardsAndResolvers: 'always'},
+    { path: 'arena', component: AboutComponent , runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId/topic/:topicId/page/:page', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId/topic/:topicId', component: TopicReplyComponent, resolve:{replies:TopicReplyResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum', component: ForumComponent},
     { path: 'arena/match/:matchId', component: EnemyDetailsComponent,resolve:{arenaMatch:ArenaMatchResolver},runGuardsAndResolvers: 'always'},
-    { path: 'battler', component: BattlerComponent},
+    { path: 'battler', component: BattlerComponent, canActivate:[AuthGuard]},
     { path: '**', component: NotFoundComponent },
 ];
 
