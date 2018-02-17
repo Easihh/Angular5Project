@@ -5,14 +5,21 @@ import { Subject } from "rxjs/Subject";
 import { Observable } from "rxjs/Observable";
 import { Battler } from "./battler";
 import { ArenaParticipant } from "./arena.participant";
+import { ArenaMatch } from "./arena.match";
 
 @Injectable()
 export class WebsocketService {
     
     private serverUrl = 'http://localhost:8090/ProjectREST/socket'
     private stompClient;
-    private stompSubject : Subject<ArenaParticipant> = new Subject<ArenaParticipant>();
-    private topicSubscription;
+    private stompArenaSubject : Subject<ArenaParticipant> = new Subject<ArenaParticipant>();
+    private stompArenaMatchSubject : Subject<ArenaMatch> = new Subject<ArenaMatch>();
+    private connectSubject: Subject<Boolean> = new Subject<Boolean>();
+    private arenaSubscription;
+    private arenaMatchSubscription;
+    private mainSubscriptionChannel: string = "/topic";
+    private arenaParticipantChannel: string = this.mainSubscriptionChannel + "/arena/participant";
+    private arenaMatchChannel: string = this.mainSubscriptionChannel + "/arena/match/";
 
   constructor() { }
   
@@ -21,24 +28,43 @@ export class WebsocketService {
       this.stompClient  = Stomp.over(ws);
       let that = this;
       this.stompClient.connect({}, function(frame) {
-          that.initTopicSubscription();
+          console.log("client Websocket is now connected.");
+          that.connectSubject.next(true);
+          that.initArenaSubscription();
       },function(message){
           //Websocket Connection lost
           alert("unable to open websocket connection on the target server.Connection was temporarly lost or Server may be down");
       });
     }
   
-  private initTopicSubscription():void{
-      let that=this;
-      this.topicSubscription=that.stompClient.subscribe("/chat", (message:any) => {
-          let battler:ArenaParticipant=JSON.parse(message.body);
-          that.stompSubject.next(battler);
-         //console.log("Message Received from Server:"+battler);
-     });
+  private initArenaSubscription(): void {
+      let that = this;
+      this.arenaSubscription = that.stompClient.subscribe( this.arenaParticipantChannel, ( message: any ) => {
+          let battler: ArenaParticipant = JSON.parse( message.body );
+          that.stompArenaSubject.next( battler );
+          //console.log("Message Received from Server:"+battler);
+      } );
+  }
+  
+  initArenaMatchSubscription( matchId: string ): void {
+      let that = this;
+      this.arenaMatchSubscription = that.stompClient.subscribe( this.arenaMatchChannel + matchId, ( message: any ) => {
+          let match: ArenaMatch = JSON.parse( message.body );
+          that.stompArenaMatchSubject.next( match );
+          console.log("Message Received from Server:"+match);
+      } );
   }
       
-  getObservable():Observable<ArenaParticipant>{
-      return this.stompSubject.asObservable();
+  getArenaParticipantObservable():Observable<ArenaParticipant>{
+      return this.stompArenaSubject.asObservable();
+  }
+  
+  getArenaMatchObservable():Observable<ArenaMatch>{
+      return this.stompArenaMatchSubject.asObservable();
+  }
+  
+  getConnectionObservable():Observable<Boolean>{
+      return this.connectSubject.asObservable();
   }
   
   disconnect(): void{

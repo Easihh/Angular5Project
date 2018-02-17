@@ -6,6 +6,6 @@ export interface ArenaMatch {
     
     matchId: string;
     mainBattler:Battler;
-    matchStatus:number;
+    matchStatus:string;
     arenaBattles:ArenaBattle[];
 }

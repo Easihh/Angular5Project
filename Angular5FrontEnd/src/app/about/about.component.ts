@@ -44,7 +44,7 @@ export class AboutComponent implements OnInit,OnDestroy{
     }
     
     subscribeToArenaParticipants() {
-        this.websocketService.getObservable().subscribe( battler => {
+        this.websocketService.getArenaParticipantObservable().subscribe( battler => {
             if ( battler.playerStatus == 1 ) {
                 this.arenaBattlers.push( battler );
             }

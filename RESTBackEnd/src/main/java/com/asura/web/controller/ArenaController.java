@@ -72,7 +72,7 @@ public class ArenaController {
 		ArenaParticipant participant = new ArenaParticipant(battler.getName(), newMatch.getMatchId(),
 				battler.getPlayerStatus());
 
-		template.convertAndSend("/chat", participant);
+		template.convertAndSend("/topic/arena/participant", participant);
 		return new ResponseEntity<ArenaParticipant>(participant, HttpStatus.OK);
 	}
 	
@@ -89,7 +89,7 @@ public class ArenaController {
 		battler.setPlayerStatus(0);
 		battler = battlerRepository.save(battler);
 		
-		template.convertAndSend("/chat", battler);
+		template.convertAndSend("/topic/arena/participant", battler);
 		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
 	}
 		
@@ -121,7 +121,7 @@ public class ArenaController {
 	}
 	
 	@RequestMapping(value = "auth/arena/battle", method = RequestMethod.POST)
-	public ResponseEntity<ArenaMatch> arenaMatchBatle(@RequestBody Map<String, String> body) throws Exception {
+	public ResponseEntity<HttpStatus> arenaMatchBatle(@RequestBody Map<String, String> body) throws Exception {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -146,7 +146,9 @@ public class ArenaController {
 		currentMatch.setMatchStatus(ArenaMatchStatus.ENDED);
 		
 		currentMatch = arenaMatchRepository.save(currentMatch);
+		
+		template.convertAndSend("/topic/arena/match/" + matchId, currentMatch);
 
-		return new ResponseEntity<ArenaMatch>(currentMatch, HttpStatus.OK);
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 }

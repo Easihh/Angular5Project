@@ -6,6 +6,7 @@ import { ArenaMatch } from "../arena.match";
 import { ActivatedRoute } from "@angular/router";
 import { PopupAlert } from "../popup.alert";
 import { HttpErrorResponse } from "@angular/common/http";
+import { WebsocketService } from "../websocket.service";
 
 @Component({
   selector: 'app-enemy-details',
@@ -21,7 +22,7 @@ export class EnemyDetailsComponent implements OnInit {
    attackIsDisabled: boolean;
    alertMessages:PopupAlert[]=[];
 
-  constructor(private dataService:DataService,private route: ActivatedRoute) { }
+  constructor(private websocketService:WebsocketService,private dataService:DataService,private route: ActivatedRoute) { }
 
   ngOnInit() {
       this.route.data.subscribe(( data: any ) => {
@@ -29,8 +30,12 @@ export class EnemyDetailsComponent implements OnInit {
           this.enemyBattler = arenaMatch.mainBattler;
           this.matchId = arenaMatch.matchId;
           this.arenaBattles = arenaMatch.arenaBattles;
-          this.attackIsDisabled = arenaMatch.matchStatus == 1 ? false : true;
+          this.attackIsDisabled = arenaMatch.matchStatus == "ENDED" ? true : false;
           this.matchStatusText = this.attackIsDisabled ? "Ended" : "Ongoing";
+          this.websocketService.getConnectionObservable().subscribe(data=>{
+              console.log("websocket connection is ready");
+              this.subscribeToArenaMatch();
+          })
       } );
   }
   
@@ -40,15 +45,23 @@ export class EnemyDetailsComponent implements OnInit {
           return;
       }
       this.dataService.arenaBattle(this.matchId).subscribe( arenaMatch => {
-          this.arenaBattles = arenaMatch.arenaBattles;
-          this.attackIsDisabled = arenaMatch.matchStatus == 1 ? false : true;
-          this.matchStatusText = this.attackIsDisabled ? "Ended" : "Ongoing";
+          //no need capture anything here as we will get info back from websocket subscription
+          //as all other player on this match page will.
       },
       err =>{
           console.log( "Error during battle in match:" + this.matchId + " " + err.error.errorMessage );
           this.alertMessages.push( new PopupAlert( this.alertMessages.length, err.error.errorMessage ) );
           }
        );
+  }
+  
+  private subscribeToArenaMatch() {
+      this.websocketService.initArenaMatchSubscription(this.matchId);
+      this.websocketService.getArenaMatchObservable().subscribe( arenaMatch => {
+          this.arenaBattles = arenaMatch.arenaBattles;
+          this.attackIsDisabled = arenaMatch.matchStatus == "ENDED" ? true : false;
+          this.matchStatusText = this.attackIsDisabled ? "Ended" : "Ongoing";
+      } )
   }
 
   close( alertIndex: number ) {
