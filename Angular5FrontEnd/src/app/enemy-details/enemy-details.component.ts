@@ -21,6 +21,7 @@ export class EnemyDetailsComponent implements OnInit {
    private matchId:string;
    attackIsDisabled: boolean;
    alertMessages:PopupAlert[]=[];
+   private subscriptionInitCalled = false;
 
   constructor(private websocketService:WebsocketService,private dataService:DataService,private route: ActivatedRoute) { }
 
@@ -32,11 +33,37 @@ export class EnemyDetailsComponent implements OnInit {
           this.arenaBattles = arenaMatch.arenaBattles;
           this.attackIsDisabled = arenaMatch.matchStatus == "ENDED" ? true : false;
           this.matchStatusText = this.attackIsDisabled ? "Ended" : "Ongoing";
-          this.websocketService.getConnectionObservable().subscribe(data=>{
-              console.log("websocket connection is ready");
+          let connection = this.websocketService.getConnectionObservable().subscribe( data => {
+              console.log( "websocket connection is ready" );
               this.subscribeToArenaMatch();
-          })
+              this.subscriptionInitCalled=true;
+          } );
+          setTimeout(() => this.websocketConnectionTimeOutDelay(connection), 5000);           
       } );
+  }
+  
+  /**
+   * Since Websocket initial connection is on main app component init and is done async and that
+   * it must be completed in order to subscribe to ArenaMatch, we subscribe to connection in the init
+   * phase of this component and wait for it to emit a subject value before trying to subscribe to AreneMatch.
+   * 
+   * It is possible however that before we subscribe to the connection, that the websocket has finished its initialization
+   * and that it won't emit subject value anymore therefore our subscription would never happen, hence the timeout
+   * and below function.
+   * 
+   * the above cases only happen when a client manually refresh a page that subscribe to a dynamic topic on init since
+   * that cannot be added to Websocket connection method unlike ArenaSubscription.
+   */
+  private websocketConnectionTimeOutDelay(connection:any):void{
+      connection.unsubscribe();
+      if ( this.websocketService.isWebsocketConnected() && !this.subscriptionInitCalled ) {
+          alert("websocket is fully connected but ArenaMatch was not subscribed to, subscribing.");  
+          this.subscribeToArenaMatch();
+          return;
+      }
+      if(!this.websocketService.isWebsocketConnected()){
+          alert("websocket is still not fully connected after timeout delay.");        
+      }
   }
   
   attack(): void {
@@ -55,7 +82,7 @@ export class EnemyDetailsComponent implements OnInit {
        );
   }
   
-  private subscribeToArenaMatch() {
+  private subscribeToArenaMatch():void {
       this.websocketService.initArenaMatchSubscription(this.matchId);
       this.websocketService.getArenaMatchObservable().subscribe( arenaMatch => {
           this.arenaBattles = arenaMatch.arenaBattles;

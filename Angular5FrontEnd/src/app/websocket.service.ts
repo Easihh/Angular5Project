@@ -20,6 +20,7 @@ export class WebsocketService {
     private mainSubscriptionChannel: string = "/topic";
     private arenaParticipantChannel: string = this.mainSubscriptionChannel + "/arena/participant";
     private arenaMatchChannel: string = this.mainSubscriptionChannel + "/arena/match/";
+    private isConnected: boolean = false;
 
   constructor() { }
   
@@ -30,6 +31,7 @@ export class WebsocketService {
       this.stompClient.connect({}, function(frame) {
           console.log("client Websocket is now connected.");
           that.connectSubject.next(true);
+          that.isConnected=true;
           that.initArenaSubscription();
       },function(message){
           //Websocket Connection lost
@@ -69,5 +71,9 @@ export class WebsocketService {
   
   disconnect(): void{
       this.stompClient.disconnect();
+  }
+  
+  isWebsocketConnected(): boolean {
+      return this.isConnected;
   }
 }
