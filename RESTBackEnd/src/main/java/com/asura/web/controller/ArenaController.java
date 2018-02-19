@@ -121,7 +121,7 @@ public class ArenaController {
 	}
 	
 	@RequestMapping(value = "auth/arena/battle", method = RequestMethod.POST)
-	public ResponseEntity<HttpStatus> arenaMatchBatle(@RequestBody Map<String, String> body) throws Exception {
+	public ResponseEntity<ArenaBattle> arenaMatchBatle(@RequestBody Map<String, String> body) throws Exception {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -142,6 +142,21 @@ public class ArenaController {
 		battleResult.setAttackerBattler(attacker);
 		battleResult.setDefenderBattler(currentMatch.getMainBattler());
 		
+		StringBuilder sb = new StringBuilder();
+		sb.append(attacker.getName() + " and " + currentMatch.getMainBattler().getName() + " ready their weapon.");
+		sb.append("<br>");
+		sb.append("<br>");
+		sb.append(attacker.getName()+" attacks!");
+		sb.append("<br>");
+		sb.append(currentMatch.getMainBattler().getName()+ " received 9999 damage!");
+		sb.append("<br>");
+		sb.append(currentMatch.getMainBattler().getName()+" has fallen.");
+		
+		battleResult.setCombatLog(sb.toString());
+		
+		battleResult = arenaBattleRepository.save(battleResult);
+		
+		
 		currentMatch.addArenaBattle(battleResult);
 		currentMatch.setMatchStatus(ArenaMatchStatus.ENDED);
 		
@@ -149,6 +164,14 @@ public class ArenaController {
 		
 		template.convertAndSend("/topic/arena/match/" + matchId, currentMatch);
 
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		return new ResponseEntity<ArenaBattle>(battleResult,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "auth/arena/battle/log", method = RequestMethod.GET)
+	public ResponseEntity<ArenaBattle> getArenaMatchBattleLog(@RequestParam("logId") long logId) throws Exception {
+		
+		ArenaBattle arenaBattleLog = arenaBattleRepository.findOne(logId);
+		
+		return new ResponseEntity<ArenaBattle>(arenaBattleLog, HttpStatus.OK);
 	}
 }

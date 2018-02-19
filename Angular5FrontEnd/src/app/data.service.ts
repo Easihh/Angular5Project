@@ -13,6 +13,7 @@ import { AuthenticationResponse } from "./authenticationResponse";
 import { Battler } from "./battler";
 import { ArenaParticipant } from "./arena.participant";
 import { ArenaMatch } from "./arena.match";
+import { ArenaBattle } from "./arena.battle";
 
 @Injectable()
 export class DataService {
@@ -28,7 +29,7 @@ export class DataService {
     getArenaParticipantURL: string ="/ProjectREST/auth/arena/getParticipants";
     getArenaMatchURL: string ="/ProjectREST/auth/arena/getMatch";
     arenaBattleURL: string ="/ProjectREST/auth/arena/battle";
-
+    getArenaMatchBattleLogURL: string ="/ProjectREST/auth/arena/battle/log";
     private playerInfo: Battler;
 
     constructor( private _http: HttpClient, private jwtHelperService:JwtHelperService ) {}
@@ -97,10 +98,17 @@ export class DataService {
          .catch( this.handleError );
      }
      
-     arenaBattle( matchId: String ): Observable<any> {
+     arenaBattle( matchId: string ): Observable<ArenaBattle> {
          return this._http.post( this.arenaBattleURL, { matchId: matchId } )
              .catch( this.handleError );
-     }    
+     }
+     
+     findArenaMatchBattleLog(logId: number ): Observable<ArenaBattle> {
+         let params = new HttpParams();
+         params = params.append( "logId", logId.toString() );
+         return this._http.get( this.getArenaMatchBattleLogURL, { params: params } )
+             .catch( this.handleError );
+     }
      
      /* Returns all info of the battler; used for logged player only*/
      retrievePlayer(): Observable<Battler> {

@@ -16,6 +16,8 @@ import { TopicReplyComponent } from "./topic-reply/topic-reply.component";
 import { EnemyDetailsComponent } from "./enemy-details/enemy-details.component";
 import { BattlerComponent } from "./battler/battler.component";
 import { ArenaMatchResolver } from "./arena.match.resolver";
+import { ArenaMatchBattleLogComponent } from "./arena.match.battle.log/arena.match.battle.log.component";
+import { ArenaMatchBattleLogResolver } from "./arena.match.battle.log.resolver";
 
 export const router: Routes = [
 
@@ -27,6 +29,7 @@ export const router: Routes = [
     { path: 'forum/:forumId/page/:page',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum/:forumId',component:TopicComponent,resolve:{topics:TopicResolver},runGuardsAndResolvers: 'always'},
     { path: 'forum', component: ForumComponent},
+    { path: 'arena/match/:matchId/log/:logId', component: ArenaMatchBattleLogComponent,resolve:{arenaMatchBattleLog:ArenaMatchBattleLogResolver},runGuardsAndResolvers: 'always'},
     { path: 'arena/match/:matchId', component: EnemyDetailsComponent,resolve:{arenaMatch:ArenaMatchResolver},runGuardsAndResolvers: 'always'},
     { path: 'battler', component: BattlerComponent, canActivate:[AuthGuard]},
     { path: '**', component: NotFoundComponent },

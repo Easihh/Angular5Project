@@ -26,6 +26,8 @@ import { WebsocketService } from "./websocket.service";
 import { EnemyDetailsComponent } from './enemy-details/enemy-details.component';
 import { BattlerComponent } from "./battler/battler.component";
 import { ArenaMatchResolver } from "./arena.match.resolver";
+import { ArenaMatchBattleLogComponent } from './arena.match.battle.log/arena.match.battle.log.component';
+import { ArenaMatchBattleLogResolver } from "./arena.match.battle.log.resolver";
 
 @NgModule({
   declarations: [     
@@ -40,7 +42,8 @@ import { ArenaMatchResolver } from "./arena.match.resolver";
     RegisterComponent,
     TopicReplyComponent,
     BattlerComponent,
-    EnemyDetailsComponent
+    EnemyDetailsComponent,
+    ArenaMatchBattleLogComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,7 @@ import { ArenaMatchResolver } from "./arena.match.resolver";
     routes
   ],
   exports: [],
-  providers: [DataService,WebsocketService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver,ArenaMatchResolver],
+  providers: [DataService,WebsocketService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver,ArenaMatchResolver,ArenaMatchBattleLogResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

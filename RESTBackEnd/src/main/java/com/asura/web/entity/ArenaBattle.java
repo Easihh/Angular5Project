@@ -42,6 +42,9 @@ public class ArenaBattle {
 	@OneToOne
 	@JoinColumn(name="WINNER_BATTLER_ID", referencedColumnName="ID")
 	private Battler winnerBattler;
+	
+	@Column(name="COMBAT_LOG")
+	private String combatLog;
 
 	public Long getId() {
 		return id;
@@ -83,5 +86,11 @@ public class ArenaBattle {
 		this.winnerBattler = winnerBattler;
 	}
 	
-	
+	public String getCombatLog() {
+		return combatLog;
+	}
+
+	public void setCombatLog(String combatLog) {
+		this.combatLog = combatLog;
+	}
 }
