@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Topic } from "./topic";
-import { TopicReply } from "./topicReply";
 import { TopicReplyWrapper } from "./topicReplyWrapper";
 import { Response } from '@angular/http';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -9,6 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import { Topic } from "./interfaces/topic";
 
 @Injectable()
 export class TopicService {

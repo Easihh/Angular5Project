@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router,Resolve,ActivatedRouteSnapshot } from "@angular/router";
-import { TopicService } from "./topic.service";
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/first';
 import 'rxjs/add/observable/of';
-import { TopicReplyWrapper } from "./topicReplyWrapper";
+import { TopicReplyWrapper } from "../topicReplyWrapper";
+import { TopicService } from "../topic.service";
 
 @Injectable()
 export class TopicReplyResolver implements Resolve<TopicReplyWrapper>{

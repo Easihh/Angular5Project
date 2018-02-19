@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { News } from "../news";
 import { DataService } from "../data.service";
 import { DatePipe } from "@angular/common";
+import { News } from "../interfaces/news";
 
 @Component({
   selector: 'app-news',

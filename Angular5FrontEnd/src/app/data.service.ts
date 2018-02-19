@@ -8,12 +8,12 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
-import { News } from "./news";
-import { AuthenticationResponse } from "./authenticationResponse";
-import { Battler } from "./battler";
-import { ArenaParticipant } from "./arena.participant";
-import { ArenaMatch } from "./arena.match";
-import { ArenaBattle } from "./arena.battle";
+import { Battler } from "./interfaces/battler";
+import { AuthenticationResponse } from "./interfaces/authenticationResponse";
+import { ArenaParticipant } from "./interfaces/arena.participant";
+import { ArenaBattle } from "./interfaces/arena.battle";
+import { ArenaMatch } from "./interfaces/arena.match";
+import { News } from "./interfaces/news";
 
 @Injectable()
 export class DataService {

@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewChildren, ElementRef, ViewChild, QueryList } from '@angular/core';
-import { Battler } from "../battler";
+import { Component, OnInit } from '@angular/core';
 import { DataService } from "../data.service";
-import { ArenaBattle } from "../arena.battle";
-import { ArenaMatch } from "../arena.match";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PopupAlert } from "../popup.alert";
 import { HttpErrorResponse } from "@angular/common/http";
 import { WebsocketService } from "../websocket.service";
+import { ArenaBattle } from "../interfaces/arena.battle";
+import { Battler } from "../interfaces/battler";
+import { ArenaMatch } from "../interfaces/arena.match";
 
 @Component({
-  selector: 'app-enemy-details',
-  templateUrl: './enemy-details.component.html',
-  styleUrls: ['./enemy-details.component.css']
+  selector: 'app-arena-details',
+  templateUrl: './match-details.component.html',
+  styleUrls: ['./match-details.component.css']
 })
-export class EnemyDetailsComponent implements OnInit {
+export class MatchDetailsComponent implements OnInit {
     
    enemyBattler:Battler;
    arenaBattles:ArenaBattle[]=[];

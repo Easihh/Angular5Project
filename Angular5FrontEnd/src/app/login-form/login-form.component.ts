@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router, NavigationEnd} from '@angular/router';
 import { DataService} from '../data.service';
-import { ErrorResponse } from "../errorResponse";
 import { HttpErrorResponse } from "@angular/common/http";
+import { ErrorResponse } from "../interfaces/errorResponse";
 
 @Component({
   selector: 'login-form',

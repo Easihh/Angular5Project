@@ -8,33 +8,31 @@ import { HttpClientModule  } from '@angular/common/http';
 import { DataService } from './data.service';
 import { TopicService } from './topic.service';
 import { AppComponent } from './app.component';
-import { AboutComponent } from './about/about.component';
 import { NotFoundComponent } from './notfound/notfound.component';
-import { DatatableComponent } from './datatable/datatable.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { ForumComponent } from './forum/forum.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TopicComponent } from './topic/topic.component';
 import { HomeComponent } from './home/home.component';
-import { TopicResolver } from "./topic.resolver";
-import { TopicReplyResolver } from "./topicReply.resolver";
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { RegisterComponent } from './register/register.component';
 import { TopicReplyComponent } from './topic-reply/topic-reply.component';
 import { MarkdownModule } from 'ngx-md';
 import { WebsocketService } from "./websocket.service";
-import { EnemyDetailsComponent } from './enemy-details/enemy-details.component';
 import { BattlerComponent } from "./battler/battler.component";
-import { ArenaMatchResolver } from "./arena.match.resolver";
 import { ArenaMatchBattleLogComponent } from './arena.match.battle.log/arena.match.battle.log.component';
-import { ArenaMatchBattleLogResolver } from "./arena.match.battle.log.resolver";
+import { MatchDetailsComponent } from "./match-details/match-details.component";
+import { TopicResolver } from "./resolvers/topic.resolver";
+import { TopicReplyResolver } from "./resolvers/topicReply.resolver";
+import { ArenaMatchResolver } from "./resolvers/arena.match.resolver";
+import { ArenaMatchBattleLogResolver } from "./resolvers/arena.match.battle.log.resolver";
+import { ArenaComponent } from "./arena/arena.component";
 
 @NgModule({
   declarations: [     
     AppComponent,
-    AboutComponent,
+    ArenaComponent,
     NotFoundComponent,
-    DatatableComponent,
     LoginFormComponent,
     ForumComponent,
     TopicComponent,
@@ -42,7 +40,7 @@ import { ArenaMatchBattleLogResolver } from "./arena.match.battle.log.resolver";
     RegisterComponent,
     TopicReplyComponent,
     BattlerComponent,
-    EnemyDetailsComponent,
+    MatchDetailsComponent,
     ArenaMatchBattleLogComponent
   ],
   imports: [

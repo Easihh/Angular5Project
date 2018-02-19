@@ -1,9 +1,9 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
-import { Topic } from "../topic";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TopicService } from "../topic.service";
 import { DatePipe } from "@angular/common";
 import { RoleEnum } from "../role-enum";
+import { Topic } from "../interfaces/topic";
 
 @Component({
   selector: 'app-topic',

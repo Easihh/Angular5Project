@@ -1,4 +1,4 @@
-import { Role } from "./role";
+
 import { Battler } from "./battler";
 
 export interface ArenaBattle {

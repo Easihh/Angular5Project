@@ -1,11 +1,8 @@
-import { Role } from "./role";
-import { Battler } from "./battler";
-import { ArenaBattle } from "./arena.battle";
-import { ArenaMatch } from "./arena.match";
 import { Resolve, ActivatedRouteSnapshot } from "@angular/router";
 import { Observable } from "rxjs/Observable";
-import { DataService } from "./data.service";
 import { Injectable } from "@angular/core";
+import { ArenaMatch } from "../interfaces/arena.match";
+import { DataService } from "../data.service";
 
 @Injectable()
 export class ArenaMatchResolver implements Resolve<ArenaMatch>{

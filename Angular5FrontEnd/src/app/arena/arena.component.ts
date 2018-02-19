@@ -3,19 +3,17 @@ import { DataService } from "../data.service";
 import { Subject } from "rxjs/Rx";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import { Topic } from "../topic";
 import { WebsocketService } from "../websocket.service";
-import { Battler } from "../battler";
-import { ArenaParticipant } from "../arena.participant";
 import { Router } from "@angular/router";
+import { ArenaParticipant } from "../interfaces/arena.participant";
 @Component({
-  selector: 'about',
-  templateUrl: './about.component.html',
+  selector: 'arena',
+  templateUrl: './arena.component.html',
   styleUrls: ['../css/bootstrap.css']
 })
 
 
-export class AboutComponent implements OnInit,OnDestroy{
+export class ArenaComponent implements OnInit,OnDestroy{
     
     arenaBattlers:ArenaParticipant[]=[];
     isArenaParticipant: boolean;

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { TopicService } from "../topic.service";
-import { TopicReply } from "../topicReply";
 import { TopicReplyWrapper } from "../topicReplyWrapper";
 import { DataService } from "../data.service";
+import { TopicReply } from "../interfaces/topicReply";
 
 @Component({
   selector: 'app-topic-reply',

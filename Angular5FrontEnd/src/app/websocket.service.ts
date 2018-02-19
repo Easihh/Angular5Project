@@ -3,9 +3,8 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { Subject } from "rxjs/Subject";
 import { Observable } from "rxjs/Observable";
-import { Battler } from "./battler";
-import { ArenaParticipant } from "./arena.participant";
-import { ArenaMatch } from "./arena.match";
+import { ArenaParticipant } from "./interfaces/arena.participant";
+import { ArenaMatch } from "./interfaces/arena.match";
 
 @Injectable()
 export class WebsocketService {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ArenaBattle } from "../arena.battle";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Battler } from "../battler";
+import { Battler } from "../interfaces/battler";
+import { ArenaBattle } from "../interfaces/arena.battle";
 
 @Component({
   selector: 'app-arena.match.battle.log',

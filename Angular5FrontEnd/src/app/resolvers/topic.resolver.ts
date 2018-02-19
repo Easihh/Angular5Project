@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router,Resolve,ActivatedRouteSnapshot } from "@angular/router";
-import { TopicService } from "./topic.service";
 import { Observable } from "rxjs/Observable";
-import { Topic } from "./topic";
 import 'rxjs/add/operator/first';
 import 'rxjs/add/observable/of';
+import { Topic } from "../interfaces/topic";
+import { TopicService } from "../topic.service";
 
 @Injectable()
 export class TopicResolver implements Resolve<Topic[]>{
