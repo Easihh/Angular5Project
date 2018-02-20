@@ -10,4 +10,6 @@ public interface ArenaMatchRepositoryCustom {
 	ArenaMatch findByMatchId(String matchId);
 
 	List<ArenaMatch> findAllByMatchStatus(ArenaMatchStatus mstatus);
+	
+	ArenaMatch findActiveByBattlerId(Long battlerId);
 }

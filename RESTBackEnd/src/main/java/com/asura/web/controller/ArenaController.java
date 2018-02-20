@@ -27,6 +27,7 @@ import com.asura.web.entity.Battler;
 import com.asura.web.repository.ArenaBattleRepository;
 import com.asura.web.repository.ArenaMatchRepository;
 import com.asura.web.repository.BattlerRepository;
+import com.asura.web.service.ArenaService;
 import com.asura.web.utility.MatchUtility;
 
 
@@ -45,6 +46,9 @@ public class ArenaController {
 	
 	@Autowired
 	private ArenaBattleRepository arenaBattleRepository;
+	
+	@Autowired
+	private ArenaService arenaService;
 	
 	@Autowired
 	private SimpMessagingTemplate template;
@@ -89,7 +93,12 @@ public class ArenaController {
 		battler.setPlayerStatus(0);
 		battler = battlerRepository.save(battler);
 		
-		template.convertAndSend("/topic/arena/participant", battler);
+		ArenaMatch currentMatch = arenaMatchRepository.findActiveByBattlerId(battler.getId());
+		
+		ArenaParticipant participant = new ArenaParticipant(battler.getName(), currentMatch.getMatchId(),
+				battler.getPlayerStatus());
+		
+		template.convertAndSend("/topic/arena/participant", participant);
 		return new ResponseEntity<Battler>(battler, HttpStatus.OK);
 	}
 		
@@ -134,25 +143,17 @@ public class ArenaController {
 		}
 		Battler attacker = battlerRepository.findByName(auth.getName());
 		
-		//some battle stuff here to determine winner.pretend attacker won here so change match status for now
-		
+		Battler winner = arenaService.determineMatchWinner(attacker, currentMatch.getMainBattler());
+		Battler loser = attacker == winner ? currentMatch.getMainBattler() : attacker;
 		ArenaBattle battleResult = new ArenaBattle();
 		battleResult.setMatchId(currentMatch.getId());
-		battleResult.setWinnerBattler(attacker);
+		battleResult.setWinnerBattler(winner);
 		battleResult.setAttackerBattler(attacker);
 		battleResult.setDefenderBattler(currentMatch.getMainBattler());
 		
-		StringBuilder sb = new StringBuilder();
-		sb.append(attacker.getName() + " and " + currentMatch.getMainBattler().getName() + " ready their weapon.");
-		sb.append("<br>");
-		sb.append("<br>");
-		sb.append(attacker.getName()+" attacks!");
-		sb.append("<br>");
-		sb.append(currentMatch.getMainBattler().getName()+ " received 9999 damage!");
-		sb.append("<br>");
-		sb.append(currentMatch.getMainBattler().getName()+" has fallen.");
-		
-		battleResult.setCombatLog(sb.toString());
+		StringBuilder combatLog = arenaService.createMatchCombatLog(winner, loser);
+			
+		battleResult.setCombatLog(combatLog.toString());
 		
 		battleResult = arenaBattleRepository.save(battleResult);
 		

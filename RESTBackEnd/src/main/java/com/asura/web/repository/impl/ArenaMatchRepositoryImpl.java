@@ -30,4 +30,12 @@ public class ArenaMatchRepositoryImpl implements ArenaMatchRepositoryCustom{
 		List<ArenaMatch> retVal = query.getResultList();
 		return retVal;
 	}
+
+	@Override
+	public ArenaMatch findActiveByBattlerId(Long battlerId) {
+		TypedQuery<ArenaMatch> query = em.createNamedQuery("ArenaMatch.findActiveByBattlerId", ArenaMatch.class);
+		query.setParameter("battlerId", battlerId);
+		List<ArenaMatch> retVal = query.getResultList();
+		return retVal.isEmpty()? null : retVal.get(0);
+	}
 }

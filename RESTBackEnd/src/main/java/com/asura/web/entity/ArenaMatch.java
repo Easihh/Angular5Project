@@ -23,6 +23,7 @@ import javax.persistence.Table;
 @Table(name="ARENA_MATCHES")
 @NamedQueries({
 	@NamedQuery(name="ArenaMatch.findByMatchId",query="select a from ArenaMatch a where a.matchId=:matchId"),
+	@NamedQuery(name="ArenaMatch.findActiveByBattlerId",query="select a from ArenaMatch a where a.matchStatus=1 AND a.mainBattler.id=:battlerId"),
 	@NamedQuery(name="ArenaMatch.findAllByMatchStatus",query="select a from ArenaMatch a where a.matchStatus=:mstatus")
 })
 public class ArenaMatch {

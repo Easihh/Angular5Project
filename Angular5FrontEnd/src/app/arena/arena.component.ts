@@ -66,11 +66,7 @@ export class ArenaComponent implements OnInit,OnDestroy{
         this.websocketService.disconnect();
         //this.stompClient.send("/app/send/message",{},"Testing Stuff");
     }
-    
-    prepareAttack( participant: ArenaParticipant ) {
-        this.router.navigate( ["/arena/match/" + participant.matchId] );
-    }
-    
+      
     enterArena(){
         this.arenaService.enterArena().subscribe(data=>{
             this.isArenaParticipant=true ;
