@@ -7,6 +7,7 @@ import { WebsocketService } from "../websocket.service";
 import { ArenaBattle } from "../interfaces/arena.battle";
 import { Battler } from "../interfaces/battler";
 import { ArenaMatch } from "../interfaces/arena.match";
+import { ArenaService } from "../arena.service";
 
 @Component({
   selector: 'app-arena-details',
@@ -23,7 +24,7 @@ export class MatchDetailsComponent implements OnInit {
    alertMessages:PopupAlert[]=[];
    private subscriptionInitCalled = false;
 
-  constructor(private router:Router,private websocketService:WebsocketService,private dataService:DataService,private route: ActivatedRoute) { }
+  constructor(private arenaService:ArenaService,private router:Router,private websocketService:WebsocketService,private dataService:DataService,private route: ActivatedRoute) { }
 
   ngOnInit() {
       this.route.data.subscribe(( data: any ) => {
@@ -82,7 +83,7 @@ export class MatchDetailsComponent implements OnInit {
           alert("Cannot Attack Yourself");
           return;
       }
-      this.dataService.arenaBattle(this.matchId).subscribe( battleLog => {
+      this.arenaService.arenaBattle(this.matchId).subscribe( battleLog => {
           console.debug("Log:"+battleLog);
           let logId: number = battleLog.id;
           this.router.navigate( ["/arena/match/" + this.matchId + "/log/" + logId] );

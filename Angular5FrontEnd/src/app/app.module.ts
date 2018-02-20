@@ -27,6 +27,7 @@ import { TopicReplyResolver } from "./resolvers/topicReply.resolver";
 import { ArenaMatchResolver } from "./resolvers/arena.match.resolver";
 import { ArenaMatchBattleLogResolver } from "./resolvers/arena.match.battle.log.resolver";
 import { ArenaComponent } from "./arena/arena.component";
+import { ArenaService } from "./arena.service";
 
 @NgModule({
   declarations: [     
@@ -61,7 +62,7 @@ import { ArenaComponent } from "./arena/arena.component";
     routes
   ],
   exports: [],
-  providers: [DataService,WebsocketService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver,ArenaMatchResolver,ArenaMatchBattleLogResolver],
+  providers: [DataService,ArenaService,WebsocketService,TopicService,AuthGuard,TopicResolver,TopicReplyResolver,ArenaMatchResolver,ArenaMatchBattleLogResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

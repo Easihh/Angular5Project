@@ -6,6 +6,7 @@ import * as SockJS from 'sockjs-client';
 import { WebsocketService } from "../websocket.service";
 import { Router } from "@angular/router";
 import { ArenaParticipant } from "../interfaces/arena.participant";
+import { ArenaService } from "../arena.service";
 @Component({
   selector: 'arena',
   templateUrl: './arena.component.html',
@@ -18,7 +19,7 @@ export class ArenaComponent implements OnInit,OnDestroy{
     arenaBattlers:ArenaParticipant[]=[];
     isArenaParticipant: boolean;
     
-    constructor(private websocketService:WebsocketService,private dataService:DataService,private router:Router){}
+    constructor(private arenaService:ArenaService,private websocketService:WebsocketService,private dataService:DataService,private router:Router){}
     
     ngOnInit(): void {
         if ( this.dataService.getPlayer() == null ) {
@@ -35,7 +36,7 @@ export class ArenaComponent implements OnInit,OnDestroy{
     }
     
     loadArenaParticipants() {
-        this.dataService.getArenaParticipants().subscribe( battlers => {
+        this.arenaService.getArenaParticipants().subscribe( battlers => {
             this.arenaBattlers = battlers;
             this.subscribeToArenaParticipants();
         } )
@@ -71,13 +72,13 @@ export class ArenaComponent implements OnInit,OnDestroy{
     }
     
     enterArena(){
-        this.dataService.enterArena().subscribe(data=>{
+        this.arenaService.enterArena().subscribe(data=>{
             this.isArenaParticipant=true ;
         });
     }
     
     leaveArena(){
-        this.dataService.leaveArena().subscribe(data=>{
+        this.arenaService.leaveArena().subscribe(data=>{
             this.isArenaParticipant=false ;
         });
     }

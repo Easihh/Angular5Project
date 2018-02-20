@@ -3,17 +3,18 @@ import { Observable } from "rxjs/Observable";
 import { Injectable } from "@angular/core";
 import { ArenaMatch } from "../interfaces/arena.match";
 import { DataService } from "../data.service";
+import { ArenaService } from "../arena.service";
 
 @Injectable()
 export class ArenaMatchResolver implements Resolve<ArenaMatch>{
     
-    constructor(private dataService:DataService){}
+    constructor(private arenaService:ArenaService,private dataService:DataService){}
     
     resolve(route: ActivatedRouteSnapshot):Observable<ArenaMatch> {
         console.log("inside resolve for ArenaMatch")
         let matchId = route.params['matchId'];
 
-        return this.dataService.findArenaMatch(matchId).map(arenaMatch =>{
+        return this.arenaService.findArenaMatch(matchId).map(arenaMatch =>{
              return arenaMatch;
          })
          .catch(error =>{

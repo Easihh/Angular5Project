@@ -10,26 +10,18 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
 import { Battler } from "./interfaces/battler";
 import { AuthenticationResponse } from "./interfaces/authenticationResponse";
-import { ArenaParticipant } from "./interfaces/arena.participant";
-import { ArenaBattle } from "./interfaces/arena.battle";
-import { ArenaMatch } from "./interfaces/arena.match";
 import { News } from "./interfaces/news";
 
 @Injectable()
 export class DataService {
 
-    createNewUserURL: string ="/ProjectREST/register";
-    loginURL: string ="/ProjectREST/login";
-    adminURL: string ="/ProjectREST/admin";
-    getNewsURL: string ="/ProjectREST/news";
-    enterArenaURL: string ="/ProjectREST/auth/arena/enter";
-    leaveArenaURL: string ="/ProjectREST/auth/arena/leave";
-    retrievePlayerURL: string ="/ProjectREST/auth/myBattler";
-    retrieveOtherPlayerURL: string ="/ProjectREST/auth/otherBattler";
-    getArenaParticipantURL: string ="/ProjectREST/auth/arena/getParticipants";
-    getArenaMatchURL: string ="/ProjectREST/auth/arena/getMatch";
-    arenaBattleURL: string ="/ProjectREST/auth/arena/battle";
-    getArenaMatchBattleLogURL: string ="/ProjectREST/auth/arena/battle/log";
+    private createNewUserURL: string = "/ProjectREST/register";
+    private loginURL: string = "/ProjectREST/login";
+    private adminURL: string = "/ProjectREST/admin";
+    private getNewsURL: string = "/ProjectREST/news";
+    private retrievePlayerURL: string = "/ProjectREST/auth/myBattler";
+    private retrieveOtherPlayerURL: string = "/ProjectREST/auth/otherBattler";
+    
     private playerInfo: Battler;
 
     constructor( private _http: HttpClient, private jwtHelperService:JwtHelperService ) {}
@@ -78,38 +70,7 @@ export class DataService {
          .do( data => console.log( "createUser:" + data ) )//data return in
          .catch( this.handleError );
      }
-     
-     /*2nd param needed(non-empty payload) in http put but server won't trust it
-     and will instead read the name in the sent jwt token.*/
-     enterArena():Observable<Battler>{
-         return this._http.put( this.enterArenaURL,{username: this.getUsername()})
-         .catch( this.handleError );
-     }
-     
-     /*2nd param needed(non-empty payload) in http put but server won't trust it
-     and will instead read the name in the sent jwt token.*/
-     leaveArena(): Observable<Battler> {
-         return this._http.put( this.leaveArenaURL, { username: this.getUsername() } )
-             .catch( this.handleError );
-     }
-     
-     getArenaParticipants():Observable<ArenaParticipant[]>{
-         return this._http.get(this.getArenaParticipantURL)
-         .catch( this.handleError );
-     }
-     
-     arenaBattle( matchId: string ): Observable<ArenaBattle> {
-         return this._http.post( this.arenaBattleURL, { matchId: matchId } )
-             .catch( this.handleError );
-     }
-     
-     findArenaMatchBattleLog(logId: number ): Observable<ArenaBattle> {
-         let params = new HttpParams();
-         params = params.append( "logId", logId.toString() );
-         return this._http.get( this.getArenaMatchBattleLogURL, { params: params } )
-             .catch( this.handleError );
-     }
-     
+                    
      /* Returns all info of the battler; used for logged player only*/
      retrievePlayer(): Observable<Battler> {
          return this._http.get( this.retrievePlayerURL )
@@ -125,17 +86,7 @@ export class DataService {
              .get( this.retrieveOtherPlayerURL, { params: params } )
              .catch( this.handleError );
      }
-     
-     /* returns info of a given battle and may return hidden value as ??? if player 
-      * should not be able to see them NYI?*/
-     findArenaMatch(matchId: string): Observable<ArenaMatch> {
-         let params = new HttpParams();
-         params = params.append( "matchId", matchId.toString() );
-         return this._http
-             .get( this.getArenaMatchURL, { params: params } )
-             .catch( this.handleError );
-     }
-     
+          
      getNews():Observable<News[]>{
          return this._http.get(this.getNewsURL)
          .catch( this.handleError );

@@ -3,17 +3,18 @@ import { Observable } from "rxjs/Observable";
 import { Injectable } from "@angular/core";
 import { DataService } from "../data.service";
 import { ArenaBattle } from "../interfaces/arena.battle";
+import { ArenaService } from "../arena.service";
 
 @Injectable()
 export class ArenaMatchBattleLogResolver implements Resolve<ArenaBattle>{
     
-    constructor(private dataService:DataService){}
+    constructor(private arenaService:ArenaService,private dataService:DataService){}
     
     resolve(route: ActivatedRouteSnapshot):Observable<ArenaBattle> {
         console.log("inside resolve for ArenaMatchBattleLogResolver");
         
         let logId = route.params['logId'];
-        return this.dataService.findArenaMatchBattleLog(logId).map(battleLog =>{
+        return this.arenaService.findArenaMatchBattleLog(logId).map(battleLog =>{
              return battleLog;
          })
          .catch(error =>{
