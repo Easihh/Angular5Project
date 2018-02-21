@@ -28,6 +28,7 @@ import { ArenaMatchResolver } from "./resolvers/arena.match.resolver";
 import { ArenaMatchBattleLogResolver } from "./resolvers/arena.match.battle.log.resolver";
 import { ArenaComponent } from "./arena/arena.component";
 import { ArenaService } from "./arena.service";
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [     
@@ -42,7 +43,8 @@ import { ArenaService } from "./arena.service";
     TopicReplyComponent,
     BattlerComponent,
     MatchDetailsComponent,
-    ArenaMatchBattleLogComponent
+    ArenaMatchBattleLogComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,7 @@ import { TopicResolver } from "./resolvers/topic.resolver";
 import { ArenaMatchBattleLogResolver } from "./resolvers/arena.match.battle.log.resolver";
 import { MatchDetailsComponent } from "./match-details/match-details.component";
 import { ArenaComponent } from "./arena/arena.component";
+import { ProfileComponent } from "./profile/profile.component";
 
 export const router: Routes = [
 
@@ -31,6 +32,7 @@ export const router: Routes = [
     { path: 'arena/match/:matchId/log/:logId', component: ArenaMatchBattleLogComponent,resolve:{arenaMatchBattleLog:ArenaMatchBattleLogResolver},runGuardsAndResolvers: 'always'},
     { path: 'arena/match/:matchId', component: MatchDetailsComponent,resolve:{arenaMatch:ArenaMatchResolver},runGuardsAndResolvers: 'always'},
     { path: 'battler', component: BattlerComponent, canActivate:[AuthGuard]},
+    { path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]},
     { path: '**', component: NotFoundComponent },
 ];
 
