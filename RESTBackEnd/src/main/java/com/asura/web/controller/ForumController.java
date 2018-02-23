@@ -35,6 +35,7 @@ import com.asura.web.ErrorType;
 import com.asura.web.ExceptionResponse;
 import com.asura.web.LoginInfoMessage;
 import com.asura.web.Message;
+import com.asura.web.StringResponseMessage;
 import com.asura.web.entity.ApplicationUser;
 import com.asura.web.entity.BasicUser;
 import com.asura.web.entity.Battler;
@@ -253,4 +254,17 @@ public class ForumController {
 		List<News> newsList = newsRepository.getAllNews();
 		return new ResponseEntity<>(newsList, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/register/checkname", method = RequestMethod.GET)
+	public ResponseEntity<Message> getLatestNews(@RequestParam("username") String username) throws Exception {
+		StringResponseMessage rep;
+		
+		rep = username.equals("Admin") ? new StringResponseMessage("Username is already taken.")
+				: new StringResponseMessage("username is available.");
+
+		return new ResponseEntity<Message>(rep, HttpStatus.OK);
+	}
+	
+	
+	
 }

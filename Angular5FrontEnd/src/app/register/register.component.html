@@ -1,12 +1,20 @@
+<div class="register">
 <p>register works!</p>
 
+<div class="register-container">
 <form (ngSubmit)="registerNewAccount()">
 	<fieldset>
 		<legend>Account Registration</legend>
-		<label for="account-name">Username:</label>
-		<input [(ngModel)]="username" name="account-name" id="account-name" type="text"><br>
+		<label for="name">Username:</label>
+		<input (keyup)="typedUsername.next($event.target.value)" class="register-input" required [(ngModel)]="username" name="name" id="name" type="text" #name="ngModel">
+			<div [hidden]="name.valid" class="alert alert-danger inline">
+				<span [hidden]="!name.hasError('required')">* Name is required</span>
+			</div>
+		<br>
 		<label for="account-pwd">Password:</label>
-		<input [(ngModel)]="password" name="account-pwd" id="account-pwd" type="password"><br>
+		<input class="register-input"  [(ngModel)]="password" name="account-pwd" id="account-pwd" type="password"><br>
 		<button type="submit" class="btn btn-primary">Create</button>
 	</fieldset>
 </form>
+</div>
+</div>

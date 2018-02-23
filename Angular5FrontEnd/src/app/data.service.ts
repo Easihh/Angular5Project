@@ -6,6 +6,10 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+import {EmptyObservable} from 'rxjs/observable/EmptyObservable';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { URLSearchParams } from '@angular/http';
 import { Battler } from "./interfaces/battler";
@@ -21,6 +25,7 @@ export class DataService {
     private getNewsURL: string = "/ProjectREST/news";
     private retrievePlayerURL: string = "/ProjectREST/auth/myBattler";
     private retrieveOtherPlayerURL: string = "/ProjectREST/auth/otherBattler";
+    private checkUsernameAvailabilityURL: string="ProjectREST/register/checkname"
     
     private playerInfo: Battler;
 
@@ -89,6 +94,22 @@ export class DataService {
           
      getNews():Observable<News[]>{
          return this._http.get(this.getNewsURL)
+         .catch( this.handleError );
+     }
+     
+     checkUsernameAvailability( username: Observable<string> ) {
+         return username.debounceTime( 500 ).distinctUntilChanged().switchMap( term =>
+             this.searchEntries( term ));
+     }
+         
+     private searchEntries(username:string){
+         if ( username.length == 0 ) {
+             return new EmptyObservable();
+         }
+         let params = new HttpParams();
+         params = params.append( "username", username );
+         return this._http
+         .get( this.checkUsernameAvailabilityURL, { params: params } )
          .catch( this.handleError );
      }
 }

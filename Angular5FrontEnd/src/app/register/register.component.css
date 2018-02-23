@@ -1,0 +1,21 @@
+.register {
+	min-height: 600px;
+}
+
+.register-container{
+	margin: 5rem;
+	margin-left:15%;
+	margin-right:15%;
+	margin-top:7.5%;
+	display: block;
+	font-size: 1.25rem;
+	border: 1px solid red;
+}
+
+.register-input{
+	border-radius: 0.25rem;
+}
+
+.inline{
+	display: inline-block;
+}
