@@ -14,24 +14,27 @@ import { NG_VALIDATORS,Validator,
 })
 export class RegisterComponent implements OnInit{
    
-  username:string;
-  password:string;
-  typedUsername: Subject<string> = new Subject<string>();
+    username: string;
+    password: string;
+    typedUsername: Subject<string> = new Subject<string>();
+    hasError: boolean = true;
+    usernameErrorMsg: string="username is required.";
   
-  constructor(private dataService:DataService,private router:Router) { }
+    constructor( private dataService: DataService, private router: Router ) { }
+
+    ngOnInit(): void {
+        this.dataService.checkUsernameAvailability( this.typedUsername ).subscribe( result => {
+            this.hasError = !result.message.includes( "available" );
+            console.log("hasError:"+this.hasError);
+            console.log("Message:"+result.message);
+            this.usernameErrorMsg = result.message;
+        } )
+    }
   
-  ngOnInit(): void {
-     this.dataService.checkUsernameAvailability( this.typedUsername).subscribe(result=>{
-         console.log("received from server:"+result);
-         let hasError=result.message.includes("taken");
-         console.log("has error:"+hasError);
-     })
-  }
-  
-  registerNewAccount():void{
-      this.dataService.createNewUser(this.username, this.password).subscribe(data=>{
-          this.router.navigate(["/"]);
-      });
-  }
+    registerNewAccount(): void {
+        this.dataService.createNewUser( this.username, this.password ).subscribe( data => {
+            this.router.navigate( ["/"] );
+        } );
+    }
 
 }

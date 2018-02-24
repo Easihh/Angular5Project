@@ -103,13 +103,31 @@ export class DataService {
      }
          
      private searchEntries(username:string){
-         if ( username.length == 0 ) {
-             return new EmptyObservable();
+         let isValid: boolean = this.usernameIsValid( username );
+         if ( !isValid ) {
+             let message: String = this.getInvalidInputMessageForUsernameInput( username );
+             let obs: any = { message: message };
+             return Observable.of(obs);
          }
+         //input is valid let's verify from backend...
          let params = new HttpParams();
          params = params.append( "username", username );
          return this._http
          .get( this.checkUsernameAvailabilityURL, { params: params } )
          .catch( this.handleError );
+     }
+     
+     private usernameIsValid( username: string ) {
+         return username.length >= 3;
+     }
+     
+     getInvalidInputMessageForUsernameInput( username ) : string{
+         if ( username.length == 0 ) {
+             return "username is required.";
+         }
+         
+         if ( username.length < 3 ) {
+             return "username must contains atleast 3 characters.";
+         }
      }
 }

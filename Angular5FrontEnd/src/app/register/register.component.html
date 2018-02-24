@@ -7,8 +7,11 @@
 		<legend>Account Registration</legend>
 		<label for="name">Username:</label>
 		<input (keyup)="typedUsername.next($event.target.value)" class="register-input" required [(ngModel)]="username" name="name" id="name" type="text" #name="ngModel">
-			<div [hidden]="name.valid" class="alert alert-danger inline">
-				<span [hidden]="!name.hasError('required')">* Name is required</span>
+			<div [hidden]="!hasError" class="alert alert-danger inline">
+				<div [hidden]="!hasError">{{usernameErrorMsg}}</div>
+			</div>
+			<div [hidden]="hasError" class="alert alert-success inline">
+				<div [hidden]="hasError">{{usernameErrorMsg}}</div>
 			</div>
 		<br>
 		<label for="account-pwd">Password:</label>
