@@ -5,8 +5,11 @@
 <form (ngSubmit)="registerNewAccount()">
 	<fieldset>
 		<legend>Account Registration</legend>
+		<div>
+			{{formError}}
+		</div>
 		<label for="name">Username:</label>
-		<input (keyup)="typedUsername.next($event.target.value)" class="register-input" required [(ngModel)]="username" name="name" id="name" type="text" #name="ngModel">
+		<input maxlength="20" (keyup)="typedUsername.next($event.target.value)" class="register-input" required [(ngModel)]="username" name="name" id="name" type="text" #name="ngModel">
 			<div [hidden]="!hasError" class="alert alert-danger inline">
 				<div [hidden]="!hasError">{{usernameErrorMsg}}</div>
 			</div>
@@ -16,6 +19,24 @@
 		<br>
 		<label for="account-pwd">Password:</label>
 		<input class="register-input"  [(ngModel)]="password" name="account-pwd" id="account-pwd" type="password"><br>
+		
+		<label for="account-confirmpwd">Confirm Password:</label>
+		<input class="register-input"  [(ngModel)]="confirmPassword" name="account-confirmpwd" id="account-confirmpwd" type="password"><br>
+		
+		
+		<legend>Team Affiliation</legend>
+		<div class="form-group">
+    		<div class="inline">
+      			<input type="radio" id="redteam" name="redteam" checked="">
+      			<label class="custom-control-label" for="redteam">Red</label>
+    		</div>
+   		 	<div class="inline">
+      			<input type="radio" id="blueteam" name="blueteam">
+      			<label class="custom-control-label" for="blueteam">Blue</label>
+    		</div>
+    	</div>
+		
+		
 		<button type="submit" class="btn btn-primary">Create</button>
 	</fieldset>
 </form>

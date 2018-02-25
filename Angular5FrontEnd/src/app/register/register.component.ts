@@ -16,9 +16,11 @@ export class RegisterComponent implements OnInit{
    
     username: string;
     password: string;
+    confirmPassword: string;
     typedUsername: Subject<string> = new Subject<string>();
     hasError: boolean = true;
     usernameErrorMsg: string="username is required.";
+    formError:string;
   
     constructor( private dataService: DataService, private router: Router ) { }
 
@@ -32,9 +34,16 @@ export class RegisterComponent implements OnInit{
     }
   
     registerNewAccount(): void {
+        if ( this.password != this.confirmPassword ) {
+            this.formError = "* Password must match.";
+            return;
+        }
         this.dataService.createNewUser( this.username, this.password ).subscribe( data => {
             this.router.navigate( ["/"] );
-        } );
+        },
+        err=>{
+            console.log("Error during Registration:"+err);
+        });
     }
 
 }

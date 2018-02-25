@@ -118,16 +118,23 @@ export class DataService {
      }
      
      private usernameIsValid( username: string ) {
-         return username.length >= 3;
+         let regExp = new RegExp( "^[a-zA-Z0-9][a-zA-Z0-9]+$" );
+         return username.length >= 3 && regExp.test(username);
      }
      
-     getInvalidInputMessageForUsernameInput( username ) : string{
+     getInvalidInputMessageForUsernameInput( username:string ) : string{
          if ( username.length == 0 ) {
-             return "username is required.";
+             return "Username is required.";
          }
          
          if ( username.length < 3 ) {
-             return "username must contains atleast 3 characters.";
+             return "Username must contains atleast 3 characters.";
          }
+                
+         let alphaNumericOnly = new RegExp( "^[a-zA-Z0-9][a-zA-Z0-9]+$" );
+         if ( !alphaNumericOnly.test( username ) ) {
+             return "Only Alpha-Numeric is allowed.";
+         }
+         return "Error missing error message for this type of invalid input";
      }
 }
